@@ -13,9 +13,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
     // Override point for customization after application launch.
-    CompanyVC *rootController = [[CompanyVC alloc]init];
+  
+    // Creates rootController with alloc. Will be released in super dealloc
+    CompanyVC *rootController = [[CompanyVC alloc] init];
+  
     self.navigationController = [[UINavigationController alloc]
                             initWithRootViewController:rootController];
     
@@ -59,6 +61,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+    
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 

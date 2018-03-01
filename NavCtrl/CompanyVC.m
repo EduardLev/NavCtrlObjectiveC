@@ -18,7 +18,6 @@
     [super viewDidLoad];
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(toggleEditMode)];
     self.navigationItem.rightBarButtonItem = editButton;
     
@@ -129,7 +128,7 @@
     } else {
         self.productViewController.title = @"Samsung mobile devices";
     }
-    
+  
     [self.navigationController
      pushViewController:self.productViewController
      animated:YES];
