@@ -30,8 +30,9 @@
   
     // add list of companies to the property in this class using class method on Company Model C.
     self.companyList = [NSMutableArray alloc];
-    self.companyList = [CompanyModelController loadSampleCompanies];
-    NSLog(@"%@", self.companyList);
+    
+    CompanyModelController *companyMC = [CompanyModelController sharedInstance];
+    self.companyList = [companyMC loadSampleCompanies];
   
     /* OLD CODE GIVEN IN SAMPLE PROJECT
     self.companyList = @[@"Apple",

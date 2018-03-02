@@ -12,6 +12,8 @@
 
 @interface CompanyModelController : NSObject
 
-+(NSMutableArray<Company*>*)loadSampleCompanies;
++(id)sharedInstance;
+
+-(NSMutableArray<Company*>*)loadSampleCompanies;
 
 @end

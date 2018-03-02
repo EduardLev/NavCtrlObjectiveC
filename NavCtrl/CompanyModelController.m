@@ -8,6 +8,8 @@
 
 #import "CompanyModelController.h"
 
+static CompanyModelController *sharedInstance = nil;
+
 @implementation CompanyModelController
 
 /**
@@ -17,7 +19,24 @@
  * This class function is provided so that the user can easily
  * instantiate an array of companies.
  */
-+(NSMutableArray<Company*>*)loadSampleCompanies {
+
++(CompanyModelController*)sharedInstance {
+    if (sharedInstance == nil) {
+        sharedInstance = [[super allocWithZone:NULL] init];
+    }
+    return sharedInstance;
+}
+
+// Called the first time that the singleton is used
+-(id)init {
+    self = [super init];
+    if (self) {
+        
+    }
+    return self;
+}
+
+- (NSMutableArray<Company*>*)loadSampleCompanies {
   
   // QUESTION: WHEN I WAS USING A LITERAL, THE PRODUCTS WERE GOING AWAY AFTER 'viewDidLoad'??
   Product *prod1 = [[Product alloc] initWithName:@"iPhone X"];
@@ -80,6 +99,40 @@
   [amazon release];
   
   return companies;
+}
+
+-(void)dealloc
+{
+    [super dealloc];
+}
+
+// We don't want to allocate a new instance, so return the current one.
++ (instancetype)allocWithZone:(NSZone*)zone {
+    return [[self sharedInstance] retain];
+}
+
+// Equally, we don't want to generate multiple copies of the singleton.
+- (instancetype)copyWithZone:(NSZone *)zone {
+    return self;
+}
+
+// Once again - do nothing, as we don't have a retain counter for this object.
+- (instancetype)retain {
+    return self;
+}
+
+// Replace the retain counter so we can never release this object.
+- (NSUInteger)retainCount {
+    return NSUIntegerMax;
+}
+
+// This function is empty, as we don't want to let the user release this object.
+- (oneway void)release {
+}
+
+//Do nothing, other than return the shared instance - as this is expected from autorelease.
+- (instancetype)autorelease {
+    return self;
 }
 
 @end
