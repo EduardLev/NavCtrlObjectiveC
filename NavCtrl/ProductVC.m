@@ -16,19 +16,39 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    // Do any additional setup after loading the view from its nib.
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this VC.
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit"
+                                                                  style:UIBarButtonItemStylePlain
+                                                                 target:self
+                                                                 action:@selector(toggleEditMode)];
+    
+    // Adds the edit button to the right side of the navigation bar
+    self.navigationItem.rightBarButtonItem = editButton;
+    [editButton release];
+}
+- (void)toggleEditMode {
+    if (self.tableView.editing) {
+        [self.tableView setEditing:NO animated:YES];
+        self.navigationItem.rightBarButtonItem.title = @"Edit";
+    } else {
+        [self.tableView setEditing:YES animated:NO];
+        self.navigationItem.rightBarButtonItem.title = @"Done";
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    
     [super viewWillAppear:animated];
     
+    NSLog(@"%@",self.company);
+    
+    /* OLD CODE FROM ORIGINAL
     if ([self.title isEqualToString:@"Apple mobile devices"]) {
         self.products = @[@"iPad", @"iPod Touch",@"iPhone"];
     } else {
         self.products = @[@"Galaxy S4", @"Galaxy Note", @"Galaxy Tab"];
-    }
+    }*/
+    
     [self.tableView reloadData];
 }
 
@@ -50,8 +70,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 #warning Incomplete method implementation.
+
     // Return the number of rows in the section.
-    return [self.products count];
+    return [self.company.products count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -62,10 +83,37 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     // Configure the cell...
-    cell.textLabel.text = [self.products objectAtIndex:[indexPath row]];
+    
+    Product *product = [self.company.products objectAtIndex:[indexPath row]];
+    cell.textLabel.text = [product name];
+    cell.showsReorderControl = true;
+    
+    CGSize itemSize = CGSizeMake(30, 30); // Makes a CGSize Object
+    UIGraphicsBeginImageContext(itemSize); // we are outside of drawrect?
+    CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.width); // creates a CGRect
+    [[product image] drawInRect:imageRect];
+    cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    /* OLD CODE FROM ORIGINAL
+    cell.textLabel.text = [self.products objectAtIndex:[indexPath row]]; */
     return cell;
 }
 
+// This method increases the height of the table cells.
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 70;
+}
+
+- (void)tableView:(UITableView *)tableView
+commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self.company.products removeObjectAtIndex:[indexPath row]];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath]
+                              withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
 /*
  // Override to support conditional editing of the table view.
  - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -76,9 +124,7 @@
  */
 
 /*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
+
  if (editingStyle == UITableViewCellEditingStyleDelete) {
  // Delete the row from the data source
  [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -89,12 +135,6 @@
  }
  */
 
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
 
 /*
  // Override to support conditional rearranging of the table view.
@@ -105,26 +145,32 @@
  }
  */
 
-/*
+
  #pragma mark - Table view delegate
  
- // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
- - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Navigation logic may go here, for example:
- // Create the next view controller.
- <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
- 
- // Pass the selected object to the new view controller.
- 
- // Push the view controller.
- [self.navigationController pushViewController:detailViewController animated:YES];
- }
- 
- */
+- (void)tableView:(UITableView *)tableView
+moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
+      toIndexPath:(NSIndexPath *)toIndexPath {
+    
+    Product *product = [self.company.products objectAtIndex:fromIndexPath.row];
+    [product retain];
+    [self.company.products removeObjectAtIndex:fromIndexPath.row];
+    [self.company.products insertObject:product atIndex:toIndexPath.row];
+    [product release];
+}
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    self.webVC = [[WebViewController alloc] init];
+    self.webVC.title = @"Browse";
+    [self.navigationController pushViewController:self.webVC animated:YES];
+    
+}
 
 - (void)dealloc {
+    [_webVC release];
+    [_company release];
     [_tableView release];
     [super dealloc];
 }

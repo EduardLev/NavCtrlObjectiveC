@@ -25,6 +25,10 @@
 		9E62FF261E4A33F1002D55B8 /* ProductVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E62FF241E4A33F1002D55B8 /* ProductVC.m */; };
 		9E62FF271E4A33F1002D55B8 /* ProductVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E62FF251E4A33F1002D55B8 /* ProductVC.xib */; };
 		9E62FF291E4A3982002D55B8 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E62FF281E4A3982002D55B8 /* Launch Screen.storyboard */; };
+		D49EC39E204883ED003FF4AB /* Company.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC39D204883ED003FF4AB /* Company.m */; };
+		D49EC3A2204886DC003FF4AB /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3A1204886DC003FF4AB /* Product.m */; };
+		D49EC3A52048A151003FF4AB /* CompanyModelController.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3A42048A151003FF4AB /* CompanyModelController.m */; };
+		D49EC3AD20499D1E003FF4AB /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3AC20499D1E003FF4AB /* WebViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +66,14 @@
 		9E62FF241E4A33F1002D55B8 /* ProductVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductVC.m; sourceTree = "<group>"; };
 		9E62FF251E4A33F1002D55B8 /* ProductVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductVC.xib; sourceTree = "<group>"; };
 		9E62FF281E4A3982002D55B8 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		D49EC39C204883ED003FF4AB /* Company.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Company.h; sourceTree = "<group>"; };
+		D49EC39D204883ED003FF4AB /* Company.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Company.m; sourceTree = "<group>"; };
+		D49EC3A0204886DC003FF4AB /* Product.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
+		D49EC3A1204886DC003FF4AB /* Product.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
+		D49EC3A32048A151003FF4AB /* CompanyModelController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompanyModelController.h; sourceTree = "<group>"; };
+		D49EC3A42048A151003FF4AB /* CompanyModelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CompanyModelController.m; sourceTree = "<group>"; };
+		D49EC3AB20499D1E003FF4AB /* WebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		D49EC3AC20499D1E003FF4AB /* WebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,9 +162,12 @@
 		48A656BA18163BF200746D36 /* NavCtrl */ = {
 			isa = PBXGroup;
 			children = (
+				D49EC3A62048A15D003FF4AB /* Model Controllers */,
+				D49EC39F204883F3003FF4AB /* Models */,
 				483796CB1BCBF7A00062D5AB /* AppDelegate */,
 				483796CC1BCBF7C70062D5AB /* ParentViewController */,
 				483796CD1BCBF7EB0062D5AB /* ProductViewController */,
+				D49EC3AE20499D25003FF4AB /* WebViewController */,
 				48A656C618163BF200746D36 /* Images.xcassets */,
 				48A656BB18163BF200746D36 /* Supporting Files */,
 			);
@@ -188,6 +203,35 @@
 				48A656D618163BF200746D36 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D49EC39F204883F3003FF4AB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D49EC39C204883ED003FF4AB /* Company.h */,
+				D49EC39D204883ED003FF4AB /* Company.m */,
+				D49EC3A0204886DC003FF4AB /* Product.h */,
+				D49EC3A1204886DC003FF4AB /* Product.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		D49EC3A62048A15D003FF4AB /* Model Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				D49EC3A32048A151003FF4AB /* CompanyModelController.h */,
+				D49EC3A42048A151003FF4AB /* CompanyModelController.m */,
+			);
+			name = "Model Controllers";
+			sourceTree = "<group>";
+		};
+		D49EC3AE20499D25003FF4AB /* WebViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D49EC3AB20499D1E003FF4AB /* WebViewController.h */,
+				D49EC3AC20499D1E003FF4AB /* WebViewController.m */,
+			);
+			name = WebViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,7 +338,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E62FF211E4A33DC002D55B8 /* CompanyVC.m in Sources */,
+				D49EC3A52048A151003FF4AB /* CompanyModelController.m in Sources */,
+				D49EC39E204883ED003FF4AB /* Company.m in Sources */,
+				D49EC3AD20499D1E003FF4AB /* WebViewController.m in Sources */,
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
+				D49EC3A2204886DC003FF4AB /* Product.m in Sources */,
 				48A656C118163BF200746D36 /* main.m in Sources */,
 				9E62FF261E4A33F1002D55B8 /* ProductVC.m in Sources */,
 			);

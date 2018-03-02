@@ -7,10 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
+#import "Company.h"
+#import "WebViewController.h"
 
-@interface ProductVC : UIViewController<UITableViewDelegate, UITableViewDataSource>
+@interface ProductVC : UIViewController<UITableViewDelegate,
+                                        UITableViewDataSource,
+                                        WKNavigationDelegate>
 
-@property (retain, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, retain) NSArray *products;
+@property (retain, nonatomic) IBOutlet UITableView *tableView; // release in dealloc
+//@property (nonatomic, retain) NSArray<Product*> *products;
+@property (nonatomic, retain) Company *company; // release in dealloc
+
+/* FOR LATER: DO I HAVE TO RELEASE THIS???? */
+@property (nonatomic, retain) WebViewController *webVC;
 
 @end
