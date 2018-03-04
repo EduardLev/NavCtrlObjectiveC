@@ -1,3 +1,4 @@
+
 //
 //  CompanyVC.m
 //  NavCtrl
@@ -18,12 +19,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Allows the cells to be clicked while in editing mode
+    self.tableView.allowsSelectionDuringEditing = TRUE;
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this VC.
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit"
                                                                   style:UIBarButtonItemStylePlain
                                                                  target:self
                                                                  action:@selector(toggleEditMode)];
     
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(enterAddMode)];
+    
+    self.navigationItem.leftBarButtonItem = addButton;
     // Adds the edit button to the right side of the navigation bar
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
@@ -42,7 +49,33 @@
                          @"Amazon"];
     */
   
-    self.title = @"Mobile Device Makers";
+    self.title = @"Stock Tracker";
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.tableView reloadData];
+}
+
+- (void)enterAddMode {
+    self.addEditVC = [[AddEditViewController alloc] init];
+    
+    // self.addEditVC.company = SET COMPANY HERE
+    
+    // ADJUST HERE
+    self.addEditVC.title = @"Add Company";
+    
+    /*
+    // Creates custom back button that is different than the title of the previous VC
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:nil
+                                                                  action:nil]; */
+    // self.navigationItem.backBarButtonItem = backButton;
+    //[self.navigationController setModalPresentationStyle:UIModalPresentationCurrentContext];
+    self.addEditVC.add = TRUE;
+    [self presentViewController:self.addEditVC animated:YES completion:nil];
 }
 
 - (void)toggleEditMode {
@@ -176,32 +209,39 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
     }
 }
 
+- (void)enterEditCompanyMode:(Company*)company AndPath:(NSIndexPath*)path {
+    self.addEditVC = [[AddEditViewController alloc] init];
+    self.addEditVC.title = @"Edit Company";
+    self.addEditVC.fromProductController = FALSE;
+    self.addEditVC.add = FALSE;
+    self.addEditVC.company = company;
+    self.addEditVC.indexPath = path;
+    [self presentViewController:self.addEditVC animated:YES completion:nil];
+}
+
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.productViewController = [[ProductVC alloc] init]; // must be matched with dealloc call
-    self.productViewController.company = self.companyList[indexPath.row];
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    /* OLD CODE FROM ORIGINAL
-    if (indexPath.row == 0) {
-        self.productViewController.title = @"Apple Mobile Devices";
+    if (self.tableView.editing) {
+        Company *company = [self.companyList objectAtIndex:[indexPath row]];
+        [self enterEditCompanyMode:company AndPath:indexPath];
     } else {
-        self.productViewController.title = @"Samsung mobile devices";
-    }*/
-    
-    self.productViewController.title = @"Products";
-    
-    // Creates custom back button that is different than the title of the previous VC
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:nil
-                                                                  action:nil];
-    self.navigationItem.backBarButtonItem = backButton;
-    
-    [self.navigationController
-     pushViewController:self.productViewController
-     animated:YES];
+        self.productViewController = [[ProductVC alloc] init]; // must be matched with dealloc call
+        self.productViewController.company = self.companyList[indexPath.row];
+        self.productViewController.title = @"Products";
+        
+        // Creates custom back button that is different than the title of the previous VC
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:nil
+                                                                      action:nil];
+        self.navigationItem.backBarButtonItem = backButton;
+        [self.navigationController
+         pushViewController:self.productViewController
+         animated:YES];
+    }
+
 }
 
 

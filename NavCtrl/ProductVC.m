@@ -17,15 +17,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Allows the cells to be clicked while in editing mode
+    self.tableView.allowsSelectionDuringEditing = TRUE;
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this VC.
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit"
                                                                   style:UIBarButtonItemStylePlain
                                                                  target:self
                                                                  action:@selector(toggleEditMode)];
     
+    UIBarButtonItem *addButton= [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(enterAddMode)];
+                      
     // Adds the edit button to the right side of the navigation bar
-    self.navigationItem.rightBarButtonItem = editButton;
+    self.navigationItem.rightBarButtonItems = @[editButton, addButton];
     [editButton release];
+    [addButton release];
 }
 - (void)toggleEditMode {
     if (self.tableView.editing) {
@@ -35,6 +41,39 @@
         [self.tableView setEditing:YES animated:NO];
         self.navigationItem.rightBarButtonItem.title = @"Done";
     }
+}
+
+-(void)enterAddMode {
+    self.addEditVC = [[AddEditViewController alloc] init];
+    
+    // self.addEditVC.company = SET PRODUCT HERE
+    
+    // ADJUST HERE
+    self.addEditVC.title = @"Add Product";
+    
+    self.addEditVC.fromProductController = TRUE;
+    self.addEditVC.add = TRUE;
+    
+    /*
+     // Creates custom back button that is different than the title of the previous VC
+     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+     style:UIBarButtonItemStylePlain
+     target:nil
+     action:nil]; */
+    // self.navigationItem.backBarButtonItem = backButton;
+    //[self.navigationController setModalPresentationStyle:UIModalPresentationCurrentContext];
+    [self presentViewController:self.addEditVC animated:YES completion:nil];
+}
+
+-(void)enterEditProductMode:(Product*)product AndPath:(NSIndexPath*)path {
+    self.addEditVC = [[AddEditViewController alloc] init];
+    self.addEditVC.title = @"Edit Product";
+    self.addEditVC.fromProductController = TRUE;
+    self.addEditVC.add = FALSE;
+    self.addEditVC.product = product;
+    self.addEditVC.company = self.company;
+    self.addEditVC.indexPath = path;
+    [self presentViewController:self.addEditVC animated:YES completion:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -162,9 +201,15 @@ moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    self.webVC = [[WebViewController alloc] init];
-    self.webVC.title = @"Browse";
-    [self.navigationController pushViewController:self.webVC animated:YES];
+    if (self.tableView.editing) {
+        // show add edit VC with data filled in.
+        Product *product = [self.company.products objectAtIndex:[indexPath row]];
+        [self enterEditProductMode:product AndPath:indexPath];
+    } else {
+        self.webVC = [[WebViewController alloc] init];
+        self.webVC.title = @"Browse";
+        [self.navigationController pushViewController:self.webVC animated:YES];
+    }
     
 }
 

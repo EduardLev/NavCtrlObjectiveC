@@ -21,6 +21,7 @@
     _name = name;
     _products = products;
     _image = [UIImage imageNamed:name];
+    [_image retain];
   }
   return self;
 }

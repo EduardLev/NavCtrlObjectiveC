@@ -14,7 +14,7 @@
 // Every company has a name and a list of products
 @property (nonatomic, retain) NSString *name; // retain - match to release in dealloc.
 @property (nonatomic, retain) NSMutableArray<Product*> *products; // retain - match to release in dealloc
-@property (nonatomic, retain) UIImage *image;
+@property (nonatomic, retain, strong) UIImage *image;
 
 -(instancetype)initWithName:(NSString*)name AndProducts:(NSArray<Product*>*)products
 NS_DESIGNATED_INITIALIZER;

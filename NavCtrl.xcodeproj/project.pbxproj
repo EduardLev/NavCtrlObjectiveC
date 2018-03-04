@@ -29,6 +29,7 @@
 		D49EC3A2204886DC003FF4AB /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3A1204886DC003FF4AB /* Product.m */; };
 		D49EC3A52048A151003FF4AB /* CompanyModelController.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3A42048A151003FF4AB /* CompanyModelController.m */; };
 		D49EC3AD20499D1E003FF4AB /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3AC20499D1E003FF4AB /* WebViewController.m */; };
+		D4F83E992049E51A00BEEBD0 /* AddEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F83E982049E51A00BEEBD0 /* AddEditViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,8 @@
 		D49EC3A42048A151003FF4AB /* CompanyModelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CompanyModelController.m; sourceTree = "<group>"; };
 		D49EC3AB20499D1E003FF4AB /* WebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		D49EC3AC20499D1E003FF4AB /* WebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		D4F83E972049E51A00BEEBD0 /* AddEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddEditViewController.h; sourceTree = "<group>"; };
+		D4F83E982049E51A00BEEBD0 /* AddEditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddEditViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +170,7 @@
 				483796CB1BCBF7A00062D5AB /* AppDelegate */,
 				483796CC1BCBF7C70062D5AB /* ParentViewController */,
 				483796CD1BCBF7EB0062D5AB /* ProductViewController */,
+				D4F83E9A2049E52100BEEBD0 /* AddEditViewController */,
 				D49EC3AE20499D25003FF4AB /* WebViewController */,
 				48A656C618163BF200746D36 /* Images.xcassets */,
 				48A656BB18163BF200746D36 /* Supporting Files */,
@@ -232,6 +236,15 @@
 				D49EC3AC20499D1E003FF4AB /* WebViewController.m */,
 			);
 			name = WebViewController;
+			sourceTree = "<group>";
+		};
+		D4F83E9A2049E52100BEEBD0 /* AddEditViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D4F83E972049E51A00BEEBD0 /* AddEditViewController.h */,
+				D4F83E982049E51A00BEEBD0 /* AddEditViewController.m */,
+			);
+			name = AddEditViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -339,6 +352,7 @@
 			files = (
 				9E62FF211E4A33DC002D55B8 /* CompanyVC.m in Sources */,
 				D49EC3A52048A151003FF4AB /* CompanyModelController.m in Sources */,
+				D4F83E992049E51A00BEEBD0 /* AddEditViewController.m in Sources */,
 				D49EC39E204883ED003FF4AB /* Company.m in Sources */,
 				D49EC3AD20499D1E003FF4AB /* WebViewController.m in Sources */,
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,

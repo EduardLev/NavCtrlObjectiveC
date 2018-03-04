@@ -10,6 +10,8 @@
 #import <WebKit/WebKit.h>
 #import "Company.h"
 #import "WebViewController.h"
+#import "AddEditViewController.h"
+@class AddEditViewController;
 
 @interface ProductVC : UIViewController<UITableViewDelegate,
                                         UITableViewDataSource,
@@ -21,5 +23,7 @@
 
 /* FOR LATER: DO I HAVE TO RELEASE THIS???? */
 @property (nonatomic, retain) WebViewController *webVC;
+@property (nonatomic, retain) AddEditViewController *addEditVC;
+
 
 @end

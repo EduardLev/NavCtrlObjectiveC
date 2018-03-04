@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/Webkit.h>
 #import "ProductVC.h"
+@class ProductVC;
+@class AddEditViewController;
 #import "Company.h"
 #import "CompanyModelController.h"
+#import "AddEditViewController.h"
 
 @interface CompanyVC : UIViewController<UITableViewDelegate, UITableViewDataSource>
 
@@ -19,6 +22,7 @@
 
 /* FOR LATER: DO I HAVE TO RELEASE THIS???? */
 @property (nonatomic, retain) ProductVC *productViewController;
+@property (nonatomic, retain) AddEditViewController *addEditVC;
  
 
 @end
