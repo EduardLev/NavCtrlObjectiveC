@@ -19,6 +19,8 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *tableView; // retain - match to release in dealloc
 @property (nonatomic, retain) NSMutableArray<Company*> *companyList; // retain - match to release in dealloc
+@property (nonatomic, retain) CompanyModelController *companyMC;
+
 
 /* FOR LATER: DO I HAVE TO RELEASE THIS???? */
 @property (nonatomic, retain) ProductVC *productViewController;

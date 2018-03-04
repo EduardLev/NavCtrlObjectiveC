@@ -15,8 +15,10 @@
 @property (nonatomic, retain) NSString *name; // retain - match to release in dealloc.
 @property (nonatomic, retain) NSMutableArray<Product*> *products; // retain - match to release in dealloc
 @property (nonatomic, retain, strong) UIImage *image;
+@property (nonatomic, retain) NSString *ticker;
+@property (nonatomic, retain) NSString *stockPrice;
 
--(instancetype)initWithName:(NSString*)name AndProducts:(NSArray<Product*>*)products
+-(instancetype)initWithName:(NSString*)name AndProducts:(NSArray<Product*>*)products Ticker:(NSString*)ticker
 NS_DESIGNATED_INITIALIZER;
 
 

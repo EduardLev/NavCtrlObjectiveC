@@ -30,6 +30,7 @@
 		D49EC3A52048A151003FF4AB /* CompanyModelController.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3A42048A151003FF4AB /* CompanyModelController.m */; };
 		D49EC3AD20499D1E003FF4AB /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3AC20499D1E003FF4AB /* WebViewController.m */; };
 		D4F83E992049E51A00BEEBD0 /* AddEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F83E982049E51A00BEEBD0 /* AddEditViewController.m */; };
+		D4F83E9D204C47C000BEEBD0 /* NetworkController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F83E9C204C47C000BEEBD0 /* NetworkController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,9 @@
 		D49EC3AC20499D1E003FF4AB /* WebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		D4F83E972049E51A00BEEBD0 /* AddEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddEditViewController.h; sourceTree = "<group>"; };
 		D4F83E982049E51A00BEEBD0 /* AddEditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddEditViewController.m; sourceTree = "<group>"; };
+		D4F83E9B204C47C000BEEBD0 /* NetworkController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkController.h; sourceTree = "<group>"; };
+		D4F83E9C204C47C000BEEBD0 /* NetworkController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkController.m; sourceTree = "<group>"; };
+		D4F83EA0204C499C00BEEBD0 /* StockFetcherDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StockFetcherDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +169,7 @@
 		48A656BA18163BF200746D36 /* NavCtrl */ = {
 			isa = PBXGroup;
 			children = (
+				D4F83E9E204C47C600BEEBD0 /* Network Controller */,
 				D49EC3A62048A15D003FF4AB /* Model Controllers */,
 				D49EC39F204883F3003FF4AB /* Models */,
 				483796CB1BCBF7A00062D5AB /* AppDelegate */,
@@ -245,6 +250,16 @@
 				D4F83E982049E51A00BEEBD0 /* AddEditViewController.m */,
 			);
 			name = AddEditViewController;
+			sourceTree = "<group>";
+		};
+		D4F83E9E204C47C600BEEBD0 /* Network Controller */ = {
+			isa = PBXGroup;
+			children = (
+				D4F83E9B204C47C000BEEBD0 /* NetworkController.h */,
+				D4F83E9C204C47C000BEEBD0 /* NetworkController.m */,
+				D4F83EA0204C499C00BEEBD0 /* StockFetcherDelegate.h */,
+			);
+			name = "Network Controller";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -354,6 +369,7 @@
 				D49EC3A52048A151003FF4AB /* CompanyModelController.m in Sources */,
 				D4F83E992049E51A00BEEBD0 /* AddEditViewController.m in Sources */,
 				D49EC39E204883ED003FF4AB /* Company.m in Sources */,
+				D4F83E9D204C47C000BEEBD0 /* NetworkController.m in Sources */,
 				D49EC3AD20499D1E003FF4AB /* WebViewController.m in Sources */,
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
 				D49EC3A2204886DC003FF4AB /* Product.m in Sources */,

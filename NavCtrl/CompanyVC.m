@@ -9,9 +9,13 @@
 
 #import "CompanyVC.h"
 
+
+
 @interface CompanyVC ()
 
+
 @end
+
 
 //  CompanyVC : UIViewController<UITableViewDelegate, UITableViewDataSource>
 @implementation CompanyVC
@@ -38,8 +42,18 @@
     // add list of companies to the property in this class using class method on Company Model C.
     self.companyList = [NSMutableArray alloc];
     
-    CompanyModelController *companyMC = [CompanyModelController sharedInstance];
-    self.companyList = [companyMC loadSampleCompanies];
+    self.companyMC = [CompanyModelController sharedInstance];
+    self.companyList = [self.companyMC loadSampleCompanies];
+    
+    // call for all stock prices here. we need to send the TICKER SYMBOLS , maybe in an array, and get an array back of the stock prices.
+    NSMutableArray *tickerSymbols = [[NSMutableArray alloc] init];
+    for (int i = 0; i < self.companyList.count; i++) {
+        [tickerSymbols addObject:self.companyList[i].ticker];
+    }
+    
+    // need to fix this because of the delegation of view controllers
+    //NSArray *stockPrices = [companyMC getStockPrices:tickerSymbols];
+    [self.companyMC getStockPrices:tickerSymbols];
   
     /* OLD CODE GIVEN IN SAMPLE PROJECT
     self.companyList = @[@"Apple",
@@ -50,6 +64,8 @@
     */
   
     self.title = @"Stock Tracker";
+    
+    [tickerSymbols release];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -122,6 +138,7 @@
     cell.textLabel.text = [comp name];
     cell.showsReorderControl = true;
     cell.imageView.image = comp.image;
+    cell.detailTextLabel.text = comp.stockPrice;
     
     // This line will eventually add the stock price
     // cell.detailTextLabel.text = @"Hello";

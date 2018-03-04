@@ -16,7 +16,7 @@
 @property (nonatomic, retain) Product *product;
 @property (nonatomic) BOOL fromProductController;
 @property (nonatomic) BOOL add;
-@property (nonatomic) NSIndexPath *indexPath;
+@property (nonatomic, retain) NSIndexPath *indexPath;
 
 
 @end

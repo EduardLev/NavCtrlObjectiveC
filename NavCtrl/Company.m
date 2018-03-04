@@ -12,15 +12,16 @@
 
 // INITIALIZATION METHODS
 -(instancetype)init {
-  return [self initWithName:@"" AndProducts:nil];
+    return [self initWithName:@"" AndProducts:nil Ticker:@""];
 }
 
--(instancetype)initWithName:(NSString*)name AndProducts:(NSMutableArray<Product*>*)products {
+-(instancetype)initWithName:(NSString*)name AndProducts:(NSMutableArray<Product*>*)products Ticker:(NSString*)ticker {
   self = [super init]; // MATCHED WITH SUPER DEALLOC
   if (self) {
     _name = name;
     _products = products;
     _image = [UIImage imageNamed:name];
+      _ticker = ticker;
     [_image retain];
   }
   return self;

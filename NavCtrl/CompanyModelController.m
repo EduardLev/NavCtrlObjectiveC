@@ -8,6 +8,12 @@
 
 #import "CompanyModelController.h"
 
+@interface CompanyModelController ()
+
+@property (nonatomic, strong) NetworkController *networkController;
+
+@end
+
 static CompanyModelController *sharedInstance = nil;
 
 @implementation CompanyModelController
@@ -24,6 +30,7 @@ static CompanyModelController *sharedInstance = nil;
     if (sharedInstance == nil) {
         sharedInstance = [[super allocWithZone:NULL] init];
     }
+    
     return sharedInstance;
 }
 
@@ -33,11 +40,12 @@ static CompanyModelController *sharedInstance = nil;
     if (self) {
         
     }
+    self.networkController = [[NetworkController alloc] init];
+    self.networkController.delegate = self;
     return self;
 }
 
 - (NSMutableArray<Company*>*)loadSampleCompanies {
-  
   // QUESTION: WHEN I WAS USING A LITERAL, THE PRODUCTS WERE GOING AWAY AFTER 'viewDidLoad'??
   Product *prod1 = [[Product alloc] initWithName:@"iPhone X"];
   Product *prod2 = [[Product alloc] initWithName:@"iPad Pro"];
@@ -47,14 +55,14 @@ static CompanyModelController *sharedInstance = nil;
   [prod1 release];
   [prod2 release];
   [prod3 release];
-  
+  /*
   prod1 = [[Product alloc] initWithName:@"Galaxy S8"];
   prod2 = [[Product alloc] initWithName:@"Galaxy Note"];
   prod3 = [[Product alloc] initWithName:@"Galaxy Tab S3"];
     NSMutableArray<Product*> *samsungProducts = [[NSMutableArray alloc] initWithObjects:prod1, prod2, prod3, nil];
   [prod1 release];
   [prod2 release];
-  [prod3 release];
+  [prod3 release]; */
   
   prod1 = [[Product alloc] initWithName:@"Pixel"];
   prod2 = [[Product alloc] initWithName:@"Chromebook Pixel"];
@@ -83,26 +91,43 @@ static CompanyModelController *sharedInstance = nil;
   prod2 = nil;
   prod3 = nil;
   
-  Company *apple = [[Company alloc] initWithName:@"Apple" AndProducts:appleProducts];
-  Company *samsung = [[Company alloc] initWithName:@"Samsung" AndProducts:samsungProducts];
-  Company *google = [[Company alloc] initWithName:@"Google" AndProducts:googleProducts];
-  Company *microsoft = [[Company alloc] initWithName:@"Microsoft" AndProducts:microsoftProducts];
-  Company *amazon = [[Company alloc] initWithName:@"Amazon" AndProducts:amazonProducts];
+    Company *apple = [[Company alloc] initWithName:@"Apple" AndProducts:appleProducts Ticker:@"AAPL"];
+    
+    // REMOVED BECAUSE SAMSUNG NOT TRADED ON US STOCK MARKETS
+    /*Company *samsung = [[Company alloc] initWithName:@"Samsung" AndProducts:samsungProducts Ticker:@"SSNLF"];*/
+    Company *google = [[Company alloc] initWithName:@"Google" AndProducts:googleProducts Ticker:@"GOOGL"];
+    Company *microsoft = [[Company alloc] initWithName:@"Microsoft" AndProducts:microsoftProducts Ticker:@"MSFT"];
+    Company *amazon = [[Company alloc] initWithName:@"Amazon" AndProducts:amazonProducts Ticker:@"AMZN"];
   
-  NSMutableArray<Company*>* companies = [NSMutableArray arrayWithObjects:
-                                         apple, samsung, google, microsoft, amazon, NULL];
+  self.companyList = [NSMutableArray arrayWithObjects:
+            apple, google, microsoft, amazon, NULL];
   
   [apple release];
-  [samsung release];
+  //[samsung release];
   [google release];
   [microsoft release];
   [amazon release];
   
-  return companies;
+    
+  return self.companyList;
+}
+
+-(void)getStockPrices:(NSArray*)tickerSymbols {
+    NSMutableString *tickerString = [[NSMutableString alloc] init];
+    for (int i = 0; i < tickerSymbols.count; i++) {
+        [tickerString appendString:tickerSymbols[i]];
+        if (i != tickerSymbols.count - 1) {
+            [tickerString appendString:@","];
+        }
+    }
+    
+    [self.networkController fetchStockPriceForTicker:tickerString];
+    [tickerString release];
 }
 
 -(void)dealloc
 {
+    [_networkController release];
     [super dealloc];
 }
 
@@ -133,6 +158,27 @@ static CompanyModelController *sharedInstance = nil;
 //Do nothing, other than return the shared instance - as this is expected from autorelease.
 - (instancetype)autorelease {
     return self;
+}
+
+#pragma mark Required Delegate Methods
+
+- (void)stockFetchSuccessWithPriceArray:(NSArray *)priceArray {
+    NSLog(@"Stock price received");
+
+    for (int i = 0; i < priceArray.count; i++) {
+        self.companyList[i].stockPrice = priceArray[i];
+    }
+
+}
+
+-(void)stockFetchDidFailWithError:(NSError*)error {
+    NSLog(@"Couldn't fetch stock price, this is a description of the error: %@", error.localizedDescription);
+    // do some sort of error handling here
+}
+
+-(void)stockFetchDidStart {
+    NSLog(@"initiation stock fetch...");
+    // could start an activity indicator here
 }
 
 @end
