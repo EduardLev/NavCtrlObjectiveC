@@ -10,14 +10,17 @@
 #import "Company.h"
 #import "Product.h"
 #import "NetworkController.h"
+#import "CompanyVC.h"
+@class CompanyVC;
 
 @interface CompanyModelController : NSObject<StockFetcherDelegate>
 
 @property (nonatomic, strong) NSMutableArray<Company*> *companyList;
+@property (nonatomic, assign) CompanyVC *companyController;
 
 +(id)sharedInstance;
 
 -(NSMutableArray<Company*>*)loadSampleCompanies;
--(void)getStockPrices:(NSArray*)tickerSymbols;
+-(void)getStockPrices;
 
 @end

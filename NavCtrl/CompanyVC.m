@@ -38,40 +38,26 @@
     // Adds the edit button to the right side of the navigation bar
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
-  
-    // add list of companies to the property in this class using class method on Company Model C.
-    self.companyList = [NSMutableArray alloc];
     
     self.companyMC = [CompanyModelController sharedInstance];
-    self.companyList = [self.companyMC loadSampleCompanies];
+    [self.companyMC loadSampleCompanies:self]; // loads companies into the company MC
     
     // call for all stock prices here. we need to send the TICKER SYMBOLS , maybe in an array, and get an array back of the stock prices.
-    NSMutableArray *tickerSymbols = [[NSMutableArray alloc] init];
-    for (int i = 0; i < self.companyList.count; i++) {
-        [tickerSymbols addObject:self.companyList[i].ticker];
-    }
+
     
     // need to fix this because of the delegation of view controllers
     //NSArray *stockPrices = [companyMC getStockPrices:tickerSymbols];
-    [self.companyMC getStockPrices:tickerSymbols];
-  
-    /* OLD CODE GIVEN IN SAMPLE PROJECT
-    self.companyList = @[@"Apple",
-                         @"Samsung",
-                         @"Microsoft",
-                         @"Google",
-                         @"Amazon"];
-    */
+    [self.companyMC getStockPrices]; // fills company with stock prices
   
     self.title = @"Stock Tracker";
-    
-    [tickerSymbols release];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.tableView reloadData];
+    [self.companyMC getStockPrices];
+    
+    //[self.tableView reloadData];
 }
 
 - (void)enterAddMode {
@@ -122,7 +108,7 @@
 {
 #warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return [self.companyList count];
+    return [self.companyMC.companyList count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -134,11 +120,11 @@
     }
     
     // Configure the cell...
-    Company *comp = [self.companyList objectAtIndex:[indexPath row]];
+    Company *comp = [self.companyMC.companyList objectAtIndex:[indexPath row]];
     cell.textLabel.text = [comp name];
     cell.showsReorderControl = true;
     cell.imageView.image = comp.image;
-    cell.detailTextLabel.text = comp.stockPrice;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"$%@", comp.stockPrice];
     
     // This line will eventually add the stock price
     // cell.detailTextLabel.text = @"Hello";
@@ -198,10 +184,10 @@
 moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
        toIndexPath:(NSIndexPath *)toIndexPath {
      
-     Company *company = [self.companyList objectAtIndex:fromIndexPath.row];
+     Company *company = [self.companyMC.companyList objectAtIndex:fromIndexPath.row];
      [company retain];
-     [self.companyList removeObjectAtIndex:fromIndexPath.row];
-     [self.companyList insertObject:company atIndex:toIndexPath.row];
+     [self.companyMC.companyList removeObjectAtIndex:fromIndexPath.row];
+     [self.companyMC.companyList insertObject:company atIndex:toIndexPath.row];
      [company release];
  }
 
@@ -220,7 +206,7 @@ moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
  forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self.companyList removeObjectAtIndex:[indexPath row]];
+        [self.companyMC.companyList removeObjectAtIndex:[indexPath row]];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath]
                               withRowAnimation:UITableViewRowAnimationFade];
     }
@@ -241,11 +227,11 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (self.tableView.editing) {
-        Company *company = [self.companyList objectAtIndex:[indexPath row]];
+        Company *company = [self.companyMC.companyList objectAtIndex:[indexPath row]];
         [self enterEditCompanyMode:company AndPath:indexPath];
     } else {
         self.productViewController = [[ProductVC alloc] init]; // must be matched with dealloc call
-        self.productViewController.company = self.companyList[indexPath.row];
+        self.productViewController.company = self.companyMC.companyList[indexPath.row];
         self.productViewController.title = @"Products";
         
         // Creates custom back button that is different than the title of the previous VC
@@ -271,10 +257,12 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
     // Pass the selected object to the new view controller.
 }
 */
+- (void)updateStockDisplay {
+    [self.tableView reloadData];
+}
 
 - (void)dealloc {
     [_tableView release];
-    [_companyList release];
     //[_tableView release];
     [super dealloc];
 }

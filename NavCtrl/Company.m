@@ -29,7 +29,7 @@
 
 // DESCRIPTION
 -(NSString*)description {
-  return [NSString stringWithFormat:@"<%@: %@>", self.name, self.products];
+  return [NSString stringWithFormat:@"<%@: %@, $%@>", self.name, self.products, self.stockPrice];
 } 
 
 // When deallocating, remember to release all the properties marked retain

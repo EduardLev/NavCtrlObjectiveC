@@ -11,6 +11,7 @@
 #import "ProductVC.h"
 @class ProductVC;
 @class AddEditViewController;
+@class CompanyModelController;
 #import "Company.h"
 #import "CompanyModelController.h"
 #import "AddEditViewController.h"
@@ -18,7 +19,6 @@
 @interface CompanyVC : UIViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, retain) IBOutlet UITableView *tableView; // retain - match to release in dealloc
-@property (nonatomic, retain) NSMutableArray<Company*> *companyList; // retain - match to release in dealloc
 @property (nonatomic, retain) CompanyModelController *companyMC;
 
 

@@ -159,14 +159,14 @@
     } else if (self.add) {
         Company *newCompany = [[Company alloc] initWithName:name AndProducts:nil];
         CompanyVC *companyListVC = (CompanyVC*)self.presentingViewController.childViewControllers[0];
-        [companyListVC.companyList addObject:newCompany];
+        [companyListVC.companyMC.companyList addObject:newCompany];
         [newCompany release];
         [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
     } else {
         self.company.name = name;
         CompanyVC *companyVC = (CompanyVC*)self.presentingViewController.childViewControllers[0];
-        [companyVC.companyList removeObjectAtIndex:[self.indexPath row]];
-        [companyVC.companyList insertObject:self.company atIndex:[self.indexPath row]];
+        [companyVC.companyMC.companyList removeObjectAtIndex:[self.indexPath row]];
+        [companyVC.companyMC.companyList insertObject:self.company atIndex:[self.indexPath row]];
         [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
     }
 }

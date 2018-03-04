@@ -45,7 +45,8 @@ static CompanyModelController *sharedInstance = nil;
     return self;
 }
 
-- (NSMutableArray<Company*>*)loadSampleCompanies {
+- (NSMutableArray<Company*>*)loadSampleCompanies:(CompanyVC*)company {
+  self.companyController = company;
   // QUESTION: WHEN I WAS USING A LITERAL, THE PRODUCTS WERE GOING AWAY AFTER 'viewDidLoad'??
   Product *prod1 = [[Product alloc] initWithName:@"iPhone X"];
   Product *prod2 = [[Product alloc] initWithName:@"iPad Pro"];
@@ -107,12 +108,17 @@ static CompanyModelController *sharedInstance = nil;
   [google release];
   [microsoft release];
   [amazon release];
-  
-    
+
   return self.companyList;
 }
 
--(void)getStockPrices:(NSArray*)tickerSymbols {
+-(void)getStockPrices {
+    
+    NSMutableArray *tickerSymbols = [[NSMutableArray alloc] init];
+    for (int i = 0; i < self.companyList.count; i++) {
+        [tickerSymbols addObject:self.companyList[i].ticker];
+    }
+    
     NSMutableString *tickerString = [[NSMutableString alloc] init];
     for (int i = 0; i < tickerSymbols.count; i++) {
         [tickerString appendString:tickerSymbols[i]];
@@ -168,7 +174,8 @@ static CompanyModelController *sharedInstance = nil;
     for (int i = 0; i < priceArray.count; i++) {
         self.companyList[i].stockPrice = priceArray[i];
     }
-
+    
+    [self.companyController updateStockDisplay];
 }
 
 -(void)stockFetchDidFailWithError:(NSError*)error {
