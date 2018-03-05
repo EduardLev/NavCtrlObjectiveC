@@ -11,6 +11,10 @@
 @interface Product : NSObject
 
 @property (nonatomic, retain) NSString *name; // retain - match to release in dealloc
+@property (nonatomic, retain) NSString *productURLString; // retain - match to release in dealloc
+
+
+
 @property (nonatomic, retain) UIImage *image;
 
 -(instancetype)initWithName:(NSString*)name

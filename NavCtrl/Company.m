@@ -21,7 +21,7 @@
     _name = name;
     _products = products;
     _image = [UIImage imageNamed:name];
-      _ticker = ticker;
+    _ticker = ticker;
     [_image retain];
   }
   return self;

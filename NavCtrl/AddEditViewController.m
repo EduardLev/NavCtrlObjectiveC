@@ -24,19 +24,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
 
-
-    // Do any additional setup after loading the view
+    // Creates the white background on the view.
+    self.view.backgroundColor = UIColor.whiteColor;
     
-    UIView *paintView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, self.view.frame.size.height)];
+    // Another way to create the background: Add a subview with a white background to the self.view
+    /*UIView *paintView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, self.view.frame.size.height)];
     [paintView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview: paintView];
-    [paintView release];
+    [paintView release]; */
     
-    UINavigationBar *navBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0.0, 20.0, self.view.frame.size.width, self.view.frame.size.height)];
+    // Creates the navigation bar at the top
+    // Currently only goes up to the safe view
+    //UINavigationBar *navBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0.0, 20.0, self.view.frame.size.width, self.view.frame.size.height)];
     
     NSString *title;
     if (self.add) {
@@ -44,29 +44,42 @@
     } else {
         self.fromProductController ? (title = @"Edit Product") : (title = @"Edit Company");
     }
-    UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:title];
+    //UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:title];
+    
+    
+    
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
                                      initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                      target:self
                                      action:@selector(cancelButtonDidTap)];
-    navItem.leftBarButtonItem = cancelButton;
+    
+    self.navigationItem.leftBarButtonItem = cancelButton;
+    //navItem.leftBarButtonItem = cancelButton;
     
     self.saveButton = [[UIBarButtonItem alloc]
                                    initWithBarButtonSystemItem:UIBarButtonSystemItemSave
                                    target:self
                                    action:@selector(saveButtonDidTap)];
     
+    self.navigationItem.rightBarButtonItem = self.saveButton;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    
+    /*
     navItem.rightBarButtonItem = self.saveButton;
-    navItem.rightBarButtonItem.enabled = NO;
+    navItem.rightBarButtonItem.enabled = NO;*/
 
+    /*
     [navBar setItems:@[navItem]];
-    [self.view addSubview:navBar];
+    [self.view addSubview:navBar]; */
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
     
     [self createTextFields];
     
     // release all items created in this function
-    [navBar release];
-    [navItem release];
+    //[navBar release];
+    //[navItem release];
     [cancelButton release];
 }
 
