@@ -11,12 +11,14 @@
 #import "Product.h"
 #import "NetworkController.h"
 #import "CompanyVC.h"
+#import <CoreData/CoreData.h>
 @class CompanyVC;
 
 @interface CompanyModelController : NSObject<StockFetcherDelegate>
 
 @property (nonatomic, strong) NSMutableArray<Company*> *companyList;
 @property (nonatomic, assign) CompanyVC *companyController;
+@property (nonatomic, strong) NSPersistentContainer *persistentContainer;
 
 +(id)sharedInstance;
 

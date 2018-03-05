@@ -20,6 +20,7 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *tableView; // retain - match to release in dealloc
 @property (nonatomic, retain) CompanyModelController *companyMC;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 
 /* FOR LATER: DO I HAVE TO RELEASE THIS???? */

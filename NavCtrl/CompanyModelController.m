@@ -37,11 +37,12 @@ static CompanyModelController *sharedInstance = nil;
 // Called the first time that the singleton is used
 -(id)init {
     self = [super init];
-    if (self) {
-        
-    }
+    if (!self) return nil;
     self.networkController = [[NetworkController alloc] init];
     self.networkController.delegate = self;
+    
+    self.persistentContainer = [NSPersistentContainer persistentContainerWithName:@"Data Model"];
+
     return self;
 }
 
