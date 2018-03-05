@@ -25,8 +25,7 @@
 		9E62FF261E4A33F1002D55B8 /* ProductVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E62FF241E4A33F1002D55B8 /* ProductVC.m */; };
 		9E62FF271E4A33F1002D55B8 /* ProductVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E62FF251E4A33F1002D55B8 /* ProductVC.xib */; };
 		9E62FF291E4A3982002D55B8 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E62FF281E4A3982002D55B8 /* Launch Screen.storyboard */; };
-		D435767D204DAB7300918D83 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D435767C204DAB7300918D83 /* CoreData.framework */; };
-		D4357680204DAB9C00918D83 /* NavCtrlModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D435767E204DAB9C00918D83 /* NavCtrlModel.xcdatamodeld */; };
+		D4357683204DAFEF00918D83 /* NavCtrlModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D4357681204DAFEF00918D83 /* NavCtrlModel.xcdatamodeld */; };
 		D49EC39E204883ED003FF4AB /* Company.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC39D204883ED003FF4AB /* Company.m */; };
 		D49EC3A2204886DC003FF4AB /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3A1204886DC003FF4AB /* Product.m */; };
 		D49EC3A52048A151003FF4AB /* CompanyModelController.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3A42048A151003FF4AB /* CompanyModelController.m */; };
@@ -70,8 +69,7 @@
 		9E62FF241E4A33F1002D55B8 /* ProductVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductVC.m; sourceTree = "<group>"; };
 		9E62FF251E4A33F1002D55B8 /* ProductVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductVC.xib; sourceTree = "<group>"; };
 		9E62FF281E4A3982002D55B8 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		D435767C204DAB7300918D83 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		D435767F204DAB9C00918D83 /* NavCtrlModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NavCtrlModel.xcdatamodel; sourceTree = "<group>"; };
+		D4357682204DAFEF00918D83 /* NavCtrlModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NavCtrlModel.xcdatamodel; sourceTree = "<group>"; };
 		D49EC39C204883ED003FF4AB /* Company.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Company.h; sourceTree = "<group>"; };
 		D49EC39D204883ED003FF4AB /* Company.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Company.m; sourceTree = "<group>"; };
 		D49EC3A0204886DC003FF4AB /* Product.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
@@ -93,7 +91,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				48A656B718163BF200746D36 /* CoreGraphics.framework in Frameworks */,
-				D435767D204DAB7300918D83 /* CoreData.framework in Frameworks */,
 				48A656B918163BF200746D36 /* UIKit.framework in Frameworks */,
 				48A656B518163BF200746D36 /* Foundation.framework in Frameworks */,
 			);
@@ -163,7 +160,6 @@
 		48A656B318163BF200746D36 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D435767C204DAB7300918D83 /* CoreData.framework */,
 				48A656B418163BF200746D36 /* Foundation.framework */,
 				48A656B618163BF200746D36 /* CoreGraphics.framework */,
 				48A656B818163BF200746D36 /* UIKit.framework */,
@@ -192,13 +188,13 @@
 		48A656BB18163BF200746D36 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D4357681204DAFEF00918D83 /* NavCtrlModel.xcdatamodeld */,
 				48A656BC18163BF200746D36 /* NavCtrl-Info.plist */,
 				48A656BD18163BF200746D36 /* InfoPlist.strings */,
 				48A656ED1816468000746D36 /* Sunflower.gif */,
 				48A656C018163BF200746D36 /* main.m */,
 				48A656C218163BF200746D36 /* NavCtrl-Prefix.pch */,
 				9E62FF281E4A3982002D55B8 /* Launch Screen.storyboard */,
-				D435767E204DAB9C00918D83 /* NavCtrlModel.xcdatamodeld */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -381,7 +377,7 @@
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
 				D49EC3A2204886DC003FF4AB /* Product.m in Sources */,
 				48A656C118163BF200746D36 /* main.m in Sources */,
-				D4357680204DAB9C00918D83 /* NavCtrlModel.xcdatamodeld in Sources */,
+				D4357683204DAFEF00918D83 /* NavCtrlModel.xcdatamodeld in Sources */,
 				9E62FF261E4A33F1002D55B8 /* ProductVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -517,6 +513,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NavCtrl/NavCtrl-Prefix.pch";
 				INFOPLIST_FILE = "NavCtrl/NavCtrl-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "turntotech.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -534,6 +531,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NavCtrl/NavCtrl-Prefix.pch";
 				INFOPLIST_FILE = "NavCtrl/NavCtrl-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "turntotech.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -616,14 +614,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		D435767E204DAB9C00918D83 /* NavCtrlModel.xcdatamodeld */ = {
+		D4357681204DAFEF00918D83 /* NavCtrlModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				D435767F204DAB9C00918D83 /* NavCtrlModel.xcdatamodel */,
+				D4357682204DAFEF00918D83 /* NavCtrlModel.xcdatamodel */,
 			);
-			currentVersion = D435767F204DAB9C00918D83 /* NavCtrlModel.xcdatamodel */;
+			currentVersion = D4357682204DAFEF00918D83 /* NavCtrlModel.xcdatamodel */;
 			path = NavCtrlModel.xcdatamodeld;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 			versionGroupType = wrapper.xcdatamodel;
 		};
 /* End XCVersionGroup section */
