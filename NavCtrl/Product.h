@@ -7,17 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ImageFetcherDelegate.h"
 
-@interface Product : NSObject
+@interface Product : NSObject<ImageFetcherDelegate>
 
-@property (nonatomic, retain) NSString *name; // retain - match to release in dealloc
-@property (nonatomic, retain) NSString *productURLString; // retain - match to release in dealloc
-
+// Stores as strings the product name, the URL for the product LOGO and the URL for the website
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *productLogoURL;
+@property (nonatomic, retain) NSString *productWebsiteURL;
+@property (nonatomic, retain) NSString *productLogoFilePath;
 
 
 @property (nonatomic, retain) UIImage *image;
 
--(instancetype)initWithName:(NSString*)name
+- (instancetype)initWithName:(NSString*)name;
+
+- (instancetype)initWithName:(NSString*)name
+                    LogoURL:(NSString*)logoURL
+                 WebsiteURL:(NSString*)websiteURL
 NS_DESIGNATED_INITIALIZER;
 
 @end

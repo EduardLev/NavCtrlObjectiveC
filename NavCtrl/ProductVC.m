@@ -10,6 +10,8 @@
 
 @interface ProductVC ()
 
+@property (nonatomic, retain) CompanyModelController *companyMC;
+
 @end
 
 @implementation ProductVC
@@ -17,22 +19,54 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Loads the image
+    
+    self.topImageView.image = (self.company.companyLogoFilepath == nil) ? [UIImage imageNamed:self.company.name] :
+        [UIImage imageWithContentsOfFile:self.company.companyLogoFilepath];
+    
+    // Creates the shared instance of the data model controller
+    self.companyMC = [CompanyModelController sharedInstance];
+    
     // Allows the cells to be clicked while in editing mode
     self.tableView.allowsSelectionDuringEditing = TRUE;
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this VC.
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit"
-                                                                  style:UIBarButtonItemStylePlain
-                                                                 target:self
-                                                                 action:@selector(toggleEditMode)];
-    
-    UIBarButtonItem *addButton= [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(enterAddMode)];
-                      
-    // Adds the edit button to the right side of the navigation bar
-    self.navigationItem.rightBarButtonItems = @[editButton, addButton];
-    [editButton release];
+    UIBarButtonItem *addButton= [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                             target:self
+                             action:@selector(enterAddMode)];
+    self.navigationItem.rightBarButtonItem = addButton;
     [addButton release];
+    
+    // Sets the top label to be the company name
+    self.topLabelText.text = [NSString stringWithFormat:@"%@ (%@)",
+                              self.company.name,self.company.ticker];
+    
+    [self toggleProductView];
+    
+    UIImage *backImage = [UIImage imageNamed:@"btn-navBack"];
+    // Creates custom back button with arrow image
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
+                                   initWithImage:backImage
+                                   style:UIBarButtonItemStylePlain
+                                   target:self
+                                   action:@selector(back)];
+    self.navigationItem.leftBarButtonItem = backButton;
 }
+
+// Called when back button is pressed
+- (void)back {
+    // INSERT ANIMATION HERE
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)toggleProductView {
+    if ([self.company.products count] != 0) {
+        self.emptyView.hidden = TRUE;
+    } else {
+        self.emptyView.hidden = FALSE;
+    }
+}
+
 - (void)toggleEditMode {
     if (self.tableView.editing) {
         [self.tableView setEditing:NO animated:YES];
@@ -43,44 +77,49 @@
     }
 }
 
--(void)enterAddMode {
+- (void)enterAddMode {
     self.addEditVC = [[AddEditViewController alloc] init];
+    self.addEditVC.title = @"Add Product"; // very important for logic of addEditVC
     
-    // self.addEditVC.company = SET PRODUCT HERE
-    
-    // ADJUST HERE
-    self.addEditVC.title = @"Add Product";
-    
-    self.addEditVC.fromProductController = TRUE;
-    self.addEditVC.add = TRUE;
-    
+    // CHANGE ANIMATION TYPE HERE
     /*
-     // Creates custom back button that is different than the title of the previous VC
-     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
-     style:UIBarButtonItemStylePlain
-     target:nil
-     action:nil]; */
-    // self.navigationItem.backBarButtonItem = backButton;
-    //[self.navigationController setModalPresentationStyle:UIModalPresentationCurrentContext];
-    [self presentViewController:self.addEditVC animated:YES completion:nil];
+     CATransition *transition = [CATransition animation];
+     transition.duration = 0.5;
+     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+     transition.type = kCATransitionFade; //kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
+     transition.subtype = kCATransitionFromTop; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+     [self.navigationController.view.layer addAnimation:transition forKey:nil]; */
+    
+    [self.navigationController pushViewController:self.addEditVC animated:YES];
 }
 
--(void)enterEditProductMode:(Product*)product AndPath:(NSIndexPath*)path {
-    self.addEditVC = [[AddEditViewController alloc] init];
-    self.addEditVC.title = @"Edit Product";
-    self.addEditVC.fromProductController = TRUE;
-    self.addEditVC.add = FALSE;
-    self.addEditVC.product = product;
-    self.addEditVC.company = self.company;
-    self.addEditVC.indexPath = path;
-    [self presentViewController:self.addEditVC animated:YES completion:nil];
+- (IBAction)addProductButtonDidTouchUpInside:(UIButton *)sender {
+    [self enterAddMode];
 }
+
+/*
+-(void)enterEditProductMode:(Product*)product {
+    self.addEditVC = [[AddEditViewController alloc] init];
+    self.addEditVC.title = @"Edit Product"; // important for logic on addEditVC
+    self.addEditVC.product = product; // the product will be whatever was selected in table view
+    self.addEditVC.company = self.company; // the company will be what this VC has saved
+
+    // CHANGE ANIMATION TYPE HERE
+     CATransition *transition = [CATransition animation];
+     transition.duration = 0.5;
+     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+     transition.type = kCATransitionFade; //kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
+     transition.subtype = kCATransitionFromTop; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+     [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
+    [self.navigationController pushViewController:self.addEditVC animated:YES];
+}*/
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    NSLog(@"%@",self.company);
-    
+    [self toggleProductView];
+        
     /* OLD CODE FROM ORIGINAL
     if ([self.title isEqualToString:@"Apple mobile devices"]) {
         self.products = @[@"iPad", @"iPod Touch",@"iPhone"];
@@ -101,20 +140,18 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
-
     // Return the number of rows in the section.
     return [self.company.products count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -122,20 +159,23 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     // Configure the cell...
-    
+    // 1 - Get the product by calling the correct row
     Product *product = [self.company.products objectAtIndex:[indexPath row]];
     cell.textLabel.text = [product name];
     cell.showsReorderControl = true;
+    tableView.separatorInset = UIEdgeInsetsZero;
     
-    CGSize itemSize = CGSizeMake(30, 30); // Makes a CGSize Object
+    UIImage *image = ([product.productLogoFilePath isEqual: @""]) ? [UIImage imageNamed:product.name] : [UIImage imageWithContentsOfFile:product.productLogoFilePath];
+    if (image == nil) {
+        image = [UIImage imageNamed:product.name];
+    }
+    CGSize itemSize = CGSizeMake(50, 50); // Makes a CGSize Object
     UIGraphicsBeginImageContext(itemSize); // we are outside of drawrect?
     CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.width); // creates a CGRect
-    [[product image] drawInRect:imageRect];
+    [image drawInRect:imageRect];
     cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    /* OLD CODE FROM ORIGINAL
-    cell.textLabel.text = [self.products objectAtIndex:[indexPath row]]; */
     return cell;
 }
 
@@ -152,38 +192,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         [self.tableView deleteRowsAtIndexPaths:@[indexPath]
                               withRowAnimation:UITableViewRowAnimationFade];
     }
+    
+    [self toggleProductView];
 }
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
-
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- }
- else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
 
  #pragma mark - Table view delegate
  
@@ -202,21 +213,29 @@ moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (self.tableView.editing) {
-        // show add edit VC with data filled in.
+        // If the table view is in editing mode, save the product that the user selected
+        // And then send that company to 'enterEditProductMode'
         Product *product = [self.company.products objectAtIndex:[indexPath row]];
-        [self enterEditProductMode:product AndPath:indexPath];
+        //[self enterEditProductMode:product];
     } else {
+        // If table view is not in editing mode, create new web view controller
+        // and pass along the product selected.
         self.webVC = [[WebViewController alloc] init];
-        self.webVC.title = @"Browse";
+        self.webVC.product = [self.company.products objectAtIndex:[indexPath row]];
+        self.webVC.company = self.company;
+        self.webVC.title = @"Product Link";
         [self.navigationController pushViewController:self.webVC animated:YES];
     }
-    
 }
 
 - (void)dealloc {
     [_webVC release];
     [_company release];
     [_tableView release];
+    [_topImageView release];
+    [_topLabelText release];
+    [_emptyView release];
     [super dealloc];
 }
+
 @end

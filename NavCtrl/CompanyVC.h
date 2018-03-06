@@ -9,22 +9,23 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/Webkit.h>
 #import "ProductVC.h"
-@class ProductVC;
-@class AddEditViewController;
-@class CompanyModelController;
 #import "Company.h"
 #import "CompanyModelController.h"
 #import "AddEditViewController.h"
 
 @interface CompanyVC : UIViewController<UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, retain) IBOutlet UITableView *tableView; // retain - match to release in dealloc
-@property (nonatomic, retain) CompanyModelController *companyMC;
+// Stores the tableView for access
+@property (nonatomic, retain) IBOutlet UITableView *tableView;
 
+// Stores the view shown to user when there are no companies
+@property (nonatomic, retain) IBOutlet UIView *emptyView;
 
-/* FOR LATER: DO I HAVE TO RELEASE THIS???? */
-@property (nonatomic, retain) ProductVC *productViewController;
-@property (nonatomic, retain) AddEditViewController *addEditVC;
- 
+// Action when user presses the add button within the no companies view
+- (IBAction)addButtonDidTouchUpInside:(UIButton *)sender;
+
+// Stores the stock timer object - every 60 S it refreshes
+@property (nonatomic, retain) NSTimer *stockTimer;
+
 
 @end

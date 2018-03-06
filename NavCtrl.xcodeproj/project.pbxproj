@@ -19,7 +19,6 @@
 		48A656D018163BF200746D36 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A656B818163BF200746D36 /* UIKit.framework */; };
 		48A656D818163BF200746D36 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48A656D618163BF200746D36 /* InfoPlist.strings */; };
 		48A656DA18163BF200746D36 /* NavCtrlTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 48A656D918163BF200746D36 /* NavCtrlTests.m */; };
-		48A656EE1816468000746D36 /* Sunflower.gif in Resources */ = {isa = PBXBuildFile; fileRef = 48A656ED1816468000746D36 /* Sunflower.gif */; };
 		9E62FF211E4A33DC002D55B8 /* CompanyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E62FF1F1E4A33DC002D55B8 /* CompanyVC.m */; };
 		9E62FF221E4A33DC002D55B8 /* CompanyVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E62FF201E4A33DC002D55B8 /* CompanyVC.xib */; };
 		9E62FF261E4A33F1002D55B8 /* ProductVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E62FF241E4A33F1002D55B8 /* ProductVC.m */; };
@@ -60,7 +59,6 @@
 		48A656D518163BF200746D36 /* NavCtrlTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NavCtrlTests-Info.plist"; sourceTree = "<group>"; };
 		48A656D718163BF200746D36 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		48A656D918163BF200746D36 /* NavCtrlTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NavCtrlTests.m; sourceTree = "<group>"; };
-		48A656ED1816468000746D36 /* Sunflower.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Sunflower.gif; sourceTree = "<group>"; };
 		9E62FF1E1E4A33DC002D55B8 /* CompanyVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyVC.h; sourceTree = "<group>"; };
 		9E62FF1F1E4A33DC002D55B8 /* CompanyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyVC.m; sourceTree = "<group>"; };
 		9E62FF201E4A33DC002D55B8 /* CompanyVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CompanyVC.xib; sourceTree = "<group>"; };
@@ -68,6 +66,7 @@
 		9E62FF241E4A33F1002D55B8 /* ProductVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductVC.m; sourceTree = "<group>"; };
 		9E62FF251E4A33F1002D55B8 /* ProductVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductVC.xib; sourceTree = "<group>"; };
 		9E62FF281E4A3982002D55B8 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		D4357684204E1E3200918D83 /* ImageFetcherDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageFetcherDelegate.h; sourceTree = "<group>"; };
 		D49EC39C204883ED003FF4AB /* Company.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Company.h; sourceTree = "<group>"; };
 		D49EC39D204883ED003FF4AB /* Company.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Company.m; sourceTree = "<group>"; };
 		D49EC3A0204886DC003FF4AB /* Product.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
@@ -188,7 +187,6 @@
 			children = (
 				48A656BC18163BF200746D36 /* NavCtrl-Info.plist */,
 				48A656BD18163BF200746D36 /* InfoPlist.strings */,
-				48A656ED1816468000746D36 /* Sunflower.gif */,
 				48A656C018163BF200746D36 /* main.m */,
 				48A656C218163BF200746D36 /* NavCtrl-Prefix.pch */,
 				9E62FF281E4A3982002D55B8 /* Launch Screen.storyboard */,
@@ -258,6 +256,7 @@
 				D4F83E9B204C47C000BEEBD0 /* NetworkController.h */,
 				D4F83E9C204C47C000BEEBD0 /* NetworkController.m */,
 				D4F83EA0204C499C00BEEBD0 /* StockFetcherDelegate.h */,
+				D4357684204E1E3200918D83 /* ImageFetcherDelegate.h */,
 			);
 			name = "Network Controller";
 			sourceTree = "<group>";
@@ -342,7 +341,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E62FF291E4A3982002D55B8 /* Launch Screen.storyboard in Resources */,
-				48A656EE1816468000746D36 /* Sunflower.gif in Resources */,
 				9E62FF221E4A33DC002D55B8 /* CompanyVC.xib in Resources */,
 				9E62FF271E4A33F1002D55B8 /* ProductVC.xib in Resources */,
 				48A656BF18163BF200746D36 /* InfoPlist.strings in Resources */,

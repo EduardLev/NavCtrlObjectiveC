@@ -18,8 +18,23 @@
                                         WKNavigationDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableView *tableView; // release in dealloc
-//@property (nonatomic, retain) NSArray<Product*> *products;
+
+// Holds the company that the product is a part of
 @property (nonatomic, retain) Company *company; // release in dealloc
+
+// Holds the logo for the company in preview mode
+@property (retain, nonatomic) IBOutlet UIImageView *topImageView;
+
+// Holds the company name for the company in preview mode
+@property (retain, nonatomic) IBOutlet UILabel *topLabelText;
+
+// Holds the bottom view when there are no products to show
+@property (retain, nonatomic) IBOutlet UIView *emptyView;
+
+// Action for the add product button
+- (IBAction)addProductButtonDidTouchUpInside:(UIButton *)sender;
+
+
 
 /* FOR LATER: DO I HAVE TO RELEASE THIS???? */
 @property (nonatomic, retain) WebViewController *webVC;

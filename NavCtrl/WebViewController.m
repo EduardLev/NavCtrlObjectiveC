@@ -7,10 +7,12 @@
 //
 
 #import "WebViewController.h"
+#import "AddEditViewController.h"
 
 @interface WebViewController ()
 
 @property (nonatomic, retain) UIProgressView *progressView;
+@property (nonatomic, retain) AddEditViewController *addEditVC;
 
 @end
 
@@ -18,6 +20,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIImage *backImage = [UIImage imageNamed:@"btn-navBack"];
+    // Creates custom back button with arrow image
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
+                                   initWithImage:backImage
+                                   style:UIBarButtonItemStylePlain
+                                   target:self
+                                   action:@selector(back)];
+    self.navigationItem.leftBarButtonItem = backButton;
+    
     // Do any additional setup after loading the view.
     [self createWebBrowser];
     
@@ -37,6 +49,32 @@
     self.progressView.clipsToBounds = YES;
     
     [self.view addSubview:self.progressView];
+    
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit"
+        style:UIBarButtonItemStylePlain target:self action:@selector(enterEditMode)];
+    self.navigationItem.rightBarButtonItem = editButton;
+    [editButton release];
+}
+
+- (void)back {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)enterEditMode {
+    self.addEditVC = [[AddEditViewController alloc] init];
+    self.addEditVC.title = @"Edit Product"; // important for logic on addEditVC
+    self.addEditVC.product = self.product; // the product will be whatever product is being shown
+    self.addEditVC.company = self.company;
+    
+    /* // CHANGE ANIMATION TYPE HERE
+    CATransition *transition = [CATransition animation];
+    transition.duration = 0.5;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    transition.type = kCATransitionFade; //kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
+    transition.subtype = kCATransitionFromTop; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+     [self.navigationController.view.layer addAnimation:transition forKey:nil]; */
+    
+    [self.navigationController pushViewController:self.addEditVC animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -80,10 +118,8 @@
 }
 
 - (void)createWebRequest {
-    // Request
-    
-    NSString *google = @"https://www.google.com";
-    NSURL *url = [[NSURL alloc] initWithString:google];
+    NSString *urlString = self.product.productWebsiteURL;
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
     NSURLRequest *nsRequest = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:nsRequest];
     [url release];
@@ -98,15 +134,6 @@
         self.progressView.hidden = !self.webView.loading;
     }
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)dealloc {
     [_progressView release];

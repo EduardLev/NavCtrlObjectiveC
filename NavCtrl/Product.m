@@ -7,33 +7,62 @@
 //
 
 #import "Product.h"
+#import "NetworkController.h"
 
+@interface Product ()
+    
+@property (nonatomic, retain) NetworkController *networkController;
+
+@end
+    
 @implementation Product
 
-// INITIALIZATION METHODS
--(instancetype)init {
-  return [self initWithName:@""];
+- (instancetype)init {
+  return [self initWithName:@"" LogoURL:@"" WebsiteURL:@""];
 }
 
--(instancetype)initWithName:(NSString*)name {
+- (instancetype)initWithName:(NSString*)name {
+    return [self initWithName:name LogoURL:@"" WebsiteURL:@""];
+}
+
+- (instancetype)initWithName:(NSString*)name
+                    LogoURL:(NSString *)logoURL
+                 WebsiteURL:(NSString *)websiteURL {
   self = [super init];
   if (self) {
     _name = name;
-    _image = [UIImage imageNamed:name];
-      
-      // FIX - WHY DO I HAVE TO DO THIS?
-    [_image retain]; // IF I DON'T DO THIS, IT DISAPPEARS BY THE TIME IT GOES TO THE PRODUCT VC
+    _productWebsiteURL = websiteURL;
+
+    self.networkController = [[NetworkController alloc] init];
+    self.networkController.image_delegate = self;
+    [self.networkController fetchImageForUrl:logoURL WithName:name];
   }
   return self;
 }
 
 // DESCRIPTION
--(NSString*)description {
+- (NSString*)description {
   return [NSString stringWithFormat:@"<%@>", self.name];
 }
 
+- (void)imageFetchSuccess:(NSString*)filePath {
+    NSLog(@"image fetched successfully");
+    self.productLogoFilePath = filePath;
+    NSLog(@"%@",filePath);
+}
+
+- (void)imageFetchDidFailWithError:(NSError*)error {
+    NSLog(@"Couldn't fetch image, this is a description of the error: %@",
+          error.localizedDescription);
+}
+
+- (void)imageFetchDidStart {
+    NSLog(@"initiating image fetch...");
+    // could start an activity indicator here
+}
+
 // DEALLOC
--(void)dealloc {
+- (void)dealloc {
     [_image release];
     [_name release];
     [super dealloc];

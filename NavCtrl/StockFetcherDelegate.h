@@ -10,10 +10,10 @@
 
 @protocol StockFetcherDelegate <NSObject>
 
--(void)stockFetchSuccessWithPriceArray:(NSArray*)priceArray;
+- (void)stockFetchSuccessWithPriceArray:(NSArray*)priceArray;
 
 @optional
--(void)stockFetchDidFailWithError:(NSError*)error;
--(void)stockFetchDidStart;
+- (void)stockFetchDidFailWithError:(NSError*)error;
+- (void)stockFetchDidStart;
 
 @end

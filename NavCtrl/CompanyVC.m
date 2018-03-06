@@ -9,13 +9,13 @@
 
 #import "CompanyVC.h"
 
-
-
 @interface CompanyVC ()
 
+@property (nonatomic, retain) CompanyModelController *companyMC;
+@property (nonatomic, retain) AddEditViewController *addEditVC;
+@property (nonatomic, retain) ProductVC *productVC;
 
 @end
-
 
 //  CompanyVC : UIViewController<UITableViewDelegate, UITableViewDataSource>
 @implementation CompanyVC
@@ -23,71 +23,118 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Creates the shared instance of the data model controller
+    self.companyMC = [CompanyModelController sharedInstance];
+    
+    // Creates the navigation buttons and sets the color of the navigation bar
+    [self customizeNavigationBar];
+
     // Allows the cells to be clicked while in editing mode
     self.tableView.allowsSelectionDuringEditing = TRUE;
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this VC.
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit"
-                                                                  style:UIBarButtonItemStylePlain
-                                                                 target:self
-                                                                 action:@selector(toggleEditMode)];
-    
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(enterAddMode)];
-    
-    self.navigationItem.leftBarButtonItem = addButton;
-    // Adds the edit button to the right side of the navigation bar
-    self.navigationItem.rightBarButtonItem = editButton;
-    [editButton release];
-    
-    self.companyMC = [CompanyModelController sharedInstance];
-    [self.companyMC loadSampleCompanies:self]; // loads companies into the company MC
-    
-    // call for all stock prices here. we need to send the TICKER SYMBOLS , maybe in an array, and get an array back of the stock prices.
+    [self toggleCompanyView];
+}
 
-    
-    // need to fix this because of the delegation of view controllers
-    //NSArray *stockPrices = [companyMC getStockPrices:tickerSymbols];
-    [self.companyMC getStockPrices]; // fills company with stock prices
-  
+- (void)customizeNavigationBar {
     self.title = @"Stock Tracker";
+    
+    // Changes the navigation bar colors to match given design
+    self.navigationController.navigationBar.barTintColor =
+    [UIColor colorWithRed:128.0/255 green:179.0/255 blue:66.0/255 alpha:1.0];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    
+    // Creates the edit and add buttons on the top. Links to their action functions
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
+                                   initWithTitle:@"Edit"
+                                   style:UIBarButtonItemStylePlain
+                                   target:self
+                                   action:@selector(toggleEditMode)];
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc]
+                                initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                  target:self
+                                  action:@selector(enterAddMode)];
+    
+    self.navigationItem.rightBarButtonItem = addButton;
+    self.navigationItem.leftBarButtonItem = editButton;
+    [editButton release];
+    [addButton release];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    // Check to see which view to show the user
+    [self toggleCompanyView];
     
-    [self.companyMC getStockPrices];
+    // Create a notificaiton observer that will check when the stock prices have been updated
+    // Calls for tableView to reload the data when it recieves the notification
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"stockPricesUpdated"
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification * _Nonnull note) {
+                                                     [self.tableView reloadData]; }];
     
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"imageFetchSuccess"
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification * _Nonnull note) {
+                                                      [self.tableView reloadData]; }];
+    
+    // Create timer for stock prices
+    NSTimeInterval refreshRate = 60.0;
+    self.stockTimer = [NSTimer scheduledTimerWithTimeInterval:refreshRate
+                                                       target:self.companyMC
+                                                     selector:@selector(getStockPrices)
+                                                     userInfo:nil
+                                                      repeats:YES];
+    
+    [self.companyMC getStockPrices]; // call it once immediately
     //[self.tableView reloadData];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    // removes timers and notifications
+    [self.stockTimer invalidate];
+    [[NSNotificationCenter defaultCenter] removeObserver:@"stockPricesUpdated"];
 }
 
 - (void)enterAddMode {
     self.addEditVC = [[AddEditViewController alloc] init];
+    self.addEditVC.title = @"Add Company"; // very important for logic of addEditVC
     
-    // self.addEditVC.company = SET COMPANY HERE
-    
-    // ADJUST HERE
-    self.addEditVC.title = @"Add Company";
-    
+    // CHANGE ANIMATION TYPE HERE
     /*
-    // Creates custom back button that is different than the title of the previous VC
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:nil
-                                                                  action:nil]; */
-    // self.navigationItem.backBarButtonItem = backButton;
-    //[self.navigationController setModalPresentationStyle:UIModalPresentationCurrentContext];
-    self.addEditVC.add = TRUE;
-    [self presentViewController:self.addEditVC animated:YES completion:nil];
+    CATransition *transition = [CATransition animation];
+    transition.duration = 0.5;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    transition.type = kCATransitionFade; //kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
+    transition.subtype = kCATransitionFromTop; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+    [self.navigationController.view.layer addAnimation:transition forKey:nil]; */
+
+    [self.navigationController pushViewController:self.addEditVC animated:YES];
 }
 
 - (void)toggleEditMode {
+    if ([self.companyMC.companyList count] == 0) {
+        return;
+    }
+
     if (self.tableView.editing) {
         [self.tableView setEditing:NO animated:YES];
-        self.navigationItem.rightBarButtonItem.title = @"Edit";
+        self.navigationItem.leftBarButtonItem.title = @"Edit";
     } else {
         [self.tableView setEditing:YES animated:NO];
-        self.navigationItem.rightBarButtonItem.title = @"Done";
+        self.navigationItem.leftBarButtonItem.title = @"Done";
     }
+}
+
+// Add Company button that is only shown on the initial blank page
+- (IBAction)addButtonDidTouchUpInside:(UIButton *)sender {
+    [self enterAddMode];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -97,16 +144,12 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-#warning Potentially incomplete method implementation.
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-#warning Incomplete method implementation.
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     return [self.companyMC.companyList count];
 }
@@ -115,69 +158,49 @@
 {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                      reuseIdentifier:CellIdentifier];
     }
     
     // Configure the cell...
+    // 1 - Get the company by calling the correct row
+    // 2 - Create the text label by accessing the name and ticker properties
+    // 3 - get the image by accessing the image string property
+    // 4 - create the detail text label by accessing the stock price property
     Company *comp = [self.companyMC.companyList objectAtIndex:[indexPath row]];
-    cell.textLabel.text = [comp name];
-    cell.showsReorderControl = true;
-    cell.imageView.image = comp.image;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"$%@", comp.stockPrice];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", comp.name, comp.ticker];
+    cell.showsReorderControl = TRUE;
+    //cell.imageView.image = comp.image;
     
-    // This line will eventually add the stock price
-    // cell.detailTextLabel.text = @"Hello";
+    cell.imageView.image = (comp.companyLogoFilepath == nil) ? [UIImage imageNamed:comp.name] : [UIImage imageWithContentsOfFile:comp.companyLogoFilepath];
+    
+    float price = [comp.stockPrice floatValue];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"$%0.2f", price];
+    if (price == 0) {
+        cell.detailTextLabel.text = @"Loading...";
+    }
+    cell.detailTextLabel.textColor = UIColor.grayColor;
     
     // Uncomment this next line if you would like the cell separator bars to reach the end
-    // tableView.separatorInset = UIEdgeInsetsZero;
+     tableView.separatorInset = UIEdgeInsetsZero;
     
-    /*cell.imageView.image = [comp image];
-    cell.imageView.frame = CGRectMake(0.0, 0.0, 30, 30);
-    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    cell.imageView.constraints = */
-    
-    CGSize itemSize = CGSizeMake(30, 30); // Makes a CGSize Object
+    // Creates custom frame for the imageView on the table view cell.
+    CGSize itemSize = CGSizeMake(50, 50); // Makes a CGSize Object
     UIGraphicsBeginImageContext(itemSize); // we are outside of drawrect?
     CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.width); // creates a CGRect
     [cell.imageView.image drawInRect:imageRect];
     cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-  
-    /* OLD CODE FROM ORIGINAL CODE */
-    //cell.textLabel.text = [self.companyList objectAtIndex:[indexPath row]];
     
     return cell;
 }
 
 // This method increases the height of the table cells.
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 70;
+    return 100;
 }
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- }
- else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
 
  // Override to support rearranging the table view.
  - (void)tableView:(UITableView *)tableView
@@ -189,37 +212,48 @@ moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
      [self.companyMC.companyList removeObjectAtIndex:fromIndexPath.row];
      [self.companyMC.companyList insertObject:company atIndex:toIndexPath.row];
      [company release];
+     
  }
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
  forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [self.companyMC.companyList removeObjectAtIndex:[indexPath row]];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath]
                               withRowAnimation:UITableViewRowAnimationFade];
     }
+    
+    [self toggleCompanyView];
 }
 
-- (void)enterEditCompanyMode:(Company*)company AndPath:(NSIndexPath*)path {
+// If the companyList array in the data model object is empty, then show the empty view
+- (void)toggleCompanyView {
+    if ([self.companyMC.companyList count] != 0) {
+        self.emptyView.hidden = TRUE;
+    } else {
+        self.emptyView.hidden = FALSE;
+    }
+}
+
+- (void)enterEditCompanyMode:(Company*)company {
     self.addEditVC = [[AddEditViewController alloc] init];
     self.addEditVC.title = @"Edit Company";
-    self.addEditVC.fromProductController = FALSE;
-    self.addEditVC.add = FALSE;
     self.addEditVC.company = company;
-    self.addEditVC.indexPath = path;
-    [self presentViewController:self.addEditVC animated:YES completion:nil];
+    
+    // CHANGE ANIMATION TYPE HERE
+    /*
+     CATransition *transition = [CATransition animation];
+     transition.duration = 0.5;
+     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+     transition.type = kCATransitionFade; //kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
+     transition.subtype = kCATransitionFromTop; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+     [self.navigationController.view.layer addAnimation:transition forKey:nil]; */
+    
+    [self.navigationController pushViewController:self.addEditVC animated:TRUE];
 }
 
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
@@ -227,43 +261,27 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (self.tableView.editing) {
+        // If the table view is in editing mode, save the company that the user selected
+        // And then send that company and index path to 'enterEditCompanyMode'
         Company *company = [self.companyMC.companyList objectAtIndex:[indexPath row]];
-        [self enterEditCompanyMode:company AndPath:indexPath];
+        [self enterEditCompanyMode:company];
     } else {
-        self.productViewController = [[ProductVC alloc] init]; // must be matched with dealloc call
-        self.productViewController.company = self.companyMC.companyList[indexPath.row];
-        self.productViewController.title = @"Products";
-        
-        // Creates custom back button that is different than the title of the previous VC
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:nil
-                                                                      action:nil];
-        self.navigationItem.backBarButtonItem = backButton;
-        [self.navigationController
-         pushViewController:self.productViewController
-         animated:YES];
+        // If table view is not in editing mode, create new product view controller
+        // and pass along the company selected. It is important to change the title
+        // So that the view controller can decide what it has to be showing
+        self.productVC = [[ProductVC alloc] init]; // must be matched with dealloc call
+        Company *comp = self.companyMC.companyList[indexPath.row];
+        self.productVC.company = comp;
+        self.productVC.title = comp.name;
+        [self.navigationController pushViewController:self.productVC animated:YES];
     }
-
-}
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-- (void)updateStockDisplay {
-    [self.tableView reloadData];
 }
 
 - (void)dealloc {
     [_tableView release];
-    //[_tableView release];
+    [_emptyView release];
     [super dealloc];
 }
+
+
 @end

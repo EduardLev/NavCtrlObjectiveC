@@ -15,7 +15,6 @@
 {
     // Override point for customization after application launch.
   
-    // Creates rootController with alloc. Will be released in super dealloc
     CompanyVC *rootController = [[CompanyVC alloc] init];
   
     self.navigationController = [[UINavigationController alloc]
@@ -26,15 +25,6 @@
     [self.window setRootViewController:self.navigationController];
     [self.window makeKeyAndVisible];
     return YES;
-    
-    
-    /*
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
-    return YES;
-     */
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

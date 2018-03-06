@@ -7,36 +7,61 @@
 //
 
 #import "Company.h"
+#import "NetworkController.h"
+
+@interface Company ()
+
+@property (nonatomic, retain) NetworkController *networkController;
+
+@end
 
 @implementation Company
 
-// INITIALIZATION METHODS
--(instancetype)init {
-    return [self initWithName:@"" AndProducts:nil Ticker:@""];
+@synthesize networkController;
+
+- (instancetype)init {
+    return [self initWithName:@"" Ticker:@"" AndLogoURL:@""];
 }
 
--(instancetype)initWithName:(NSString*)name AndProducts:(NSMutableArray<Product*>*)products Ticker:(NSString*)ticker {
+// INITIALIZATION METHODS
+- (instancetype)initWithName:(NSString*)name Ticker:(NSString*)ticker AndLogoURL:(NSString*)logoURL {
   self = [super init]; // MATCHED WITH SUPER DEALLOC
   if (self) {
     _name = name;
-    _products = products;
-    _image = [UIImage imageNamed:name];
     _ticker = ticker;
-    [_image retain];
+    
+    self.networkController = [[NetworkController alloc] init];
+    self.networkController.image_delegate = self;
+    [self.networkController fetchImageForUrl:logoURL WithName:name];
   }
   return self;
 }
 
-// DESCRIPTION
--(NSString*)description {
+- (NSString*)description {
   return [NSString stringWithFormat:@"<%@: %@, $%@>", self.name, self.products, self.stockPrice];
-} 
+}
+
+- (void)imageFetchSuccess:(NSString*)filePath {
+    NSLog(@"image fetched successfully");
+    self.companyLogoFilepath = filePath;
+    NSLog(@"%@",filePath);
+}
+
+- (void)imageFetchDidFailWithError:(NSError*)error {
+    NSLog(@"Couldn't fetch image, this is a description of the error: %@",
+          error.localizedDescription);
+}
+
+- (void)imageFetchDidStart {
+    NSLog(@"initiating image fetch...");
+    // could start an activity indicator here
+}
 
 // When deallocating, remember to release all the properties marked retain
--(void)dealloc {
-    //[_image release];
+- (void)dealloc {
     [_products release];
     [_name release];
+    [self.networkController release];
     [super dealloc];
 }
 
