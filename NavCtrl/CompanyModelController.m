@@ -29,14 +29,14 @@ static CompanyModelController *sharedInstance = nil;
 // Called the first time that the singleton is used
 // Should load the data to this data model
 // All data on companies and products will be in this model controller
--(id)init {
+- (id)init {
     self = [super init];
     if (self) {
         // Will populate self.companyList with data written by hand in the method
         [self loadHardcodedData];
 
         // Initialize network controllers
-        self.networkController = [[NetworkController alloc] init];
+        _networkController = [[NetworkController alloc] init];
         self.networkController.stock_delegate = self;
     }
     return self;
@@ -47,12 +47,14 @@ static CompanyModelController *sharedInstance = nil;
  * Website URLS only hardcorded for apple products currently.
  * Logo URL's only hardcoded for iPhone X
  */
--(void)loadHardcodedData {
-    self.companyList = [[NSMutableArray<Company*> alloc] init];
+- (void)loadHardcodedData {
+    _companyList = [[NSMutableArray<Company*> alloc] init];
     // create hardcoded products and companies
     // Apple Products
     
-    Product *prod1 = [[Product alloc] initWithName:@"iPhone X" LogoURL:@"https://goo.gl/iYhNTa" WebsiteURL:@"https://www.apple.com/iphone-x/"];
+    Product *prod1 = [[Product alloc] initWithName:@"iPhone X"
+                                           LogoURL:@"https://goo.gl/iYhNTa"
+                                        WebsiteURL:@"https://www.apple.com/iphone-x/"];
     Product *prod2 = [[Product alloc] initWithName:@"iPad Pro"];
     prod2.productWebsiteURL = @"https://www.apple.com/ipad-pro/";
     Product *prod3 = [[Product alloc] initWithName:@"Macbook Pro"];
@@ -102,16 +104,21 @@ static CompanyModelController *sharedInstance = nil;
     Company *amazon = [[Company alloc] initWithName:@"Amazon" Ticker:@"AMZN" AndLogoURL:@"https://static1.squarespace.com/static/58eac4d88419c2d993e74f57/58ed681b29687f7f1229cc79/58ed6cf259cc68798571a3e4/1502659740704/e52e202774c81a2da566d4d0a93665cd_amazon-icon-amazon-logo-clipart_512-512.png"];
     amazon.products = amazonProducts;
     
-    self.companyList = [NSMutableArray arrayWithObjects:
+    _companyList = [NSMutableArray arrayWithObjects:
                         apple, google, microsoft, amazon, NULL];
     
     [apple release];
     [google release];
     [microsoft release];
     [amazon release];
+    
+    [appleProducts release];
+    [googleProducts release];
+    [amazonProducts release];
+    [microsoftProducts release];
 }
 
--(void)getStockPrices {
+- (void)getStockPrices {
     NSMutableArray *tickerSymbols = [[NSMutableArray alloc] init];
     for (int i = 0; i < self.companyList.count; i++) {
         [tickerSymbols addObject:self.companyList[i].ticker];
@@ -127,13 +134,14 @@ static CompanyModelController *sharedInstance = nil;
     
     [self.networkController fetchStockPriceForTicker:tickerString];
     [tickerString release];
+    [tickerSymbols release];
 }
 
 #pragma mark - Manipulation Data Model Methods
 
 - (void)addCompany:(Company *)company {
     if (self.companyList == nil) {
-        self.companyList = [[NSMutableArray<Company*> alloc] init];
+        _companyList = [[NSMutableArray<Company*> alloc] init];
     }
     [self.companyList addObject:company];
 }
@@ -180,12 +188,7 @@ static CompanyModelController *sharedInstance = nil;
     return false;
 }
 
--(void)dealloc
-{
-    [_networkController release];
-    [super dealloc];
-}
-
+#pragma mark Singleton Methods
 // We don't want to allocate a new instance, so return the current one.
 + (instancetype)allocWithZone:(NSZone*)zone {
     return [[self sharedInstance] retain];
@@ -259,6 +262,15 @@ static CompanyModelController *sharedInstance = nil;
 -(void)stockFetchDidStart {
     NSLog(@"initiating stock fetch...");
     // could start an activity indicator here
+}
+
+#pragma mark Deallocation Methods
+
+-(void)dealloc
+{
+    [_networkController release];
+    [_companyList release];
+    [super dealloc];
 }
 
 @end

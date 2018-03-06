@@ -34,21 +34,22 @@
     [self createWebBrowser];
     
     // call dealloc - NOT YET IMPLEMENTED - CHECK
-    self.progressView = [[UIProgressView alloc]
+    UIProgressView *progressView = [[UIProgressView alloc]
                          initWithProgressViewStyle:UIProgressViewStyleDefault];
-    [self.progressView sizeToFit];
+    [progressView sizeToFit];
     
     //progressView.progressTintColor = [UIColor colorWithRed:187.0/255 green:160.0/255 blue:209.0/255 alpha:1.0];
-    [[self.progressView layer]setFrame:CGRectMake(0, 60, self.view.frame.size.width, 6)];
-    [[self.progressView layer]setBorderColor:[UIColor redColor].CGColor];
-    self.progressView.trackTintColor = [UIColor clearColor];
+    [[progressView layer]setFrame:CGRectMake(0, 60, self.view.frame.size.width, 6)];
+    [[progressView layer]setBorderColor:[UIColor redColor].CGColor];
+    progressView.trackTintColor = [UIColor clearColor];
     
     //[[self.progressView layer]setCornerRadius:self.progressView.frame.size.width / 2];
     //[[self.progressView layer]setBorderWidth:3];
-    [[self.progressView layer]setMasksToBounds:TRUE];
-    self.progressView.clipsToBounds = YES;
+    [[progressView layer]setMasksToBounds:TRUE];
+    progressView.clipsToBounds = YES;
     
     [self.view addSubview:self.progressView];
+    [progressView release];
     
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit"
         style:UIBarButtonItemStylePlain target:self action:@selector(enterEditMode)];
@@ -61,7 +62,7 @@
 }
 
 - (void)enterEditMode {
-    self.addEditVC = [[AddEditViewController alloc] init];
+    _addEditVC = [[AddEditViewController alloc] init];
     self.addEditVC.title = @"Edit Product"; // important for logic on addEditVC
     self.addEditVC.product = self.product; // the product will be whatever product is being shown
     self.addEditVC.company = self.company;
@@ -91,14 +92,14 @@
 
 - (void)createWebConfiguration {
     // Web Configuration
-    self.webConfiguration = [[WKWebViewConfiguration alloc] init]; // released in dealloc
+    _webConfiguration = [[WKWebViewConfiguration alloc] init]; // released in dealloc
 }
 
 - (void)createWebView {
     // Web View
     CGRect frame = CGRectMake(0.0, 20.0, self.view.frame.size.width,
                               self.view.frame.size.height - 20);
-    self.webView = [[WKWebView alloc] initWithFrame:frame configuration:self.webConfiguration];
+    _webView = [[WKWebView alloc] initWithFrame:frame configuration:self.webConfiguration];
     self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
     UIViewAutoresizingFlexibleHeight;
     self.webView.navigationDelegate = self;
@@ -131,6 +132,7 @@
     }
     
     if ([keyPath isEqualToString:@"loading"]) {
+        NSLog(@"this happened");
         self.progressView.hidden = !self.webView.loading;
     }
 }
@@ -139,6 +141,11 @@
     [_progressView release];
     [_webView release];
     [_webConfiguration release];
+    [_addEditVC release];
+    [_webView release];
+    [_company release];
+    [_progressView release];
+    [_product release];
     [super dealloc];
 }
 

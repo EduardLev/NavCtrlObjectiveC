@@ -11,14 +11,13 @@
 
 @interface AddEditViewController ()
 
-@property (nonatomic) UITextField *nameTextField;
-@property (nonatomic) UITextField *tickerTextField;
-@property (nonatomic) UITextField *urlTextField;
+@property (nonatomic, assign) UITextField *nameTextField;
+@property (nonatomic, assign) UITextField *tickerTextField;
+@property (nonatomic, assign) UITextField *urlTextField;
 
 @property (nonatomic) UIBarButtonItem *saveButton;
 
 @property (nonatomic, retain) CompanyModelController *companyModelController;
-
 
 @end
 
@@ -101,6 +100,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [self createTextFields];
     if ([self validateTextFields]) {
         self.navigationItem.rightBarButtonItem.enabled = TRUE;
@@ -120,19 +120,20 @@
 
 // When the view disappears, remove the observers for keyboard notifications from this object
 -(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
 }
 
 // Creates frames for all text fields, and then calls 'createTextField' with that field to populate
 -(void)createTextFields {
-    self.nameTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, 200, 300, 40)];
+    _nameTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, 200, 300, 40)];
     [self createTextField:self.nameTextField];
     [self.nameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    self.tickerTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, 260, 300, 40)];
+    _tickerTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, 260, 300, 40)];
     [self createTextField:self.tickerTextField];
     [self.tickerTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    self.urlTextField= [[UITextField alloc] initWithFrame:CGRectMake(30, 320, 300, 40)];
+    _urlTextField= [[UITextField alloc] initWithFrame:CGRectMake(30, 320, 300, 40)];
     [self createTextField:self.urlTextField];
     [self.urlTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 }
@@ -214,7 +215,6 @@
         Product *newProduct = [[Product alloc] initWithName:name LogoURL:ticker WebsiteURL:url];
             if ([self checkIfProductExists:newProduct]) {
                 [self.companyModelController addProduct:newProduct ToCompany:self.company];
-                [newProduct release];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
                 UIAlertController* alert =
@@ -228,6 +228,7 @@
                 [alert addAction:defaultAction];
                 [self presentViewController:alert animated:YES completion:nil];
             }
+        [newProduct release];
     } else if ([self.title isEqualToString:@"Edit Product"]) {
         
         // 1 - remove product from the data model
@@ -244,7 +245,6 @@
         Company *newCompany = [[Company alloc] initWithName:name Ticker:ticker AndLogoURL:url];
             if ([self checkIfCompanyExists:newCompany]) {
                 [self.companyModelController addCompany:newCompany];
-                [newCompany release];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
                 UIAlertController* alert =
@@ -258,6 +258,7 @@
                 [alert addAction:defaultAction];
                 [self presentViewController:alert animated:YES completion:nil];
             }
+        [newCompany release];
     } else if ([self.title isEqualToString:@"Edit Company"]) {
         
         // 1 - remove company from the data model
@@ -422,7 +423,9 @@
 -(void)dealloc {
     self.fromProductController = 0;
     [_company release];
-    [_saveButton release];
+    [_companyModelController release];
+    [_product release];
+    [_indexPath release];
     [super dealloc];
 }
 

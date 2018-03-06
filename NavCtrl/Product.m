@@ -26,14 +26,14 @@
 }
 
 - (instancetype)initWithName:(NSString*)name
-                    LogoURL:(NSString *)logoURL
-                 WebsiteURL:(NSString *)websiteURL {
+                    LogoURL:(NSString*)logoURL
+                 WebsiteURL:(NSString*)websiteURL {
   self = [super init];
   if (self) {
     _name = name;
     _productWebsiteURL = websiteURL;
 
-    self.networkController = [[NetworkController alloc] init];
+    _networkController = [[NetworkController alloc] init];
     self.networkController.image_delegate = self;
     [self.networkController fetchImageForUrl:logoURL WithName:name];
   }
@@ -65,6 +65,10 @@
 - (void)dealloc {
     [_image release];
     [_name release];
+    [_productLogoURL release];
+    [_productWebsiteURL release];
+    [_productLogoFilePath release];
+    [_networkController release];
     [super dealloc];
 }
 

@@ -24,6 +24,8 @@
 // This property will hold the list of companies in this application
 @property (nonatomic, strong) NSMutableArray<Company*> *companyList;
 
+- (void)loadHardcodedData;
+
 // This will return the shared instance of Company Model Controller as per the singleton model
 + (CompanyModelController*)sharedInstance;
 

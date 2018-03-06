@@ -42,7 +42,7 @@
             for (int i = 0; i < stockQuotes.count; i++) {
                 [prices addObject:[stockQuotes[i] objectForKey:@"2. price"]];
             }
-            [NSError release];
+            [error release];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.stock_delegate stockFetchSuccessWithPriceArray:prices];
             });
@@ -68,14 +68,14 @@
             [data writeToFile:filePath atomically:YES];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.image_delegate imageFetchSuccess:filePath];
+                    [self.image_delegate imageFetchSuccess:filePath];
             });
         }
         
         if (error) {
             if ([self.image_delegate respondsToSelector:@selector(imageFetchDidFailWithError:)]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.image_delegate imageFetchDidFailWithError:error];
+                    //[self.image_delegate imageFetchDidFailWithError:error];
                 });
             }
         }

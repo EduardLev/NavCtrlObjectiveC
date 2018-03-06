@@ -30,8 +30,8 @@
     _name = name;
     _ticker = ticker;
     
-    self.networkController = [[NetworkController alloc] init];
-    self.networkController.image_delegate = self;
+    networkController = [[NetworkController alloc] init];
+    networkController.image_delegate = self;
     [self.networkController fetchImageForUrl:logoURL WithName:name];
   }
   return self;
@@ -61,7 +61,11 @@
 - (void)dealloc {
     [_products release];
     [_name release];
-    [self.networkController release];
+    [_companyLogoURL release];
+    [networkController release];
+    [_companyLogoFilepath release];
+    [_ticker release];
+    [_stockPrice release];
     [super dealloc];
 }
 

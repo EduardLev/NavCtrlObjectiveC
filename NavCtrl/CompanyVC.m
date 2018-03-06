@@ -103,7 +103,7 @@
 }
 
 - (void)enterAddMode {
-    self.addEditVC = [[AddEditViewController alloc] init];
+    _addEditVC = [[AddEditViewController alloc] init];
     self.addEditVC.title = @"Add Company"; // very important for logic of addEditVC
     
     // CHANGE ANIMATION TYPE HERE
@@ -174,7 +174,9 @@
     cell.showsReorderControl = TRUE;
     //cell.imageView.image = comp.image;
     
-    cell.imageView.image = (comp.companyLogoFilepath == nil) ? [UIImage imageNamed:comp.name] : [UIImage imageWithContentsOfFile:comp.companyLogoFilepath];
+    cell.imageView.image = (comp.companyLogoFilepath == nil) ?
+    [UIImage imageNamed:comp.name] :
+    [UIImage imageWithContentsOfFile:comp.companyLogoFilepath];
     
     float price = [comp.stockPrice floatValue];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"$%0.2f", price];
@@ -240,7 +242,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 }
 
 - (void)enterEditCompanyMode:(Company*)company {
-    self.addEditVC = [[AddEditViewController alloc] init];
+    _addEditVC = [[AddEditViewController alloc] init];
     self.addEditVC.title = @"Edit Company";
     self.addEditVC.company = company;
     
@@ -269,7 +271,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
         // If table view is not in editing mode, create new product view controller
         // and pass along the company selected. It is important to change the title
         // So that the view controller can decide what it has to be showing
-        self.productVC = [[ProductVC alloc] init]; // must be matched with dealloc call
+        _productVC = [[ProductVC alloc] init]; // must be matched with dealloc call
         Company *comp = self.companyMC.companyList[indexPath.row];
         self.productVC.company = comp;
         self.productVC.title = comp.name;
@@ -280,6 +282,10 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 - (void)dealloc {
     [_tableView release];
     [_emptyView release];
+    [_companyMC release];
+    [_addEditVC release];
+    [_stockTimer release];
+    [_productVC release];
     [super dealloc];
 }
 
