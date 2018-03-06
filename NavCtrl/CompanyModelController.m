@@ -105,6 +105,10 @@ static CompanyModelController *sharedInstance = nil;
     self.companyList = [NSMutableArray arrayWithObjects:
                         apple, google, microsoft, amazon, NULL];
     
+    [amazonProducts release];
+    [appleProducts release];
+    [microsoftProducts release];
+    [googleProducts release];
     [apple release];
     [google release];
     [microsoft release];
@@ -127,13 +131,14 @@ static CompanyModelController *sharedInstance = nil;
     
     [self.networkController fetchStockPriceForTicker:tickerString];
     [tickerString release];
+    [tickerSymbols release];
 }
 
 #pragma mark - Manipulation Data Model Methods
 
 - (void)addCompany:(Company *)company {
     if (self.companyList == nil) {
-        self.companyList = [[NSMutableArray<Company*> alloc] init];
+        _companyList = [[NSMutableArray<Company*> alloc] init];
     }
     [self.companyList addObject:company];
 }
@@ -183,6 +188,7 @@ static CompanyModelController *sharedInstance = nil;
 -(void)dealloc
 {
     [_networkController release];
+    [_companyList release];
     [super dealloc];
 }
 

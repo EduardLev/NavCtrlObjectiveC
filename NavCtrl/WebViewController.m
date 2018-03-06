@@ -34,7 +34,7 @@
     [self createWebBrowser];
     
     // call dealloc - NOT YET IMPLEMENTED - CHECK
-    self.progressView = [[UIProgressView alloc]
+    _progressView = [[UIProgressView alloc]
                          initWithProgressViewStyle:UIProgressViewStyleDefault];
     [self.progressView sizeToFit];
     
@@ -61,7 +61,7 @@
 }
 
 - (void)enterEditMode {
-    self.addEditVC = [[AddEditViewController alloc] init];
+    _addEditVC = [[AddEditViewController alloc] init];
     self.addEditVC.title = @"Edit Product"; // important for logic on addEditVC
     self.addEditVC.product = self.product; // the product will be whatever product is being shown
     self.addEditVC.company = self.company;
@@ -91,14 +91,14 @@
 
 - (void)createWebConfiguration {
     // Web Configuration
-    self.webConfiguration = [[WKWebViewConfiguration alloc] init]; // released in dealloc
+    _webConfiguration = [[WKWebViewConfiguration alloc] init]; // released in dealloc
 }
 
 - (void)createWebView {
     // Web View
     CGRect frame = CGRectMake(0.0, 20.0, self.view.frame.size.width,
                               self.view.frame.size.height - 20);
-    self.webView = [[WKWebView alloc] initWithFrame:frame configuration:self.webConfiguration];
+    _webView = [[WKWebView alloc] initWithFrame:frame configuration:self.webConfiguration];
     self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
     UIViewAutoresizingFlexibleHeight;
     self.webView.navigationDelegate = self;
@@ -139,6 +139,9 @@
     [_progressView release];
     [_webView release];
     [_webConfiguration release];
+    [_product release];
+    [_company release];
+    [_addEditVC release];
     [super dealloc];
 }
 

@@ -42,7 +42,6 @@
             for (int i = 0; i < stockQuotes.count; i++) {
                 [prices addObject:[stockQuotes[i] objectForKey:@"2. price"]];
             }
-            [NSError release];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.stock_delegate stockFetchSuccessWithPriceArray:prices];
             });

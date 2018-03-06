@@ -78,7 +78,7 @@
 }
 
 - (void)enterAddMode {
-    self.addEditVC = [[AddEditViewController alloc] init];
+    _addEditVC = [[AddEditViewController alloc] init];
     self.addEditVC.title = @"Add Product"; // very important for logic of addEditVC
     
     // CHANGE ANIMATION TYPE HERE
@@ -215,12 +215,11 @@ moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
     if (self.tableView.editing) {
         // If the table view is in editing mode, save the product that the user selected
         // And then send that company to 'enterEditProductMode'
-        Product *product = [self.company.products objectAtIndex:[indexPath row]];
         //[self enterEditProductMode:product];
     } else {
         // If table view is not in editing mode, create new web view controller
         // and pass along the product selected.
-        self.webVC = [[WebViewController alloc] init];
+        _webVC = [[WebViewController alloc] init];
         self.webVC.product = [self.company.products objectAtIndex:[indexPath row]];
         self.webVC.company = self.company;
         self.webVC.title = @"Product Link";
@@ -235,6 +234,8 @@ moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
     [_topImageView release];
     [_topLabelText release];
     [_emptyView release];
+    [_companyMC release];
+    [_addEditVC release];
     [super dealloc];
 }
 

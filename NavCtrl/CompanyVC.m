@@ -240,7 +240,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 }
 
 - (void)enterEditCompanyMode:(Company*)company {
-    self.addEditVC = [[AddEditViewController alloc] init];
+    _addEditVC = [[AddEditViewController alloc] init];
     self.addEditVC.title = @"Edit Company";
     self.addEditVC.company = company;
     
@@ -280,6 +280,10 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 - (void)dealloc {
     [_tableView release];
     [_emptyView release];
+    [_stockTimer release];
+    [_productVC release];
+    [_addEditVC release];
+    [_companyMC release];
     [super dealloc];
 }
 

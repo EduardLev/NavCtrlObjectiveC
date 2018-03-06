@@ -65,6 +65,10 @@
 - (void)dealloc {
     [_image release];
     [_name release];
+    [_networkController release];
+    [_productLogoURL release];
+    [_productLogoFilePath release];
+    [_productWebsiteURL release];
     [super dealloc];
 }
 

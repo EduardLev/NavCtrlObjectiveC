@@ -20,7 +20,7 @@
     self.navigationController = [[UINavigationController alloc]
                             initWithRootViewController:rootController];
     
-    self.window = [[UIWindow alloc]
+    _window = [[UIWindow alloc]
                    initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.window setRootViewController:self.navigationController];
     [self.window makeKeyAndVisible];
@@ -53,6 +53,12 @@
 {
     
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+-(void)dealloc {
+    [_window release];
+    [_navigationController release];
+    [super dealloc];
 }
 
 @end

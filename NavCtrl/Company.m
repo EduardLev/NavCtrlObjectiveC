@@ -61,7 +61,10 @@
 - (void)dealloc {
     [_products release];
     [_name release];
-    [self.networkController release];
+    [_ticker release];
+    [_stockPrice release];
+    [_companyLogoURL release];
+    [_companyLogoFilepath release];
     [super dealloc];
 }
 
