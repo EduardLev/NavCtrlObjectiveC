@@ -160,8 +160,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                      reuseIdentifier:CellIdentifier];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                       reuseIdentifier:CellIdentifier] autorelease];
     }
     
     // Configure the cell...
@@ -172,7 +172,6 @@
     Company *comp = [self.companyMC.companyList objectAtIndex:[indexPath row]];
     cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", comp.name, comp.ticker];
     cell.showsReorderControl = TRUE;
-    //cell.imageView.image = comp.image;
     
     cell.imageView.image = (comp.companyLogoFilepath == nil) ?
     [UIImage imageNamed:comp.name] :

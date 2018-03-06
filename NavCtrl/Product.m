@@ -33,7 +33,7 @@
     _name = name;
     _productWebsiteURL = websiteURL;
 
-    _networkController = [[NetworkController alloc] init];
+    self.networkController = [[NetworkController alloc] init];
     self.networkController.image_delegate = self;
     [self.networkController fetchImageForUrl:logoURL WithName:name];
   }

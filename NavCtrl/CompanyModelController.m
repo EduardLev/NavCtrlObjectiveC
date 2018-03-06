@@ -104,7 +104,7 @@ static CompanyModelController *sharedInstance = nil;
     Company *amazon = [[Company alloc] initWithName:@"Amazon" Ticker:@"AMZN" AndLogoURL:@"https://static1.squarespace.com/static/58eac4d88419c2d993e74f57/58ed681b29687f7f1229cc79/58ed6cf259cc68798571a3e4/1502659740704/e52e202774c81a2da566d4d0a93665cd_amazon-icon-amazon-logo-clipart_512-512.png"];
     amazon.products = amazonProducts;
     
-    _companyList = [NSMutableArray arrayWithObjects:
+    self.companyList = [NSMutableArray arrayWithObjects:
                         apple, google, microsoft, amazon, NULL];
     
     [apple release];

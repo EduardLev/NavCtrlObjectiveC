@@ -17,7 +17,7 @@
   
     CompanyVC *rootController = [[CompanyVC alloc] init];
   
-    self.navigationController = [[UINavigationController alloc]
+    _navigationController = [[UINavigationController alloc]
                             initWithRootViewController:rootController];
     
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -59,6 +59,7 @@
 
 - (void)dealloc {
     [_window release];
+    [_navigationController release];
     [super dealloc];
 }
 

@@ -213,7 +213,7 @@
     if ([self.title isEqualToString:@"Add Product"]) {
         // ticker text field has logo URL for Product
         Product *newProduct = [[Product alloc] initWithName:name LogoURL:ticker WebsiteURL:url];
-            if ([self checkIfProductExists:newProduct]) {
+            if (![self checkIfProductExists:newProduct]) {
                 [self.companyModelController addProduct:newProduct ToCompany:self.company];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
@@ -243,7 +243,7 @@
         
     } else if ([self.title isEqualToString:@"Add Company"]) {
         Company *newCompany = [[Company alloc] initWithName:name Ticker:ticker AndLogoURL:url];
-            if ([self checkIfCompanyExists:newCompany]) {
+            if (![self checkIfCompanyExists:newCompany]) {
                 [self.companyModelController addCompany:newCompany];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
