@@ -160,7 +160,9 @@
         } else if (field == self.tickerTextField) {
             field.text = self.fromProductController ? self.product.productLogoURL : self.company.ticker;
         } else if (field == self.urlTextField) {
-            field.text = self.fromProductController ? self.product.productWebsiteURL : self.company.companyLogoURL;
+            field.text = self.fromProductController ?
+            self.product.productWebsiteURL :
+            self.company.companyLogoURL;
         }
     }
     
@@ -212,8 +214,12 @@
     
     if ([self.title isEqualToString:@"Add Product"]) {
         // ticker text field has logo URL for Product
-        Product *newProduct = [[Product alloc] initWithName:name LogoURL:ticker WebsiteURL:url];
-            if (![self checkIfProductExists:newProduct]) {
+            if (![self checkIfProductExists:name]) {
+                Product *newProduct = [[Product alloc] initWithName:name
+                                                            LogoURL:ticker
+                                                         WebsiteURL:url];
+                NSLog(@"%@",url);
+                NSLog(@"%@",newProduct.productWebsiteURL);
                 [self.companyModelController addProduct:newProduct ToCompany:self.company];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
@@ -228,7 +234,6 @@
                 [alert addAction:defaultAction];
                 [self presentViewController:alert animated:YES completion:nil];
             }
-        [newProduct release];
     } else if ([self.title isEqualToString:@"Edit Product"]) {
         
         // 1 - remove product from the data model
@@ -242,9 +247,10 @@
         [self.navigationController popViewControllerAnimated:YES];
         
     } else if ([self.title isEqualToString:@"Add Company"]) {
-        Company *newCompany = [[Company alloc] initWithName:name Ticker:ticker AndLogoURL:url];
-            if (![self checkIfCompanyExists:newCompany]) {
+            if (![self checkIfCompanyExists:name]) {
+                Company *newCompany = [[Company alloc] initWithName:name Ticker:ticker AndLogoURL:url];
                 [self.companyModelController addCompany:newCompany];
+                [newCompany release];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
                 UIAlertController* alert =
@@ -258,25 +264,23 @@
                 [alert addAction:defaultAction];
                 [self presentViewController:alert animated:YES completion:nil];
             }
-        [newCompany release];
     } else if ([self.title isEqualToString:@"Edit Company"]) {
-        
         // 1 - remove company from the data model
         // 2 - set the stored company in this VC with new properties
         // 3 - add edited company to the data model
-        [self.companyModelController removeCompany:self.company]; // 1
+        int index = [self.companyModelController removeCompany:self.company]; // 1
         self.company.name = name; // 2
         self.company.ticker = ticker; // 2
         self.company.companyLogoURL = url; // 2
-        [self.companyModelController addCompany:self.company]; // 3
+        [self.companyModelController insertCompany:self.company AtIndex:index]; // 3
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
-- (BOOL)checkIfProductExists:(Product*)product {
+- (BOOL)checkIfProductExists:(NSString*)name {
     if ([self.company.products count] > 0) {
         for (int i = 0; i < [self.company.products count]; i++) {
-            if ([[self.company.products[i] name] isEqualToString:product.name]) {
+            if ([[self.company.products[i] name] isEqualToString:name]) {
                 return true;
             }
         }
@@ -285,10 +289,10 @@
 }
 
 
-- (BOOL)checkIfCompanyExists:(Company*)company {
+- (BOOL)checkIfCompanyExists:(NSString*)name {
     if ([self.companyModelController.companyList count] > 0) {
         for (int i = 0; i < [self.companyModelController.companyList count]; i++) {
-            if ([[self.companyModelController.companyList[i] name] isEqualToString:company.name]) {
+            if ([[self.companyModelController.companyList[i] name] isEqualToString:name]) {
                 return true;
             }
         }
@@ -296,15 +300,7 @@
     return false;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+#pragma mark - Keyboard Methods
 
 -(void)keyboardDidShow:(NSNotification*)notification {
     [UIView animateWithDuration:0.25 animations:^
@@ -320,12 +316,9 @@
          CGRect newFrame3 = [self.urlTextField frame];
          newFrame3.origin.y -= 50;
          [self.urlTextField setFrame:newFrame3];
-         
      }completion:^(BOOL finished)
      {
-         
      }];
-    
 }
 
 -(void)keyboardDidHide:(NSNotification*)notification {
@@ -347,9 +340,7 @@
          
      }completion:^(BOOL finished)
      {
-         
      }];
-    
 }
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
@@ -359,7 +350,6 @@
 
 -(BOOL)textFieldShouldEndEditing:(UITextField *)textField {
     NSLog(@"text Field Should End Editing");
-
     return true;
 }
 
@@ -367,7 +357,6 @@
 // When user clicks out
 -(void)textFieldDidEndEditing:(UITextField *)textField {
     NSLog(@"text Field Did End Editing");
-
 }
 
 // Called when user selects done on the keyboard
@@ -402,22 +391,32 @@
     return true;
 }
 
-/*
- * Checks if the text fields are all filled in with strings of length > 0.
- * If so, then the save button is enabled.
- *
- */
 
 - (void)textFieldDidChange :(UITextField *) textField{
         self.navigationItem.rightBarButtonItem.enabled = [self validateTextFields] ? TRUE : FALSE;
 }
 
+/*
+ * Checks if the text fields are all filled in with strings of length > 0.
+ * If so, then the save button is enabled.
+ *
+ */
 -(BOOL)validateTextFields {
-    if ((self.nameTextField.text.length > 0)&&(self.tickerTextField.text.length > 0)&&(self.urlTextField.text.length > 0)) {
-        return true;
-    } else {
-        return false;
-    }
+    NSString *name = self.nameTextField.text; // name of product or company
+    NSString *tickerORURL = self.tickerTextField.text; // company ticker or product logo URL
+    NSString *url = self.urlTextField.text; // company logo URL or product website URL
+    
+    return (name.length>0)&&(tickerORURL.length>0)&&(url.length>0);
+    
+    /*
+    bool correctName = (name.length > 0); // check if the name length is greater than 0
+    
+    bool correctURL;
+    NSRange range = NSMakeRange(0, 8); // string "https://" is 8 characters long
+    NSString *firstPartOfURL = [url substringWithRange:range];
+    correctURL = [firstPartOfURL isEqualToString:@"https://"] ? TRUE : FALSE;
+    
+    return (correctURL)&&(correctName); */
 }
 
 -(void)dealloc {

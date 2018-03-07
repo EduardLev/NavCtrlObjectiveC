@@ -20,25 +20,38 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    UIImage *backImage = [UIImage imageNamed:@"btn-navBack"];
-    // Creates custom back button with arrow image
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
-                                   initWithImage:backImage
-                                   style:UIBarButtonItemStylePlain
-                                   target:self
-                                   action:@selector(back)];
-    self.navigationItem.leftBarButtonItem = backButton;
+    [self createNavigationBarButtons];
     
     // Do any additional setup after loading the view.
-    [self createWebBrowser];
-    
+    if ([self checkInternetConnection]) {
+        [self createWebBrowser];
+        [self createProgressView];
+    } else {
+        [self presentNoInternetAlert];
+    }
+}
+
+- (void)presentNoInternetAlert {
+    UIAlertController* alert =
+    [UIAlertController alertControllerWithTitle:@"Error"
+                                        message:@"No Internet Connection"
+                                 preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* defaultAction =
+    [UIAlertAction actionWithTitle:@"OK"
+                             style:UIAlertActionStyleDefault
+                           handler:^(UIAlertAction * action) {}];
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)createProgressView {
     // call dealloc - NOT YET IMPLEMENTED - CHECK
     UIProgressView *progressView = [[UIProgressView alloc]
-                         initWithProgressViewStyle:UIProgressViewStyleDefault];
+                                    initWithProgressViewStyle:UIProgressViewStyleDefault];
     [progressView sizeToFit];
     
-    //progressView.progressTintColor = [UIColor colorWithRed:187.0/255 green:160.0/255 blue:209.0/255 alpha:1.0];
+    //progressView.progressTintColor = [UIColor colorWithRed:187.0/255
+    //green:160.0/255 blue:209.0/255 alpha:1.0];
     [[progressView layer]setFrame:CGRectMake(0, 60, self.view.frame.size.width, 6)];
     [[progressView layer]setBorderColor:[UIColor redColor].CGColor];
     progressView.trackTintColor = [UIColor clearColor];
@@ -50,11 +63,24 @@
     
     [self.view addSubview:self.progressView];
     [progressView release];
-    
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit"
-        style:UIBarButtonItemStylePlain target:self action:@selector(enterEditMode)];
+}
+
+- (void)createNavigationBarButtons {
+    // Creates EDIT Button
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit"
+                                                                  style:UIBarButtonItemStylePlain
+                                                                 target:self
+                                                                 action:@selector(enterEditMode)];
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
+    
+    // Creates BACK Button with custom arrow image
+    UIImage *backImage = [UIImage imageNamed:@"btn-navBack"];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:backImage
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(back)];
+    self.navigationItem.leftBarButtonItem = backButton;
 }
 
 - (void)back {
@@ -70,9 +96,12 @@
     /* // CHANGE ANIMATION TYPE HERE
     CATransition *transition = [CATransition animation];
     transition.duration = 0.5;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-    transition.type = kCATransitionFade; //kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
-    transition.subtype = kCATransitionFromTop; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+    transition.timingFunction = [CAMediaTimingFunction
+     functionWithName:kCAMediaTimingFunctionEaseIn];
+    transition.type = kCATransitionFade; //kCATransitionMoveIn; //, kCATransitionPush,
+     kCATransitionReveal, kCATransitionFade
+    transition.subtype = kCATransitionFromTop; //kCATransitionFromLeft, kCATransitionFromRight,
+     kCATransitionFromTop, kCATransitionFromBottom
      [self.navigationController.view.layer addAnimation:transition forKey:nil]; */
     
     [self.navigationController pushViewController:self.addEditVC animated:YES];
@@ -84,6 +113,13 @@
 }
 
 #pragma mark - Network Methods
+
+- (BOOL)checkInternetConnection {
+    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+    return (networkStatus != NotReachable);
+}
+
 - (void)createWebBrowser {
     [self createWebConfiguration];
     [self createWebView];
@@ -120,13 +156,20 @@
 
 - (void)createWebRequest {
     NSString *urlString = self.product.productWebsiteURL;
-    NSURL *url = [[NSURL alloc] initWithString:urlString];
-    NSURLRequest *nsRequest = [NSURLRequest requestWithURL:url];
-    [self.webView loadRequest:nsRequest];
+    NSLog(@"%@",urlString);
+    NSURL *url = [NSURL URLWithString:urlString];
+    if ((url.host != nil)&&(url.scheme != nil)) {
+        NSURLRequest *nsRequest = [NSURLRequest requestWithURL:url];
+        [self.webView loadRequest:nsRequest];
+    }
     [url release];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                       context:(void *)context {
+    
     if ([keyPath isEqualToString:@"estimatedProgress"]) {
         self.progressView.progress = self.webView.estimatedProgress;
     }

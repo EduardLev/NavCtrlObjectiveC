@@ -68,6 +68,8 @@
     // Check to see which view to show the user
     [self toggleCompanyView];
     
+    [self.tableView reloadData];
+    
     // Create a notificaiton observer that will check when the stock prices have been updated
     // Calls for tableView to reload the data when it recieves the notification
     [[NSNotificationCenter defaultCenter] addObserverForName:@"stockPricesUpdated"

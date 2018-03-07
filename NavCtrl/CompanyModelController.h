@@ -34,13 +34,15 @@
  */
 - (void)addCompany:(Company*)company;
 
+- (void)insertCompany:(Company*)company AtIndex:(int)index;
+
 /**
  * Function that removes a given company from the company list array in the Company Model Controller
  * object. The function returns true if the company was removed. The company may not be able to be
  * removed either because it does not exist in the company list array or because the company
  * list array does not exist. In either case, the function will return false.
  */
-- (BOOL)removeCompany:(Company*)company;
+- (int)removeCompany:(Company*)company;
 
 /**
  * Function that adds a given Product object to a Company that may be contained in the company

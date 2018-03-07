@@ -78,8 +78,9 @@
 }
 
 - (void)enterAddMode {
-    _addEditVC = [[AddEditViewController alloc] init];
+    self.addEditVC = [[AddEditViewController alloc] init];
     self.addEditVC.title = @"Add Product"; // very important for logic of addEditVC
+    self.addEditVC.company = self.company;
     
     // CHANGE ANIMATION TYPE HERE
     /*
@@ -147,6 +148,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
+    NSLog(@"%d",[self.company.products count]);
+
     return [self.company.products count];
 }
 
@@ -221,13 +224,14 @@ moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
     } else {
         // If table view is not in editing mode, create new web view controller
         // and pass along the product selected.
-        _webVC = [[WebViewController alloc] init];
+        self.webVC = [[WebViewController alloc] init];
         self.webVC.product = [self.company.products objectAtIndex:[indexPath row]];
         self.webVC.company = self.company;
         self.webVC.title = @"Product Link";
         [self.navigationController pushViewController:self.webVC animated:YES];
-    }
+        }
 }
+
 
 - (void)dealloc {
     [_webVC release];

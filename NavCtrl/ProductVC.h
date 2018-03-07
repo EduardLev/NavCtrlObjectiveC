@@ -31,14 +31,10 @@
 // Holds the bottom view when there are no products to show
 @property (nonatomic, retain) IBOutlet UIView *emptyView;
 
-// Action for the add product button
-- (IBAction)addProductButtonDidTouchUpInside:(UIButton *)sender;
-
-
-
-/* FOR LATER: DO I HAVE TO RELEASE THIS???? */
 @property (nonatomic, retain) WebViewController *webVC;
 @property (nonatomic, retain) AddEditViewController *addEditVC;
 
+// Action for the add product button
+- (IBAction)addProductButtonDidTouchUpInside:(UIButton *)sender;
 
 @end

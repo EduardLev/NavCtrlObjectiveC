@@ -24,6 +24,7 @@
 		9E62FF261E4A33F1002D55B8 /* ProductVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E62FF241E4A33F1002D55B8 /* ProductVC.m */; };
 		9E62FF271E4A33F1002D55B8 /* ProductVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E62FF251E4A33F1002D55B8 /* ProductVC.xib */; };
 		9E62FF291E4A3982002D55B8 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E62FF281E4A3982002D55B8 /* Launch Screen.storyboard */; };
+		D483EA972050446B00CD5CEE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D483EA952050446A00CD5CEE /* Reachability.m */; };
 		D49EC39E204883ED003FF4AB /* Company.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC39D204883ED003FF4AB /* Company.m */; };
 		D49EC3A2204886DC003FF4AB /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3A1204886DC003FF4AB /* Product.m */; };
 		D49EC3A52048A151003FF4AB /* CompanyModelController.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3A42048A151003FF4AB /* CompanyModelController.m */; };
@@ -67,6 +68,8 @@
 		9E62FF251E4A33F1002D55B8 /* ProductVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductVC.xib; sourceTree = "<group>"; };
 		9E62FF281E4A3982002D55B8 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		D4357684204E1E3200918D83 /* ImageFetcherDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageFetcherDelegate.h; sourceTree = "<group>"; };
+		D483EA952050446A00CD5CEE /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = ../../Reachability/Reachability/Reachability.m; sourceTree = "<group>"; };
+		D483EA962050446B00CD5CEE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = ../../Reachability/Reachability/Reachability.h; sourceTree = "<group>"; };
 		D49EC39C204883ED003FF4AB /* Company.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Company.h; sourceTree = "<group>"; };
 		D49EC39D204883ED003FF4AB /* Company.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Company.m; sourceTree = "<group>"; };
 		D49EC3A0204886DC003FF4AB /* Product.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
@@ -168,6 +171,8 @@
 		48A656BA18163BF200746D36 /* NavCtrl */ = {
 			isa = PBXGroup;
 			children = (
+				D483EA962050446B00CD5CEE /* Reachability.h */,
+				D483EA952050446A00CD5CEE /* Reachability.m */,
 				D4F83E9E204C47C600BEEBD0 /* Network Controller */,
 				D49EC3A62048A15D003FF4AB /* Model Controllers */,
 				D49EC39F204883F3003FF4AB /* Models */,
@@ -366,6 +371,7 @@
 				9E62FF211E4A33DC002D55B8 /* CompanyVC.m in Sources */,
 				D49EC3A52048A151003FF4AB /* CompanyModelController.m in Sources */,
 				D4F83E992049E51A00BEEBD0 /* AddEditViewController.m in Sources */,
+				D483EA972050446B00CD5CEE /* Reachability.m in Sources */,
 				D49EC39E204883ED003FF4AB /* Company.m in Sources */,
 				D4F83E9D204C47C000BEEBD0 /* NetworkController.m in Sources */,
 				D49EC3AD20499D1E003FF4AB /* WebViewController.m in Sources */,
