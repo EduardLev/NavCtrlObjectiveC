@@ -24,8 +24,8 @@
     
     // Do any additional setup after loading the view.
     if ([self checkInternetConnection]) {
-        [self createProgressView];
         [self createWebBrowser];
+        [self createProgressView];
     } else {
         [self presentNoInternetAlert];
     }
