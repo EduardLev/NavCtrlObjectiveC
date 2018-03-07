@@ -121,24 +121,28 @@
 // When the view disappears, remove the observers for keyboard notifications from this object
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardDidShowNotification
                                                   object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardDidHideNotification
                                                   object:nil];
+
 }
 
 // Creates frames for all text fields, and then calls 'createTextField' with that field to populate
 -(void)createTextFields {
     _nameTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, 200, 300, 40)];
     [self createTextField:self.nameTextField];
+
     [self.nameTextField addTarget:self action:@selector(textFieldDidChange:)
                  forControlEvents:UIControlEventEditingChanged];
     _tickerTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, 260, 300, 40)];
     [self createTextField:self.tickerTextField];
     [self.tickerTextField addTarget:self action:@selector(textFieldDidChange:)
                    forControlEvents:UIControlEventEditingChanged];
+
     _urlTextField= [[UITextField alloc] initWithFrame:CGRectMake(30, 320, 300, 40)];
     [self createTextField:self.urlTextField];
     [self.urlTextField addTarget:self action:@selector(textFieldDidChange:)
@@ -229,6 +233,7 @@
                 [newProduct release];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
+                [newProduct release];
                 UIAlertController* alert =
                 [UIAlertController alertControllerWithTitle:@"Error"
                                                     message:@"Product already exists"
@@ -259,6 +264,7 @@
                 [newCompany release];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
+                [newCompany release];
                 UIAlertController* alert =
                 [UIAlertController alertControllerWithTitle:@"Error"
                                                     message:@"Company already exists"
@@ -428,8 +434,10 @@
 -(void)dealloc {
     self.fromProductController = 0;
     [_company release];
+
     [_companyModelController release];
     [_product release];
+
     [_indexPath release];
     [super dealloc];
 }

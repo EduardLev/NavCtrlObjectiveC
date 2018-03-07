@@ -119,6 +119,10 @@ static CompanyModelController *sharedInstance = nil;
     self.companyList = [NSMutableArray arrayWithObjects:
                         apple, google, microsoft, amazon, NULL];
     
+    [amazonProducts release];
+    [appleProducts release];
+    [microsoftProducts release];
+    [googleProducts release];
     [apple release];
     [google release];
     [microsoft release];
@@ -211,6 +215,7 @@ static CompanyModelController *sharedInstance = nil;
 }
 
 #pragma mark Singleton Methods
+
 // We don't want to allocate a new instance, so return the current one.
 + (instancetype)allocWithZone:(NSZone*)zone {
     return [[self sharedInstance] retain];
