@@ -30,8 +30,8 @@
     _name = name;
     _ticker = ticker;
     
-    self.networkController = [[NetworkController alloc] init];
-    self.networkController.image_delegate = self;
+    networkController = [[NetworkController alloc] init];
+    networkController.image_delegate = self;
     [self.networkController fetchImageForUrl:logoURL WithName:name];
   }
   return self;
@@ -42,6 +42,8 @@
 }
 
 - (void)imageFetchSuccess:(NSString*)filePath {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"imageFetchSuccess"
+                                                        object:nil];
     NSLog(@"image fetched successfully");
     self.companyLogoFilepath = filePath;
     NSLog(@"%@",filePath);
@@ -61,10 +63,11 @@
 - (void)dealloc {
     [_products release];
     [_name release];
+    [_companyLogoURL release];
+    [networkController release];
+    [_companyLogoFilepath release];
     [_ticker release];
     [_stockPrice release];
-    [_companyLogoURL release];
-    [_companyLogoFilepath release];
     [super dealloc];
 }
 

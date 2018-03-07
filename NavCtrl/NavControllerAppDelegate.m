@@ -17,13 +17,15 @@
   
     CompanyVC *rootController = [[CompanyVC alloc] init];
   
-    self.navigationController = [[UINavigationController alloc]
+    _navigationController = [[UINavigationController alloc]
                             initWithRootViewController:rootController];
     
-    _window = [[UIWindow alloc]
-                   initWithFrame:[[UIScreen mainScreen] bounds]];
+    _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.window setRootViewController:self.navigationController];
     [self.window makeKeyAndVisible];
+    
+    [rootController release];
+    [self.navigationController release];    
     return YES;
 }
 
@@ -55,7 +57,7 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
--(void)dealloc {
+- (void)dealloc {
     [_window release];
     [_navigationController release];
     [super dealloc];

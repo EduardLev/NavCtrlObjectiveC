@@ -11,6 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Product.h"
 #import "Company.h"
+#import "Reachability.h"
 
 @interface WebViewController : UIViewController<WKNavigationDelegate, WKUIDelegate>
 

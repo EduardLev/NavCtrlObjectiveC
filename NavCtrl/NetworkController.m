@@ -42,6 +42,7 @@
             for (int i = 0; i < stockQuotes.count; i++) {
                 [prices addObject:[stockQuotes[i] objectForKey:@"2. price"]];
             }
+            [error release];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.stock_delegate stockFetchSuccessWithPriceArray:prices];
             });
@@ -58,7 +59,11 @@
     }
     
     NSURL *url = [NSURL URLWithString:logoURL];
-    NSURLSessionDownloadTask *task = [[NSURLSession sharedSession] downloadTaskWithURL:url completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSessionDownloadTask *task = [[NSURLSession sharedSession]
+                                      downloadTaskWithURL:url
+                                        completionHandler:^(NSURL * _Nullable location,
+                                                            NSURLResponse * _Nullable response,
+                                                            NSError * _Nullable error) {
         UIImage *logo = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
         if (logo) {
             NSString *fileName = [NSString stringWithFormat:@"%@.png", name];
@@ -67,14 +72,14 @@
             [data writeToFile:filePath atomically:YES];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.image_delegate imageFetchSuccess:filePath];
+                    [self.image_delegate imageFetchSuccess:filePath];
             });
         }
         
         if (error) {
             if ([self.image_delegate respondsToSelector:@selector(imageFetchDidFailWithError:)]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.image_delegate imageFetchDidFailWithError:error];
+                    //[self.image_delegate imageFetchDidFailWithError:error];
                 });
             }
         }

@@ -26,12 +26,13 @@
 }
 
 - (instancetype)initWithName:(NSString*)name
-                    LogoURL:(NSString *)logoURL
-                 WebsiteURL:(NSString *)websiteURL {
+                    LogoURL:(NSString*)logoURL
+                 WebsiteURL:(NSString*)websiteURL {
   self = [super init];
   if (self) {
-    _name = name;
-    _productWebsiteURL = websiteURL;
+    self.name = name;
+    self.productWebsiteURL = websiteURL;
+    self.productLogoURL = logoURL;
 
     self.networkController = [[NetworkController alloc] init];
     self.networkController.image_delegate = self;
@@ -46,6 +47,8 @@
 }
 
 - (void)imageFetchSuccess:(NSString*)filePath {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"imageFetchSuccess"
+                                                        object:nil];
     NSLog(@"image fetched successfully");
     self.productLogoFilePath = filePath;
     NSLog(@"%@",filePath);
@@ -65,10 +68,10 @@
 - (void)dealloc {
     [_image release];
     [_name release];
-    [_networkController release];
     [_productLogoURL release];
-    [_productLogoFilePath release];
     [_productWebsiteURL release];
+    [_productLogoFilePath release];
+    [_networkController release];
     [super dealloc];
 }
 

@@ -68,6 +68,8 @@
     // Check to see which view to show the user
     [self toggleCompanyView];
     
+    [self.tableView reloadData];
+    
     // Create a notificaiton observer that will check when the stock prices have been updated
     // Calls for tableView to reload the data when it recieves the notification
     [[NSNotificationCenter defaultCenter] addObserverForName:@"stockPricesUpdated"
@@ -103,7 +105,7 @@
 }
 
 - (void)enterAddMode {
-    self.addEditVC = [[AddEditViewController alloc] init];
+    _addEditVC = [[AddEditViewController alloc] init];
     self.addEditVC.title = @"Add Company"; // very important for logic of addEditVC
     
     // CHANGE ANIMATION TYPE HERE
@@ -160,8 +162,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                      reuseIdentifier:CellIdentifier];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                       reuseIdentifier:CellIdentifier] autorelease];
     }
     
     // Configure the cell...
@@ -172,9 +174,10 @@
     Company *comp = [self.companyMC.companyList objectAtIndex:[indexPath row]];
     cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", comp.name, comp.ticker];
     cell.showsReorderControl = TRUE;
-    //cell.imageView.image = comp.image;
     
-    cell.imageView.image = (comp.companyLogoFilepath == nil) ? [UIImage imageNamed:comp.name] : [UIImage imageWithContentsOfFile:comp.companyLogoFilepath];
+    cell.imageView.image = (comp.companyLogoFilepath == nil) ?
+    [UIImage imageNamed:comp.name] :
+    [UIImage imageWithContentsOfFile:comp.companyLogoFilepath];
     
     float price = [comp.stockPrice floatValue];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"$%0.2f", price];
@@ -269,7 +272,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
         // If table view is not in editing mode, create new product view controller
         // and pass along the company selected. It is important to change the title
         // So that the view controller can decide what it has to be showing
-        self.productVC = [[ProductVC alloc] init]; // must be matched with dealloc call
+        _productVC = [[ProductVC alloc] init]; // must be matched with dealloc call
         Company *comp = self.companyMC.companyList[indexPath.row];
         self.productVC.company = comp;
         self.productVC.title = comp.name;
@@ -280,10 +283,10 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 - (void)dealloc {
     [_tableView release];
     [_emptyView release];
+    [_companyMC release];
+    [_addEditVC release];
     [_stockTimer release];
     [_productVC release];
-    [_addEditVC release];
-    [_companyMC release];
     [super dealloc];
 }
 

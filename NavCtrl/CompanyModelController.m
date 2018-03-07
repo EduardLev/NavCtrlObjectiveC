@@ -29,14 +29,14 @@ static CompanyModelController *sharedInstance = nil;
 // Called the first time that the singleton is used
 // Should load the data to this data model
 // All data on companies and products will be in this model controller
--(id)init {
+- (id)init {
     self = [super init];
     if (self) {
         // Will populate self.companyList with data written by hand in the method
         [self loadHardcodedData];
 
         // Initialize network controllers
-        self.networkController = [[NetworkController alloc] init];
+        _networkController = [[NetworkController alloc] init];
         self.networkController.stock_delegate = self;
     }
     return self;
@@ -47,17 +47,20 @@ static CompanyModelController *sharedInstance = nil;
  * Website URLS only hardcorded for apple products currently.
  * Logo URL's only hardcoded for iPhone X
  */
--(void)loadHardcodedData {
-    self.companyList = [[NSMutableArray<Company*> alloc] init];
+- (void)loadHardcodedData {
+    _companyList = [[NSMutableArray<Company*> alloc] init];
     // create hardcoded products and companies
     // Apple Products
     
-    Product *prod1 = [[Product alloc] initWithName:@"iPhone X" LogoURL:@"https://goo.gl/iYhNTa" WebsiteURL:@"https://www.apple.com/iphone-x/"];
+    Product *prod1 = [[Product alloc] initWithName:@"iPhone X"
+                                           LogoURL:@"https://goo.gl/iYhNTa"
+                                        WebsiteURL:@"https://www.apple.com/iphone-x/"];
     Product *prod2 = [[Product alloc] initWithName:@"iPad Pro"];
     prod2.productWebsiteURL = @"https://www.apple.com/ipad-pro/";
     Product *prod3 = [[Product alloc] initWithName:@"Macbook Pro"];
     prod3.productWebsiteURL = @"https://www.apple.com/macbook-pro/";
-    NSMutableArray<Product*> *appleProducts = [[NSMutableArray alloc] initWithObjects:prod1, prod2, prod3, nil];
+    NSMutableArray<Product*> *appleProducts = [[NSMutableArray alloc]
+                                               initWithObjects:prod1, prod2, prod3, nil];
     [prod1 release];
     [prod2 release];
     [prod3 release];
@@ -66,7 +69,8 @@ static CompanyModelController *sharedInstance = nil;
     prod1 = [[Product alloc] initWithName:@"Pixel"];
     prod2 = [[Product alloc] initWithName:@"Chromebook Pixel"];
     prod3 = [[Product alloc] initWithName:@"Home"];
-    NSMutableArray<Product*> *googleProducts = [[NSMutableArray alloc] initWithObjects:prod1, prod2, prod3, nil];
+    NSMutableArray<Product*> *googleProducts = [[NSMutableArray alloc]
+                                                initWithObjects:prod1, prod2, prod3, nil];
     [prod1 release];
     [prod2 release];
     [prod3 release];
@@ -75,7 +79,8 @@ static CompanyModelController *sharedInstance = nil;
     prod1 = [[Product alloc] initWithName:@"Surface Pro"];
     prod2 = [[Product alloc] initWithName:@"Lumia 950"];
     prod3 = [[Product alloc] initWithName:@"Lumia 650"];
-    NSMutableArray<Product*> *microsoftProducts = [[NSMutableArray alloc] initWithObjects:prod1, prod2, prod3, nil];
+    NSMutableArray<Product*> *microsoftProducts = [[NSMutableArray alloc]
+                                                   initWithObjects:prod1, prod2, prod3, nil];
     [prod1 release];
     [prod2 release];
     [prod3 release];
@@ -84,7 +89,8 @@ static CompanyModelController *sharedInstance = nil;
     prod1 = [[Product alloc] initWithName:@"Kindle Fire"];
     prod2 = [[Product alloc] initWithName:@"Kindle Paperwhite"];
     prod3 = [[Product alloc] initWithName:@"Echo"];
-    NSMutableArray<Product*> *amazonProducts = [[NSMutableArray alloc] initWithObjects:prod1, prod2, prod3, nil];
+    NSMutableArray<Product*> *amazonProducts = [[NSMutableArray alloc]
+                                                initWithObjects:prod1, prod2, prod3, nil];
     [prod1 release];
     [prod2 release];
     [prod3 release];
@@ -93,13 +99,21 @@ static CompanyModelController *sharedInstance = nil;
     prod3 = nil;
     
     // Create company objects with the above products
-    Company *apple = [[Company alloc] initWithName:@"Apple" Ticker:@"AAPL" AndLogoURL:@"https://goo.gl/1gyEdF"];
+    Company *apple = [[Company alloc] initWithName:@"Apple"
+                                            Ticker:@"AAPL"
+                                        AndLogoURL:@"https://goo.gl/1gyEdF"];
     apple.products = appleProducts;
-    Company *google = [[Company alloc] initWithName:@"Google" Ticker:@"GOOGL" AndLogoURL:@"https://goo.gl/irTv1f"];
+    Company *google = [[Company alloc] initWithName:@"Google"
+                                             Ticker:@"GOOGL"
+                                         AndLogoURL:@"https://goo.gl/irTv1f"];
     google.products = googleProducts;
-    Company *microsoft = [[Company alloc] initWithName:@"Microsoft" Ticker:@"MSFT" AndLogoURL:@"https://diylogodesigns.com/blog/wp-content/uploads/2016/04/Microsoft-Logo-icon-png-Transparent-Background.png"];
+    Company *microsoft = [[Company alloc] initWithName:@"Microsoft"
+                                                Ticker:@"MSFT"
+                                            AndLogoURL:@"https://diylogodesigns.com/blog/wp-content/uploads/2016/04/Microsoft-Logo-icon-png-Transparent-Background.png"];
     microsoft.products = microsoftProducts;
-    Company *amazon = [[Company alloc] initWithName:@"Amazon" Ticker:@"AMZN" AndLogoURL:@"https://static1.squarespace.com/static/58eac4d88419c2d993e74f57/58ed681b29687f7f1229cc79/58ed6cf259cc68798571a3e4/1502659740704/e52e202774c81a2da566d4d0a93665cd_amazon-icon-amazon-logo-clipart_512-512.png"];
+    Company *amazon = [[Company alloc] initWithName:@"Amazon"
+                                             Ticker:@"AMZN"
+                                         AndLogoURL:@"https://static1.squarespace.com/static/58eac4d88419c2d993e74f57/58ed681b29687f7f1229cc79/58ed6cf259cc68798571a3e4/1502659740704/e52e202774c81a2da566d4d0a93665cd_amazon-icon-amazon-logo-clipart_512-512.png"];
     amazon.products = amazonProducts;
     
     self.companyList = [NSMutableArray arrayWithObjects:
@@ -113,9 +127,14 @@ static CompanyModelController *sharedInstance = nil;
     [google release];
     [microsoft release];
     [amazon release];
+    
+    [appleProducts release];
+    [googleProducts release];
+    [amazonProducts release];
+    [microsoftProducts release];
 }
 
--(void)getStockPrices {
+- (void)getStockPrices {
     NSMutableArray *tickerSymbols = [[NSMutableArray alloc] init];
     for (int i = 0; i < self.companyList.count; i++) {
         [tickerSymbols addObject:self.companyList[i].ticker];
@@ -143,7 +162,14 @@ static CompanyModelController *sharedInstance = nil;
     [self.companyList addObject:company];
 }
 
-- (BOOL)removeCompany:(Company *)company {
+- (void)insertCompany:(Company*)company AtIndex:(int)index {
+    if (self.companyList == nil) {
+        [self addCompany:company];
+    }
+    [self.companyList insertObject:company atIndex:index];
+}
+
+- (int)removeCompany:(Company *)company {
     // Converts the company input to uppercase in order to compare to the company list
     NSString *companyInputUppercase = [company.name uppercaseString];
     if (self.companyList != nil) {
@@ -152,20 +178,23 @@ static CompanyModelController *sharedInstance = nil;
             NSString *companyListUppercase = [self.companyList[i].name uppercaseString];
             if ([companyListUppercase isEqualToString:companyInputUppercase]) {
                 [self.companyList removeObjectAtIndex:i];
-                return true;
+                return i;
             }
         }
     }
     
     // returns if self.companyList = nil, or if no name is found in the list equal to input name
-    return false;
+    return -1;
 }
 
 - (BOOL)addProduct:(Product*)product ToCompany:(Company*)company {
     for (Company *c in self.companyList) {
-        if ([c isEqual:company]) {
-            [c.products addObject:product];
-            return true;
+        if ([c.name isEqual:company.name]) {
+            if (c.products == nil) {
+                c.products = [[NSMutableArray<Product*> alloc] init];
+            }
+        [c.products addObject:product];
+        return true;
         }
     }
     // product was not added to the company
@@ -185,12 +214,7 @@ static CompanyModelController *sharedInstance = nil;
     return false;
 }
 
--(void)dealloc
-{
-    [_networkController release];
-    [_companyList release];
-    [super dealloc];
-}
+#pragma mark Singleton Methods
 
 // We don't want to allocate a new instance, so return the current one.
 + (instancetype)allocWithZone:(NSZone*)zone {
@@ -249,7 +273,8 @@ static CompanyModelController *sharedInstance = nil;
 }
 
 - (void)imageFetchDidFailWithError:(NSError*)error {
-    NSLog(@"Couldn't fetch image, this is a description of the error: %@", error.localizedDescription);
+    NSLog(@"Couldn't fetch image, this is a description of the error: %@",
+          error.localizedDescription);
 }
 
 - (void)imageFetchDidStart {
@@ -258,13 +283,23 @@ static CompanyModelController *sharedInstance = nil;
 }
 
 -(void)stockFetchDidFailWithError:(NSError*)error {
-    NSLog(@"Couldn't fetch stock price, this is a description of the error: %@", error.localizedDescription);
+    NSLog(@"Couldn't fetch stock price, this is a description of the error: %@",
+          error.localizedDescription);
     // do some sort of error handling here
 }
 
 -(void)stockFetchDidStart {
     NSLog(@"initiating stock fetch...");
     // could start an activity indicator here
+}
+
+#pragma mark Deallocation Methods
+
+-(void)dealloc
+{
+    [_networkController release];
+    [_companyList release];
+    [super dealloc];
 }
 
 @end

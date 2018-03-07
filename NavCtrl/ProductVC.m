@@ -18,8 +18,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // Loads the image
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"imageFetchSuccess"
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification * _Nonnull note) {
+                                                      [self.tableView reloadData]; }];
     
     self.topImageView.image = (self.company.companyLogoFilepath == nil) ? [UIImage imageNamed:self.company.name] :
         [UIImage imageWithContentsOfFile:self.company.companyLogoFilepath];
@@ -80,6 +84,7 @@
 - (void)enterAddMode {
     _addEditVC = [[AddEditViewController alloc] init];
     self.addEditVC.title = @"Add Product"; // very important for logic of addEditVC
+    self.addEditVC.company = self.company;
     
     // CHANGE ANIMATION TYPE HERE
     /*
@@ -147,6 +152,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
+    NSLog(@"%d",[self.company.products count]);
+
     return [self.company.products count];
 }
 
@@ -156,7 +163,8 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[[UITableViewCell alloc]
+                 initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     // Configure the cell...
     // 1 - Get the product by calling the correct row
@@ -165,7 +173,10 @@
     cell.showsReorderControl = true;
     tableView.separatorInset = UIEdgeInsetsZero;
     
-    UIImage *image = ([product.productLogoFilePath isEqual: @""]) ? [UIImage imageNamed:product.name] : [UIImage imageWithContentsOfFile:product.productLogoFilePath];
+    UIImage *image = ([product.productLogoFilePath isEqual: @""]) ?
+    [UIImage imageNamed:product.name] :
+    [UIImage imageWithContentsOfFile:product.productLogoFilePath];
+    
     if (image == nil) {
         image = [UIImage imageNamed:product.name];
     }
@@ -213,9 +224,7 @@ moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (self.tableView.editing) {
-        // If the table view is in editing mode, save the product that the user selected
-        // And then send that company to 'enterEditProductMode'
-        //[self enterEditProductMode:product];
+        // nothing here
     } else {
         // If table view is not in editing mode, create new web view controller
         // and pass along the product selected.
@@ -224,8 +233,9 @@ moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
         self.webVC.company = self.company;
         self.webVC.title = @"Product Link";
         [self.navigationController pushViewController:self.webVC animated:YES];
-    }
+        }
 }
+
 
 - (void)dealloc {
     [_webVC release];
