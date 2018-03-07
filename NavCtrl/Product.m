@@ -34,7 +34,7 @@
     self.productWebsiteURL = websiteURL;
     self.productLogoURL = logoURL;
 
-    self.networkController = [[NetworkController alloc] init];
+    _networkController = [[NetworkController alloc] init];
     self.networkController.image_delegate = self;
     [self.networkController fetchImageForUrl:logoURL WithName:name];
   }

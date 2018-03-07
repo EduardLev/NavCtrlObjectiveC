@@ -275,10 +275,11 @@
         // 2 - set the stored company in this VC with new properties
         // 3 - add edited company to the data model
         int index = [self.companyModelController removeCompany:self.company]; // 1
-        self.company.name = name; // 2
-        self.company.ticker = ticker; // 2
-        self.company.companyLogoURL = url; // 2
-        [self.companyModelController insertCompany:self.company AtIndex:index]; // 3
+        Company *temporaryCompany = [[Company alloc] initWithName:name
+                                                           Ticker:ticker
+                                                       AndLogoURL:url];
+        [self.companyModelController insertCompany:temporaryCompany AtIndex:index]; // 3
+        [temporaryCompany release];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }

@@ -82,7 +82,7 @@
 }
 
 - (void)enterAddMode {
-    self.addEditVC = [[AddEditViewController alloc] init];
+    _addEditVC = [[AddEditViewController alloc] init];
     self.addEditVC.title = @"Add Product"; // very important for logic of addEditVC
     self.addEditVC.company = self.company;
     

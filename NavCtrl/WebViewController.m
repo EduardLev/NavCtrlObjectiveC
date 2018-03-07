@@ -21,11 +21,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self createNavigationBarButtons];
-    
+    [self createProgressView];
+
     // Do any additional setup after loading the view.
     if ([self checkInternetConnection]) {
         [self createWebBrowser];
-        [self createProgressView];
+        [self.view addSubview:self.progressView];
     } else {
         [self presentNoInternetAlert];
     }
@@ -45,18 +46,15 @@
 }
 
 - (void)createProgressView {
-    UIProgressView *progressView = [[UIProgressView alloc]
+    _progressView = [[UIProgressView alloc]
                                     initWithProgressViewStyle:UIProgressViewStyleDefault];
-    [progressView sizeToFit];
-    [[progressView layer]setFrame:CGRectMake(0, 70, self.view.frame.size.width, 10)];
-    [[progressView layer]setBorderColor:[UIColor redColor].CGColor];
-    progressView.trackTintColor = [UIColor clearColor];
+    [self.progressView sizeToFit];
+    [[self.progressView layer]setFrame:CGRectMake(0.0, 60.0, self.view.frame.size.width, 6)];
+    [[self.progressView layer]setBorderColor:[UIColor redColor].CGColor];
+    self.progressView.trackTintColor = [UIColor clearColor];
     
-    [[progressView layer]setMasksToBounds:TRUE];
-    progressView.clipsToBounds = YES;
-    
-    [self.view addSubview:self.progressView];
-    [progressView release];
+    [[self.progressView layer]setMasksToBounds:TRUE];
+    self.progressView.clipsToBounds = YES;
 }
 
 - (void)createNavigationBarButtons {
@@ -127,12 +125,13 @@
 
 - (void)createWebView {
     // Web View
-    CGRect frame = CGRectMake(0.0, 20.0, self.view.frame.size.width,
-                              self.view.frame.size.height - 20);
+    CGRect frame = CGRectMake(0.0, 60.0, self.view.frame.size.width,
+                              self.view.frame.size.height - 60);
     _webView = [[WKWebView alloc] initWithFrame:frame configuration:self.webConfiguration];
     self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
     UIViewAutoresizingFlexibleHeight;
     self.webView.navigationDelegate = self;
+    [self.view addSubview:self.webView];
     
     [self.webView addObserver:self
                    forKeyPath:NSStringFromSelector(@selector(estimatedProgress))
@@ -145,7 +144,6 @@
                       context:NULL];
     
     [self.webView setUIDelegate:self];
-    [self.view addSubview:self.webView];
 }
 
 - (void)createWebRequest {
@@ -154,6 +152,17 @@
     if ((url.host != nil)&&(url.scheme != nil)) {
         NSURLRequest *nsRequest = [NSURLRequest requestWithURL:url];
         [self.webView loadRequest:nsRequest];
+    } else {
+        UIAlertController* alert =
+        [UIAlertController alertControllerWithTitle:@"Error"
+                                            message:@"Invalid URL"
+                                     preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* defaultAction =
+        [UIAlertAction actionWithTitle:@"OK"
+                                 style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction * action) {}];
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -169,6 +178,23 @@
     if ([keyPath isEqualToString:@"loading"]) {
         self.progressView.hidden = !self.webView.loading;
     }
+}
+
+- (void)webView:(WKWebView *)webView
+didFailProvisionalNavigation:(WKNavigation *)navigation
+      withError:(NSError *)error {
+    NSLog(@"error loading website");
+    
+    UIAlertController* alert =
+    [UIAlertController alertControllerWithTitle:@"Error"
+                                        message:@"This website was not able to be loaded"
+                                 preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* defaultAction =
+    [UIAlertAction actionWithTitle:@"OK"
+                             style:UIAlertActionStyleDefault
+                           handler:^(UIAlertAction * action) {}];
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)dealloc {
