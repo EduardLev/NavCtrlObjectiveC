@@ -45,19 +45,13 @@
 }
 
 - (void)createProgressView {
-    // call dealloc - NOT YET IMPLEMENTED - CHECK
     UIProgressView *progressView = [[UIProgressView alloc]
                                     initWithProgressViewStyle:UIProgressViewStyleDefault];
     [progressView sizeToFit];
-    
-    //progressView.progressTintColor = [UIColor colorWithRed:187.0/255
-    //green:160.0/255 blue:209.0/255 alpha:1.0];
-    [[progressView layer]setFrame:CGRectMake(0, 60, self.view.frame.size.width, 6)];
+    [[progressView layer]setFrame:CGRectMake(0, 70, self.view.frame.size.width, 10)];
     [[progressView layer]setBorderColor:[UIColor redColor].CGColor];
     progressView.trackTintColor = [UIColor clearColor];
     
-    //[[self.progressView layer]setCornerRadius:self.progressView.frame.size.width / 2];
-    //[[self.progressView layer]setBorderWidth:3];
     [[progressView layer]setMasksToBounds:TRUE];
     progressView.clipsToBounds = YES;
     
@@ -143,7 +137,7 @@
     [self.webView addObserver:self
                    forKeyPath:NSStringFromSelector(@selector(estimatedProgress))
                       options:NSKeyValueObservingOptionNew
-                      context:NULL]; // need to remove observer later
+                      context:NULL];
     
     [self.webView addObserver:self
                    forKeyPath:NSStringFromSelector(@selector(loading))
@@ -151,7 +145,6 @@
                       context:NULL];
     
     [self.webView setUIDelegate:self];
-    
     [self.view addSubview:self.webView];
 }
 
@@ -174,7 +167,6 @@
     }
     
     if ([keyPath isEqualToString:@"loading"]) {
-        NSLog(@"this happened");
         self.progressView.hidden = !self.webView.loading;
     }
 }
