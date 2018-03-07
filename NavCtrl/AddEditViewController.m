@@ -121,21 +121,28 @@
 // When the view disappears, remove the observers for keyboard notifications from this object
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidShowNotification
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
 }
 
 // Creates frames for all text fields, and then calls 'createTextField' with that field to populate
 -(void)createTextFields {
     _nameTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, 200, 300, 40)];
     [self createTextField:self.nameTextField];
-    [self.nameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.nameTextField addTarget:self action:@selector(textFieldDidChange:)
+                 forControlEvents:UIControlEventEditingChanged];
     _tickerTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, 260, 300, 40)];
     [self createTextField:self.tickerTextField];
-    [self.tickerTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.tickerTextField addTarget:self action:@selector(textFieldDidChange:)
+                   forControlEvents:UIControlEventEditingChanged];
     _urlTextField= [[UITextField alloc] initWithFrame:CGRectMake(30, 320, 300, 40)];
     [self createTextField:self.urlTextField];
-    [self.urlTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.urlTextField addTarget:self action:@selector(textFieldDidChange:)
+                forControlEvents:UIControlEventEditingChanged];
 }
 
 /**
@@ -218,9 +225,8 @@
                 Product *newProduct = [[Product alloc] initWithName:name
                                                             LogoURL:ticker
                                                          WebsiteURL:url];
-                NSLog(@"%@",url);
-                NSLog(@"%@",newProduct.productWebsiteURL);
                 [self.companyModelController addProduct:newProduct ToCompany:self.company];
+                [newProduct release];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
                 UIAlertController* alert =

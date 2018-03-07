@@ -30,10 +30,11 @@
                  WebsiteURL:(NSString*)websiteURL {
   self = [super init];
   if (self) {
-    _name = name;
-    _productWebsiteURL = websiteURL;
+    self.name = name;
+    self.productWebsiteURL = websiteURL;
+    self.productLogoURL = logoURL;
 
-    _networkController = [[NetworkController alloc] init];
+    self.networkController = [[NetworkController alloc] init];
     self.networkController.image_delegate = self;
     [self.networkController fetchImageForUrl:logoURL WithName:name];
   }
@@ -46,6 +47,8 @@
 }
 
 - (void)imageFetchSuccess:(NSString*)filePath {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"imageFetchSuccess"
+                                                        object:nil];
     NSLog(@"image fetched successfully");
     self.productLogoFilePath = filePath;
     NSLog(@"%@",filePath);

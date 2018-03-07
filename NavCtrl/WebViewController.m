@@ -24,8 +24,8 @@
     
     // Do any additional setup after loading the view.
     if ([self checkInternetConnection]) {
-        [self createWebBrowser];
         [self createProgressView];
+        [self createWebBrowser];
     } else {
         [self presentNoInternetAlert];
     }
@@ -139,7 +139,6 @@
     self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
     UIViewAutoresizingFlexibleHeight;
     self.webView.navigationDelegate = self;
-    [self.view addSubview:self.webView];
     
     [self.webView addObserver:self
                    forKeyPath:NSStringFromSelector(@selector(estimatedProgress))
@@ -152,17 +151,17 @@
                       context:NULL];
     
     [self.webView setUIDelegate:self];
+    
+    [self.view addSubview:self.webView];
 }
 
 - (void)createWebRequest {
     NSString *urlString = self.product.productWebsiteURL;
-    NSLog(@"%@",urlString);
     NSURL *url = [NSURL URLWithString:urlString];
     if ((url.host != nil)&&(url.scheme != nil)) {
         NSURLRequest *nsRequest = [NSURLRequest requestWithURL:url];
         [self.webView loadRequest:nsRequest];
     }
-    [url release];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath

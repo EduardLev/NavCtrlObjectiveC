@@ -42,6 +42,8 @@
 }
 
 - (void)imageFetchSuccess:(NSString*)filePath {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"imageFetchSuccess"
+                                                        object:nil];
     NSLog(@"image fetched successfully");
     self.companyLogoFilepath = filePath;
     NSLog(@"%@",filePath);

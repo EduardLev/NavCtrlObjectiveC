@@ -59,7 +59,11 @@
     }
     
     NSURL *url = [NSURL URLWithString:logoURL];
-    NSURLSessionDownloadTask *task = [[NSURLSession sharedSession] downloadTaskWithURL:url completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSessionDownloadTask *task = [[NSURLSession sharedSession]
+                                      downloadTaskWithURL:url
+                                        completionHandler:^(NSURL * _Nullable location,
+                                                            NSURLResponse * _Nullable response,
+                                                            NSError * _Nullable error) {
         UIImage *logo = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
         if (logo) {
             NSString *fileName = [NSString stringWithFormat:@"%@.png", name];

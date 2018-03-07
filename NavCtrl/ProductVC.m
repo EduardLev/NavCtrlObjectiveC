@@ -18,8 +18,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // Loads the image
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"imageFetchSuccess"
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification * _Nonnull note) {
+                                                      [self.tableView reloadData]; }];
     
     self.topImageView.image = (self.company.companyLogoFilepath == nil) ? [UIImage imageNamed:self.company.name] :
         [UIImage imageWithContentsOfFile:self.company.companyLogoFilepath];
@@ -224,7 +228,7 @@ moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
     } else {
         // If table view is not in editing mode, create new web view controller
         // and pass along the product selected.
-        self.webVC = [[WebViewController alloc] init];
+        _webVC = [[WebViewController alloc] init];
         self.webVC.product = [self.company.products objectAtIndex:[indexPath row]];
         self.webVC.company = self.company;
         self.webVC.title = @"Product Link";
