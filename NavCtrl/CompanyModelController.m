@@ -186,8 +186,11 @@ static CompanyModelController *sharedInstance = nil;
 - (BOOL)addProduct:(Product*)product ToCompany:(Company*)company {
     for (Company *c in self.companyList) {
         if ([c.name isEqual:company.name]) {
-            [c.products addObject:product];
-            return true;
+            if (c.products == nil) {
+                c.products = [[NSMutableArray<Product*> alloc] init];
+            }
+        [c.products addObject:product];
+        return true;
         }
     }
     // product was not added to the company

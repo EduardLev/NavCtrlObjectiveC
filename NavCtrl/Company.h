@@ -27,7 +27,7 @@
 @property (nonatomic, retain) NSString *stockPrice;
 
 // Mutable Array of the products sold by this company
-@property (nonatomic, retain) NSMutableArray<Product*> *products; // retain - match to release in dealloc
+@property (nonatomic, retain) NSMutableArray<Product*> *products;
 
 -(instancetype)initWithName:(NSString*)name
                      Ticker:(NSString*)ticker
