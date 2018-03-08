@@ -200,7 +200,8 @@
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self.company.products removeObjectAtIndex:[indexPath row]];
+        [self.companyMC removeProduct:[self.company.products objectAtIndex:[indexPath row]] FromCompany:self.company];
+        //[self.company.products removeObjectAtIndex:[indexPath row]];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath]
                               withRowAnimation:UITableViewRowAnimationFade];
     }

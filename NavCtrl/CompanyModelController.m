@@ -44,11 +44,14 @@ static CompanyModelController *sharedInstance = nil;
                                    initWithArray:[self.context
                                                   executeFetchRequest:request
                                                   error:&error]];
+        
+        //bool HasLaunched = [[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"];
+        
         if (!self.managedCompanyList) {
             NSLog(@"Error fetching Company objects: %@\n%@",
                   [error localizedDescription],
                   [error userInfo]);
-            abort();
+            //abort();
         }
         
         _companyList = [[NSMutableArray<Company*> alloc] init];
@@ -57,6 +60,13 @@ static CompanyModelController *sharedInstance = nil;
             [self loadHardcodedData];
         }
         [self populateCompanyListWithFetchedData];
+        
+        // Counts how many times the user has launched this application
+        /*if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"])
+        {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }*/
 
         // Initialize network controllers
         _networkController = [[NetworkController alloc] init];
@@ -70,6 +80,7 @@ static CompanyModelController *sharedInstance = nil;
         Company *company = [[Company alloc] initWithName:cMO.name
                                                   Ticker:cMO.ticker
                                               AndLogoURL:cMO.companyLogoURL];
+        company.products = [[NSMutableArray<Product*> alloc] init];
         for (ProductManagedObject *pMO in cMO.products) {
             Product *product = [[Product alloc] initWithName:pMO.name
                                                      LogoURL:pMO.productLogoURL
@@ -121,7 +132,7 @@ static CompanyModelController *sharedInstance = nil;
     
         // create hardcoded products and companies
         // Apple Products
-        Product *prod1 = [[Product alloc] initWithName:@"iPhone X"
+        /*Product *prod1 = [[Product alloc] initWithName:@"iPhone X"
                                                LogoURL:@"https://goo.gl/iYhNTa"
                                             WebsiteURL:@"https://www.apple.com/iphone-x/"];
         Product *prod2 = [[Product alloc] initWithName:@"iPad Pro"];
@@ -135,39 +146,34 @@ static CompanyModelController *sharedInstance = nil;
         [prod3 release];
         prod1 = nil;
         prod2 = nil;
-        prod3 = nil;
+        prod3 = nil;*/
         
         // Create the managed object products
     
         ProductManagedObject *prod1MO = [NSEntityDescription
                                          insertNewObjectForEntityForName:@"ProductManagedObject"
                                          inManagedObjectContext:[self context]];
-        prod1MO.name = prod1.name;
-        prod1MO.productLogoURL = prod1.productLogoURL;
-        prod1MO.productWebsiteURL = prod1.productWebsiteURL;
-        prod1MO.productLogoFilePath = prod1.productLogoFilePath;
+        prod1MO.name = @"iPhone X";
+        prod1MO.productLogoURL = @"https://goo.gl/iYhNTa";
+        prod1MO.productWebsiteURL = @"https://www.apple.com/iphone-x/";
         
         ProductManagedObject *prod2MO = [NSEntityDescription
                                          insertNewObjectForEntityForName:@"ProductManagedObject"
                                          inManagedObjectContext:[self context]];
-        prod2MO.name = prod2.name;
-        prod2MO.productLogoURL = prod2.productLogoURL;
-        prod2MO.productWebsiteURL = prod2.productWebsiteURL;
-        prod2MO.productLogoFilePath = prod2.productLogoFilePath;
+        prod2MO.name = @"iPad Pro";
+        prod2MO.productWebsiteURL = @"https://www.apple.com/ipad-pro/";
         
         ProductManagedObject *prod3MO = [NSEntityDescription
                                          insertNewObjectForEntityForName:@"ProductManagedObject"
                                          inManagedObjectContext:[self context]];
-        prod3MO.name = prod3.name;
-        prod3MO.productLogoURL = prod3.productLogoURL;
-        prod3MO.productWebsiteURL = prod3.productWebsiteURL;
-        prod3MO.productLogoFilePath = prod3.productLogoFilePath;
+        prod3MO.name = @"Macbook Pro";
+        prod3MO.productWebsiteURL = @"https://www.apple.com/macbook-pro/";
         
         // Create company objects with the above products
-        Company *apple = [[Company alloc] initWithName:@"Apple"
+        /*Company *apple = [[Company alloc] initWithName:@"Apple"
                                             Ticker:@"AAPL"
                                         AndLogoURL:@"https://goo.gl/1gyEdF"];
-        apple.products = appleProducts;
+        apple.products = appleProducts;*/
     
         // Just created hardcoded apple product, and will save into core data immediately
         CompanyManagedObject *appleMO = [NSEntityDescription
@@ -175,16 +181,13 @@ static CompanyModelController *sharedInstance = nil;
                                      inManagedObjectContext:[self context]];
         
         // connecting model object companies with the object companies
-        appleMO.name = apple.name;
-        appleMO.companyLogoURL = apple.companyLogoURL;
-        appleMO.companyLogoFilepath = apple.companyLogoFilepath;
-        appleMO.ticker = apple.ticker;
-        
+        appleMO.name = @"Apple";
+        appleMO.companyLogoURL = @"https://goo.gl/1gyEdF";
+        appleMO.ticker = @"AAPL";
         appleMO.products = [[NSSet alloc] initWithObjects:prod1MO, prod2MO, prod3MO, nil];
         
         //self.companyList = [NSMutableArray arrayWithObjects: apple, nil];
         self.managedCompanyList = [NSMutableArray arrayWithObjects: appleMO, nil];
-    
     
         NSError *error = nil;
         if ([[self context] save:&error] == NO) {
@@ -193,8 +196,8 @@ static CompanyModelController *sharedInstance = nil;
                      [error userInfo]);
         }
 
-        [apple release];
-        [appleProducts release];
+        //[apple release];
+        //[appleProducts release];
     /*
     Company *google = [[Company alloc] initWithName:@"Google"
                                              Ticker:@"GOOGL"
@@ -241,10 +244,31 @@ static CompanyModelController *sharedInstance = nil;
 #pragma mark - Manipulation Data Model Methods
 
 - (void)addCompany:(Company *)company {
+    
+    // Add company to the company list array with NSObjects
     if (self.companyList == nil) {
         _companyList = [[NSMutableArray<Company*> alloc] init];
     }
     [self.companyList addObject:company];
+    
+    // Add company to the company list array with NSManagedObjects
+    CompanyManagedObject *companyMO = [NSEntityDescription
+                                     insertNewObjectForEntityForName:@"CompanyManagedObject"
+                                              inManagedObjectContext:[self context]];
+    companyMO.name = company.name;
+    companyMO.ticker = company.ticker;
+    companyMO.companyLogoFilepath = company.companyLogoFilepath;
+    companyMO.companyLogoURL = company.companyLogoURL;
+    companyMO.stockPrice = company.stockPrice;
+    // when you add a company, you are not yet adding products, so not necessary to add here
+    
+    [self.managedCompanyList addObject:companyMO];
+    NSError *error = nil;
+    if ([[self context] save:&error] == NO) {
+        NSAssert(NO, @"Error saving context: %@\n%@",
+                 [error localizedDescription],
+                 [error userInfo]);
+    }
 }
 
 - (void)insertCompany:(Company*)company AtIndex:(int)index {
@@ -252,34 +276,115 @@ static CompanyModelController *sharedInstance = nil;
         [self addCompany:company];
     }
     [self.companyList insertObject:company atIndex:index];
+    
+    // Add company to the company list array with NSManagedObjects
+    CompanyManagedObject *companyMO = [NSEntityDescription
+                                       insertNewObjectForEntityForName:@"CompanyManagedObject"
+                                       inManagedObjectContext:[self context]];
+    companyMO.name = company.name;
+    companyMO.ticker = company.ticker;
+    companyMO.companyLogoFilepath = company.companyLogoFilepath;
+    companyMO.companyLogoURL = company.companyLogoURL;
+    companyMO.stockPrice = company.stockPrice;
+    
+    [self.managedCompanyList insertObject:companyMO atIndex:index];
+    NSError *error = nil;
+    if ([[self context] save:&error] == NO) {
+        NSAssert(NO, @"Error saving context: %@\n%@",
+                 [error localizedDescription],
+                 [error userInfo]);
+    }
 }
 
 - (int)removeCompany:(Company *)company {
     // Converts the company input to uppercase in order to compare to the company list
     NSString *companyInputUppercase = [company.name uppercaseString];
+    
+    // Deletes form the object company list
     if (self.companyList != nil) {
         for (int i = 0; i < self.companyList.count; i++) {
-            // Convers the company list name to uppercase in order to compare to input company
-            NSString *companyListUppercase = [self.companyList[i].name uppercaseString];
+            // Converts the company list name to uppercase in order to compare to input company
+            NSString *companyListUppercase = [self.companyList[i].name
+                                              uppercaseString];
             if ([companyListUppercase isEqualToString:companyInputUppercase]) {
                 [self.companyList removeObjectAtIndex:i];
-                return i;
             }
         }
     }
     
+    // Deletes from managed object company list
+    if (self.managedCompanyList != nil) {
+        for (int i = 0; i < self.managedCompanyList.count; i++) {
+            // Converts the company list name to uppercase in order to compare to input company
+            NSString *managedCompanyListUppercase = [self.managedCompanyList[i].name
+                                                     uppercaseString];
+            if ([managedCompanyListUppercase isEqualToString:companyInputUppercase]) {
+                [self.context deleteObject:[self.managedCompanyList objectAtIndex:i]];
+                [self.managedCompanyList removeObjectAtIndex:i];
+                NSError *error = nil;
+                if ([[self context] save:&error] == NO) {
+                    NSAssert(NO, @"Error saving context: %@\n%@",
+                             [error localizedDescription],
+                             [error userInfo]);
+                }
+                return i;
+            }
+        }
+    }
     // returns if self.companyList = nil, or if no name is found in the list equal to input name
     return -1;
 }
+/*
+- (void)populateCompanyListWithFetchedData {
+    for (CompanyManagedObject *cMO in self.managedCompanyList) {
+        Company *company = [[Company alloc] initWithName:cMO.name
+                                                  Ticker:cMO.ticker
+                                              AndLogoURL:cMO.companyLogoURL];
+        company.products = [[NSMutableArray<Product*> alloc] init];
+        for (ProductManagedObject *pMO in cMO.products) {
+            Product *product = [[Product alloc] initWithName:pMO.name
+                                                     LogoURL:pMO.productLogoURL
+                                                  WebsiteURL:pMO.productWebsiteURL];
+            [company.products addObject:product];
+            //[product release];
+        }
+        [self.companyList addObject:company];
+        //[company release];
+    }
+}*/
 
 - (BOOL)addProduct:(Product*)product ToCompany:(Company*)company {
     for (Company *c in self.companyList) {
-        if ([c.name isEqual:company.name]) {
+        if ([c.name isEqualToString:company.name]) {
             if (c.products == nil) {
                 c.products = [[NSMutableArray<Product*> alloc] init];
             }
         [c.products addObject:product];
-        return true;
+        //return true;
+        }
+    }
+    
+    ProductManagedObject *productMO = [NSEntityDescription
+                                       insertNewObjectForEntityForName:@"ProductManagedObject"
+                                       inManagedObjectContext:[self context]];
+    productMO.name = product.name;
+    productMO.productLogoURL = product.productLogoURL;
+    productMO.productWebsiteURL = product.productWebsiteURL;
+    productMO.productLogoFilePath = product.productLogoFilePath;
+    
+    for (CompanyManagedObject *companyMO in self.managedCompanyList) {
+        if ([companyMO.name isEqualToString:company.name]) {
+            if (companyMO.products == nil) {
+                companyMO.products = [[NSSet<ProductManagedObject*> alloc] init];
+            }
+            companyMO.products = [companyMO.products setByAddingObject:productMO];
+            NSError *error = nil;
+            if ([[self context] save:&error] == NO) {
+                NSAssert(NO, @"Error saving context: %@\n%@",
+                         [error localizedDescription],
+                         [error userInfo]);
+            }
+            return true;
         }
     }
     // product was not added to the company
@@ -291,12 +396,71 @@ static CompanyModelController *sharedInstance = nil;
         if ([c isEqual:company]) {
             if ([company.products containsObject:product]) {
                 [company.products removeObject:product];
-                return true;
+                //return true;
             }
         }
     }
+
+    for (CompanyManagedObject *cMO in self.managedCompanyList) {
+        if ([cMO.name isEqualToString:company.name]) {
+            for (ProductManagedObject *pMO in cMO.products) {
+                if ([pMO.name isEqualToString:product.name]) {
+                    NSMutableSet<ProductManagedObject*> *set = [cMO.products mutableCopy];
+                    [set removeObject:pMO];
+                    cMO.products = set;
+                    [self.context deleteObject:pMO];
+                    [set release];
+                    NSError *error = nil;
+                    if ([[self context] save:&error] == NO) {
+                        NSAssert(NO, @"Error saving context: %@\n%@",
+                                 [error localizedDescription],
+                                 [error userInfo]);
+                    }
+                    return true;
+                }
+            }
+        }
+    }
+    
     // product was not removed from the company
     return false;
+}
+
+- (void)moveCompany:(Company*)company
+          FromIndex:(NSIndexPath*)fromIndexPath
+            ToIndex:(NSIndexPath*)toIndexPath {
+    
+    CompanyManagedObject *companyMO = [self.managedCompanyList objectAtIndex:fromIndexPath.row];
+    
+    CompanyManagedObject *companyMOCopy = [NSEntityDescription
+                                           insertNewObjectForEntityForName:@"CompanyManagedObject"
+                                           inManagedObjectContext:[self context]];
+    companyMOCopy.name = companyMO.name;
+    companyMOCopy.companyLogoURL = companyMO.companyLogoURL;
+    companyMOCopy.companyLogoFilepath = companyMO.companyLogoFilepath;
+    companyMOCopy.stockPrice = companyMO.stockPrice;
+    companyMOCopy.ticker = companyMO.ticker;
+    
+    [companyMO retain];
+    [self.companyList removeObjectAtIndex:fromIndexPath.row];
+    [self.companyList insertObject:company atIndex:toIndexPath.row];
+    
+    [self.managedCompanyList removeObjectAtIndex:fromIndexPath.row];
+    [self.context deleteObject:companyMO];
+    [self.managedCompanyList insertObject:companyMOCopy atIndex:toIndexPath.row];
+    // at this point the managedCompanyList matches the companyList.
+    
+    NSError *error = nil;
+    if ([[self context] save:&error] == NO) {
+        NSAssert(NO, @"Error saving context: %@\n%@",
+                 [error localizedDescription],
+                 [error userInfo]);
+    }
+    
+    [companyMO release];
+    
+    //[self.companyMC.companyList removeObjectAtIndex:fromIndexPath.row];
+    //[self.companyMC.companyList insertObject:company atIndex:toIndexPath.row];
 }
 
 #pragma mark Singleton Methods

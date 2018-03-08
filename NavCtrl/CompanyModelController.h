@@ -46,6 +46,10 @@
 
 - (void)insertCompany:(Company*)company AtIndex:(int)index;
 
+- (void)moveCompany:(Company*)company
+          FromIndex:(NSIndexPath*)fromIndexPath
+            ToIndex:(NSIndexPath*)toIndexPath;
+
 /**
  * Function that removes a given company from the company list array in the Company Model Controller
  * object. The function returns true if the company was removed. The company may not be able to be

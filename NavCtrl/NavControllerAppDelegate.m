@@ -25,7 +25,8 @@
     [self.window makeKeyAndVisible];
     
     [rootController release];
-    [self.navigationController release];    
+    [self.navigationController release];
+    
     return YES;
 }
 
@@ -83,7 +84,7 @@
                      Check the error message to determine what the actual problem was.
                      */
                     NSLog(@"Unresolved error %@, %@", error, error.userInfo);
-                    abort();
+                    //abort();
                 }
             }];
         }
@@ -101,7 +102,7 @@
         // Replace this implementation with code to handle the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
         NSLog(@"Unresolved error %@, %@", error, error.userInfo);
-        abort();
+        //abort();
     }
 }
 

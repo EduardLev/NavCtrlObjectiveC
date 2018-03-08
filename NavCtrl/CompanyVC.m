@@ -209,13 +209,12 @@
  - (void)tableView:(UITableView *)tableView
 moveRowAtIndexPath:(NSIndexPath *)fromIndexPath
        toIndexPath:(NSIndexPath *)toIndexPath {
-     
      Company *company = [self.companyMC.companyList objectAtIndex:fromIndexPath.row];
      [company retain];
-     [self.companyMC.companyList removeObjectAtIndex:fromIndexPath.row];
-     [self.companyMC.companyList insertObject:company atIndex:toIndexPath.row];
-     [company release];
-     
+     [self.companyMC moveCompany:company FromIndex:fromIndexPath ToIndex:toIndexPath];
+     //[self.companyMC.companyList removeObjectAtIndex:fromIndexPath.row];
+     //[self.companyMC.companyList insertObject:company atIndex:toIndexPath.row];
+     [company release];     
  }
 
 #pragma mark - Table view delegate
@@ -225,11 +224,11 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
  forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self.companyMC.companyList removeObjectAtIndex:[indexPath row]];
+        [self.companyMC removeCompany:[self.companyMC.companyList objectAtIndex:[indexPath row]]];
+        // Removes cell in table view
         [self.tableView deleteRowsAtIndexPaths:@[indexPath]
                               withRowAnimation:UITableViewRowAnimationFade];
     }
-    
     [self toggleCompanyView];
 }
 
