@@ -16,11 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<CompanyManagedObject *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSString *name;
-@property (nullable, nonatomic, copy) NSString *companyLogoURL;
 @property (nullable, nonatomic, copy) NSString *companyLogoFilepath;
-@property (nullable, nonatomic, copy) NSString *ticker;
+@property (nullable, nonatomic, copy) NSString *companyLogoURL;
+@property (nullable, nonatomic, copy) NSString *name;
 @property (nullable, nonatomic, copy) NSString *stockPrice;
+@property (nullable, nonatomic, copy) NSString *ticker;
+@property (nonatomic) int16_t order;
 @property (nullable, nonatomic, retain) NSSet<ProductManagedObject *> *products;
 
 @end

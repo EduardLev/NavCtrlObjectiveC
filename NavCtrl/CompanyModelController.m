@@ -39,6 +39,11 @@ static CompanyModelController *sharedInstance = nil;
         // Creates request which will get the data saved in Core Data and retrieve it
         NSFetchRequest *request = [NSFetchRequest
                                    fetchRequestWithEntityName:@"CompanyManagedObject"];
+        
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order"
+                                                                       ascending:YES];
+        request.sortDescriptors = @[sortDescriptor];
+        
         NSError *error = nil;
         self.managedCompanyList = [[NSMutableArray alloc]
                                    initWithArray:[self.context
@@ -81,6 +86,7 @@ static CompanyModelController *sharedInstance = nil;
                                                   Ticker:cMO.ticker
                                               AndLogoURL:cMO.companyLogoURL];
         company.products = [[NSMutableArray<Product*> alloc] init];
+        company.order = cMO.order;
         for (ProductManagedObject *pMO in cMO.products) {
             Product *product = [[Product alloc] initWithName:pMO.name
                                                      LogoURL:pMO.productLogoURL
@@ -431,24 +437,25 @@ static CompanyModelController *sharedInstance = nil;
             ToIndex:(NSIndexPath*)toIndexPath {
     
     CompanyManagedObject *companyMO = [self.managedCompanyList objectAtIndex:fromIndexPath.row];
-    
-    CompanyManagedObject *companyMOCopy = [NSEntityDescription
-                                           insertNewObjectForEntityForName:@"CompanyManagedObject"
-                                           inManagedObjectContext:[self context]];
-    companyMOCopy.name = companyMO.name;
-    companyMOCopy.companyLogoURL = companyMO.companyLogoURL;
-    companyMOCopy.companyLogoFilepath = companyMO.companyLogoFilepath;
-    companyMOCopy.stockPrice = companyMO.stockPrice;
-    companyMOCopy.ticker = companyMO.ticker;
-    
     [companyMO retain];
+    
     [self.companyList removeObjectAtIndex:fromIndexPath.row];
     [self.companyList insertObject:company atIndex:toIndexPath.row];
     
+    // Updates order for the company list. Sets the order to the new position they appear.
+    for (int i = 0; i < self.companyList.count; i++) {
+        self.companyList[i].order = i;
+    }
+    
     [self.managedCompanyList removeObjectAtIndex:fromIndexPath.row];
-    [self.context deleteObject:companyMO];
-    [self.managedCompanyList insertObject:companyMOCopy atIndex:toIndexPath.row];
-    // at this point the managedCompanyList matches the companyList.
+    [self.managedCompanyList insertObject:companyMO atIndex:toIndexPath.row];
+    
+    for (int i = 0; i < self.managedCompanyList.count; i++) {
+        self.managedCompanyList[i].order = i;
+    }
+    // at this point the managedCompanyList matches the companyList
+    
+    
     
     NSError *error = nil;
     if ([[self context] save:&error] == NO) {

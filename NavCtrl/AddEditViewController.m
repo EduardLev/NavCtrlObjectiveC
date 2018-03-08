@@ -38,50 +38,6 @@
     // Creates the white background on the view.
     self.view.backgroundColor = UIColor.whiteColor;
     
-    // Another way to create the background: Add a subview with a white background to the self.view
-    /*UIView *paintView = [[UIView alloc]
-                            initWithFrame:CGRectMake(0.0,
-                                                     0.0,
-                                                     self.view.frame.size.width,
-                                                     self.view.frame.size.height)];
-    [paintView setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview: paintView];
-    [paintView release]; */
-    
-    // Creates the navigation bar at the top
-    // Currently only goes up to the safe view
-    
-    // BASED ON PRESENT MODE OF SHOWING THIS VC
-    /*UINavigationBar *navBar = [[UINavigationBar alloc]
-                               initWithFrame:CGRectMake(0.0,
-                                                        20.0,
-                                                        self.view.frame.size.width,
-                                                        self.view.frame.size.height)];
-    
-    UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:self.title];
-    
-    // Creates cancel button - linked to 'cancelButtonDidTap'
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
-                                     initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                     target:self
-                                     action:@selector(cancelButtonDidTap)];
-    navItem.leftBarButtonItem = cancelButton;
-    [cancelButton release];
-    
-    // Creates save button - linked to 'saveButtonDidTap'
-    self.saveButton = [[UIBarButtonItem alloc]
-                                   initWithBarButtonSystemItem:UIBarButtonSystemItemSave
-                                   target:self
-                                   action:@selector(saveButtonDidTap)];
-    navItem.rightBarButtonItem = self.saveButton;
-    navItem.rightBarButtonItem.enabled = NO; // SAVE NOT ENABLED INITIALLY
-
-    // Adds items to navigation bar, then adds navigation bar to the current view (self.view)
-    [navBar setItems:@[navItem]];
-    [self.view addSubview:navBar];
-    [navBar release];
-    [navItem release]; */
-    
     // Sets local properties to determine in later logic what kind of data to show
     self.add = [self.title containsString:@"Add"]? TRUE : FALSE;
     self.fromProductController = [self.title containsString:@"Product"]? TRUE : FALSE;

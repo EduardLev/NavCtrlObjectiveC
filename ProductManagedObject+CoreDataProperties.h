@@ -16,10 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<ProductManagedObject *> *)fetchRequest;
 
+@property (nullable, nonatomic, copy) NSString *name;
 @property (nullable, nonatomic, copy) NSString *productLogoFilePath;
 @property (nullable, nonatomic, copy) NSString *productLogoURL;
 @property (nullable, nonatomic, copy) NSString *productWebsiteURL;
-@property (nullable, nonatomic, copy) NSString *name;
 
 @end
 

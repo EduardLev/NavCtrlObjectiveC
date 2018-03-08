@@ -261,18 +261,18 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    Company *comp = self.companyMC.companyList[indexPath.row];
+    comp.order = indexPath.row;
     
     if (self.tableView.editing) {
         // If the table view is in editing mode, save the company that the user selected
         // And then send that company and index path to 'enterEditCompanyMode'
-        Company *company = [self.companyMC.companyList objectAtIndex:[indexPath row]];
-        [self enterEditCompanyMode:company];
+        [self enterEditCompanyMode:comp];
     } else {
         // If table view is not in editing mode, create new product view controller
         // and pass along the company selected. It is important to change the title
         // So that the view controller can decide what it has to be showing
         _productVC = [[ProductVC alloc] init]; // must be matched with dealloc call
-        Company *comp = self.companyMC.companyList[indexPath.row];
         self.productVC.company = comp;
         self.productVC.title = comp.name;
         [self.navigationController pushViewController:self.productVC animated:YES];

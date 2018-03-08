@@ -15,11 +15,12 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"CompanyManagedObject"];
 }
 
-@dynamic name;
-@dynamic companyLogoURL;
 @dynamic companyLogoFilepath;
-@dynamic ticker;
+@dynamic companyLogoURL;
+@dynamic name;
 @dynamic stockPrice;
+@dynamic ticker;
+@dynamic order;
 @dynamic products;
 
 @end

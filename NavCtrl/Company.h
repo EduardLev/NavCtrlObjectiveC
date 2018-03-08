@@ -29,6 +29,8 @@
 // Mutable Array of the products sold by this company
 @property (nonatomic, retain) NSMutableArray<Product*> *products;
 
+@property (nonatomic) NSInteger order;
+
 -(instancetype)initWithName:(NSString*)name
                      Ticker:(NSString*)ticker
                  AndLogoURL:(NSString*)logoURL
