@@ -66,7 +66,6 @@
 
 // DEALLOC
 - (void)dealloc {
-    [_image release];
     [_name release];
     [_productLogoURL release];
     [_productWebsiteURL release];

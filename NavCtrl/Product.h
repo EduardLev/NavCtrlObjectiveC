@@ -17,8 +17,7 @@
 @property (nonatomic, retain) NSString *productWebsiteURL;
 @property (nonatomic, retain) NSString *productLogoFilePath;
 
-
-@property (nonatomic, retain) UIImage *image;
+//@property (nonatomic, retain) UIImage *image;
 
 - (instancetype)initWithName:(NSString*)name;
 

@@ -25,6 +25,11 @@
 		9E62FF271E4A33F1002D55B8 /* ProductVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E62FF251E4A33F1002D55B8 /* ProductVC.xib */; };
 		9E62FF291E4A3982002D55B8 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E62FF281E4A3982002D55B8 /* Launch Screen.storyboard */; };
 		D483EA972050446B00CD5CEE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D483EA952050446A00CD5CEE /* Reachability.m */; };
+		D483EB242051829500CD5CEE /* NavigationControllerModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D483EB222051829500CD5CEE /* NavigationControllerModel.xcdatamodeld */; };
+		D483EB2D205183CF00CD5CEE /* ProductManagedObject+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = D483EB27205183CF00CD5CEE /* ProductManagedObject+CoreDataClass.m */; };
+		D483EB2E205183CF00CD5CEE /* ProductManagedObject+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = D483EB28205183CF00CD5CEE /* ProductManagedObject+CoreDataProperties.m */; };
+		D483EB2F205183CF00CD5CEE /* CompanyManagedObject+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = D483EB2B205183CF00CD5CEE /* CompanyManagedObject+CoreDataClass.m */; };
+		D483EB30205183CF00CD5CEE /* CompanyManagedObject+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = D483EB2C205183CF00CD5CEE /* CompanyManagedObject+CoreDataProperties.m */; };
 		D49EC39E204883ED003FF4AB /* Company.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC39D204883ED003FF4AB /* Company.m */; };
 		D49EC3A2204886DC003FF4AB /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3A1204886DC003FF4AB /* Product.m */; };
 		D49EC3A52048A151003FF4AB /* CompanyModelController.m in Sources */ = {isa = PBXBuildFile; fileRef = D49EC3A42048A151003FF4AB /* CompanyModelController.m */; };
@@ -70,6 +75,15 @@
 		D4357684204E1E3200918D83 /* ImageFetcherDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageFetcherDelegate.h; sourceTree = "<group>"; };
 		D483EA952050446A00CD5CEE /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = ../../Reachability/Reachability/Reachability.m; sourceTree = "<group>"; };
 		D483EA962050446B00CD5CEE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = ../../Reachability/Reachability/Reachability.h; sourceTree = "<group>"; };
+		D483EB232051829500CD5CEE /* NavigationControllerModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NavigationControllerModel.xcdatamodel; sourceTree = "<group>"; };
+		D483EB25205183CF00CD5CEE /* ProductManagedObject+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ProductManagedObject+CoreDataProperties.h"; sourceTree = "<group>"; };
+		D483EB26205183CF00CD5CEE /* ProductManagedObject+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ProductManagedObject+CoreDataClass.h"; sourceTree = "<group>"; };
+		D483EB27205183CF00CD5CEE /* ProductManagedObject+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "ProductManagedObject+CoreDataClass.m"; sourceTree = "<group>"; };
+		D483EB28205183CF00CD5CEE /* ProductManagedObject+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "ProductManagedObject+CoreDataProperties.m"; sourceTree = "<group>"; };
+		D483EB29205183CF00CD5CEE /* CompanyManagedObject+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CompanyManagedObject+CoreDataProperties.h"; sourceTree = "<group>"; };
+		D483EB2A205183CF00CD5CEE /* CompanyManagedObject+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CompanyManagedObject+CoreDataClass.h"; sourceTree = "<group>"; };
+		D483EB2B205183CF00CD5CEE /* CompanyManagedObject+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CompanyManagedObject+CoreDataClass.m"; sourceTree = "<group>"; };
+		D483EB2C205183CF00CD5CEE /* CompanyManagedObject+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CompanyManagedObject+CoreDataProperties.m"; sourceTree = "<group>"; };
 		D49EC39C204883ED003FF4AB /* Company.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Company.h; sourceTree = "<group>"; };
 		D49EC39D204883ED003FF4AB /* Company.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Company.m; sourceTree = "<group>"; };
 		D49EC3A0204886DC003FF4AB /* Product.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
@@ -141,6 +155,15 @@
 		48A656A818163BF200746D36 = {
 			isa = PBXGroup;
 			children = (
+				D483EB25205183CF00CD5CEE /* ProductManagedObject+CoreDataProperties.h */,
+				D483EB26205183CF00CD5CEE /* ProductManagedObject+CoreDataClass.h */,
+				D483EB27205183CF00CD5CEE /* ProductManagedObject+CoreDataClass.m */,
+				D483EB28205183CF00CD5CEE /* ProductManagedObject+CoreDataProperties.m */,
+				D483EB29205183CF00CD5CEE /* CompanyManagedObject+CoreDataProperties.h */,
+				D483EB2A205183CF00CD5CEE /* CompanyManagedObject+CoreDataClass.h */,
+				D483EB2B205183CF00CD5CEE /* CompanyManagedObject+CoreDataClass.m */,
+				D483EB2C205183CF00CD5CEE /* CompanyManagedObject+CoreDataProperties.m */,
+				D483EB222051829500CD5CEE /* NavigationControllerModel.xcdatamodeld */,
 				48A656BA18163BF200746D36 /* NavCtrl */,
 				48A656D318163BF200746D36 /* NavCtrlTests */,
 				48A656B318163BF200746D36 /* Frameworks */,
@@ -316,6 +339,7 @@
 				TargetAttributes = {
 					48A656B018163BF200746D36 = {
 						DevelopmentTeam = 3987LS8PQB;
+						LastSwiftMigration = 0920;
 					};
 					48A656CB18163BF200746D36 = {
 						TestTargetID = 48A656B018163BF200746D36;
@@ -371,11 +395,16 @@
 				9E62FF211E4A33DC002D55B8 /* CompanyVC.m in Sources */,
 				D49EC3A52048A151003FF4AB /* CompanyModelController.m in Sources */,
 				D4F83E992049E51A00BEEBD0 /* AddEditViewController.m in Sources */,
+				D483EB242051829500CD5CEE /* NavigationControllerModel.xcdatamodeld in Sources */,
 				D483EA972050446B00CD5CEE /* Reachability.m in Sources */,
 				D49EC39E204883ED003FF4AB /* Company.m in Sources */,
+				D483EB2F205183CF00CD5CEE /* CompanyManagedObject+CoreDataClass.m in Sources */,
 				D4F83E9D204C47C000BEEBD0 /* NetworkController.m in Sources */,
 				D49EC3AD20499D1E003FF4AB /* WebViewController.m in Sources */,
+				D483EB2D205183CF00CD5CEE /* ProductManagedObject+CoreDataClass.m in Sources */,
+				D483EB30205183CF00CD5CEE /* CompanyManagedObject+CoreDataProperties.m in Sources */,
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
+				D483EB2E205183CF00CD5CEE /* ProductManagedObject+CoreDataProperties.m in Sources */,
 				D49EC3A2204886DC003FF4AB /* Product.m in Sources */,
 				48A656C118163BF200746D36 /* main.m in Sources */,
 				9E62FF261E4A33F1002D55B8 /* ProductVC.m in Sources */,
@@ -520,13 +549,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				DEVELOPMENT_TEAM = 3987LS8PQB;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NavCtrl/NavCtrl-Prefix.pch";
 				INFOPLIST_FILE = "NavCtrl/NavCtrl-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "turntotech.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "NavCtrl-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -537,13 +571,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				DEVELOPMENT_TEAM = 3987LS8PQB;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NavCtrl/NavCtrl-Prefix.pch";
 				INFOPLIST_FILE = "NavCtrl/NavCtrl-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "turntotech.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "NavCtrl-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -622,6 +660,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D483EB222051829500CD5CEE /* NavigationControllerModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				D483EB232051829500CD5CEE /* NavigationControllerModel.xcdatamodel */,
+			);
+			currentVersion = D483EB232051829500CD5CEE /* NavigationControllerModel.xcdatamodel */;
+			path = NavigationControllerModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 48A656A918163BF200746D36 /* Project object */;
 }

@@ -18,11 +18,20 @@
 #import "Company.h"
 #import "Product.h"
 #import "NetworkController.h"
+#import "CompanyManagedObject+CoreDataClass.h"
+#import "NavControllerAppDelegate.h"
+
 
 @interface CompanyModelController : NSObject<StockFetcherDelegate>
 
+
 // This property will hold the list of companies in this application
 @property (nonatomic, strong) NSMutableArray<Company*> *companyList;
+
+// CORE DATA
+@property (nonatomic, strong) NSArray<CompanyManagedObject*> *managedCompanyList;
+@property (nonatomic, strong) NavControllerAppDelegate *appDelegate;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 // This will return the shared instance of Company Model Controller as per the singleton model
 + (CompanyModelController*)sharedInstance;

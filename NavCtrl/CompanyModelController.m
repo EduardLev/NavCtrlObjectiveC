@@ -32,6 +32,20 @@ static CompanyModelController *sharedInstance = nil;
 - (id)init {
     self = [super init];
     if (self) {
+        // Creates references to the navigation controller app delegate and context
+        self.appDelegate = (NavControllerAppDelegate*)[[UIApplication sharedApplication] delegate];
+        self.context = self.appDelegate.persistentContainer.viewContext;
+        
+        
+        // Creates request which will get the data saved in Core Data and retrieve it
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CompanyManagedObject"];
+        NSError *error = nil;
+        self.managedCompanyList = [self.context executeFetchRequest:request error:&error];
+        if (!self.managedCompanyList) {
+            NSLog(@"Error fetching Company objects: %@\n%@", [error localizedDescription], [error userInfo]);
+            abort();
+        }
+
         // Will populate self.companyList with data written by hand in the method
         [self loadHardcodedData];
 
@@ -103,6 +117,14 @@ static CompanyModelController *sharedInstance = nil;
                                             Ticker:@"AAPL"
                                         AndLogoURL:@"https://goo.gl/1gyEdF"];
     apple.products = appleProducts;
+    
+    // try to save into core data here to see how it works
+    CompanyManagedObject *company1 = [NSEntityDescription insertNewObjectForEntityForName:@"CompanyManagedObject" inManagedObjectContext:[self context]];
+    NSError *error = nil;
+    if ([[self context] save:&error] == NO) {
+        NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
+    }
+    
     Company *google = [[Company alloc] initWithName:@"Google"
                                              Ticker:@"GOOGL"
                                          AndLogoURL:@"https://goo.gl/irTv1f"];

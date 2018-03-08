@@ -155,17 +155,24 @@
     // If the VC is for editing, enter the correct placeholders
     if (self.add) {
         if (field == self.nameTextField) {
-            field.placeholder = self.fromProductController ? @"Enter Product Name" : @"Enter Company Name";
+            field.placeholder = self.fromProductController ? @"Enter Product Name" :
+            @"Enter Company Name";
         } else if (field == self.tickerTextField) {
-            field.placeholder = self.fromProductController ? @"Enter Product Logo URL" : @"Enter Company Stock Ticker Abbreviation";
+            field.placeholder = self.fromProductController ? @"Enter Product Logo URL" :
+            @"Enter Company Stock Ticker Abbreviation";
         } else if (field == self.urlTextField) {
-            field.placeholder = self.fromProductController ? @"Enter Product Website URL" : @"Enter Company Logo URL";
+            field.placeholder = self.fromProductController ? @"Enter Product Website URL" :
+            @"Enter Company Logo URL";
         }
     } else { // If the VC is for editing, put in the text that matches the current product
         if (field == self.nameTextField) {
-            field.text = self.fromProductController ? self.product.name : self.company.name;
+            field.text = self.fromProductController ?
+            self.product.name :
+            self.company.name;
         } else if (field == self.tickerTextField) {
-            field.text = self.fromProductController ? self.product.productLogoURL : self.company.ticker;
+            field.text = self.fromProductController ?
+            self.product.productLogoURL :
+            self.company.ticker;
         } else if (field == self.urlTextField) {
             field.text = self.fromProductController ?
             self.product.productWebsiteURL :
@@ -254,7 +261,9 @@
         
     } else if ([self.title isEqualToString:@"Add Company"]) {
             if (![self checkIfCompanyExists:name]) {
-                Company *newCompany = [[Company alloc] initWithName:name Ticker:ticker AndLogoURL:url];
+                Company *newCompany = [[Company alloc] initWithName:name
+                                                             Ticker:ticker
+                                                         AndLogoURL:url];
                 [self.companyModelController addCompany:newCompany];
                 [newCompany release];
                 [self.navigationController popViewControllerAnimated:YES];

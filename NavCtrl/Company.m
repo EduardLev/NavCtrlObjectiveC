@@ -24,7 +24,9 @@
 }
 
 // INITIALIZATION METHODS
-- (instancetype)initWithName:(NSString*)name Ticker:(NSString*)ticker AndLogoURL:(NSString*)logoURL {
+- (instancetype)initWithName:(NSString*)name
+                      Ticker:(NSString*)ticker
+                  AndLogoURL:(NSString*)logoURL {
   self = [super init]; // MATCHED WITH SUPER DEALLOC
   if (self) {
     _name = name;
