@@ -138,10 +138,10 @@
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
     
-    [self.webView addObserver:self
+    /*[self.webView addObserver:self
                    forKeyPath:NSStringFromSelector(@selector(loading))
                       options:NSKeyValueObservingOptionNew
-                      context:NULL];
+                      context:NULL];*/
     
     [self.webView setUIDelegate:self];
 }

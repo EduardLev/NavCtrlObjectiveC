@@ -10,8 +10,8 @@
     </entity>
     <entity name="ProductManagedObject" representedClassName="ProductManagedObject" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productLogoFilePath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="productLogoURL" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="productWebsiteFilePath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="productWebsiteURL" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>

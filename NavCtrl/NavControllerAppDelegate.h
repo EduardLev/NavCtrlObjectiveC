@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "CompanyModelController.h"
+@class CompanyModelController;
 
 @interface NavControllerAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -15,6 +17,7 @@
 @property (strong, nonatomic) UINavigationController *navigationController;
 
 @property (readonly, strong) NSPersistentContainer *persistentContainer;
+@property (strong, nonatomic) CompanyModelController *companyModelController;
 
 - (void)saveContext;
 

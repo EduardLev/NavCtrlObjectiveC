@@ -36,18 +36,27 @@ static CompanyModelController *sharedInstance = nil;
         self.appDelegate = (NavControllerAppDelegate*)[[UIApplication sharedApplication] delegate];
         self.context = self.appDelegate.persistentContainer.viewContext;
         
-        
         // Creates request which will get the data saved in Core Data and retrieve it
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CompanyManagedObject"];
+        NSFetchRequest *request = [NSFetchRequest
+                                   fetchRequestWithEntityName:@"CompanyManagedObject"];
         NSError *error = nil;
-        self.managedCompanyList = [self.context executeFetchRequest:request error:&error];
+        self.managedCompanyList = [[NSMutableArray alloc]
+                                   initWithArray:[self.context
+                                                  executeFetchRequest:request
+                                                  error:&error]];
         if (!self.managedCompanyList) {
-            NSLog(@"Error fetching Company objects: %@\n%@", [error localizedDescription], [error userInfo]);
+            NSLog(@"Error fetching Company objects: %@\n%@",
+                  [error localizedDescription],
+                  [error userInfo]);
             abort();
         }
-
-        // Will populate self.companyList with data written by hand in the method
-        [self loadHardcodedData];
+        
+        _companyList = [[NSMutableArray<Company*> alloc] init];
+        if (self.managedCompanyList.count == 0) {
+            // Will populate self.companyList with data written by hand in the method
+            [self loadHardcodedData];
+        }
+        [self populateCompanyListWithFetchedData];
 
         // Initialize network controllers
         _networkController = [[NetworkController alloc] init];
@@ -56,29 +65,30 @@ static CompanyModelController *sharedInstance = nil;
     return self;
 }
 
+- (void)populateCompanyListWithFetchedData {
+    for (CompanyManagedObject *cMO in self.managedCompanyList) {
+        Company *company = [[Company alloc] initWithName:cMO.name
+                                                  Ticker:cMO.ticker
+                                              AndLogoURL:cMO.companyLogoURL];
+        for (ProductManagedObject *pMO in cMO.products) {
+            Product *product = [[Product alloc] initWithName:pMO.name
+                                                     LogoURL:pMO.productLogoURL
+                                                  WebsiteURL:pMO.productWebsiteURL];
+            [company.products addObject:product];
+            //[product release];
+        }
+        [self.companyList addObject:company];
+        //[company release];
+    }
+}
+
 /**
  * This will populate 'self.companyList' with a list of 4 companies with 3 products each.
  * Website URLS only hardcorded for apple products currently.
  * Logo URL's only hardcoded for iPhone X
  */
 - (void)loadHardcodedData {
-    _companyList = [[NSMutableArray<Company*> alloc] init];
-    // create hardcoded products and companies
-    // Apple Products
-    
-    Product *prod1 = [[Product alloc] initWithName:@"iPhone X"
-                                           LogoURL:@"https://goo.gl/iYhNTa"
-                                        WebsiteURL:@"https://www.apple.com/iphone-x/"];
-    Product *prod2 = [[Product alloc] initWithName:@"iPad Pro"];
-    prod2.productWebsiteURL = @"https://www.apple.com/ipad-pro/";
-    Product *prod3 = [[Product alloc] initWithName:@"Macbook Pro"];
-    prod3.productWebsiteURL = @"https://www.apple.com/macbook-pro/";
-    NSMutableArray<Product*> *appleProducts = [[NSMutableArray alloc]
-                                               initWithObjects:prod1, prod2, prod3, nil];
-    [prod1 release];
-    [prod2 release];
-    [prod3 release];
-    
+    /*
     // Google Products
     prod1 = [[Product alloc] initWithName:@"Pixel"];
     prod2 = [[Product alloc] initWithName:@"Chromebook Pixel"];
@@ -107,24 +117,85 @@ static CompanyModelController *sharedInstance = nil;
                                                 initWithObjects:prod1, prod2, prod3, nil];
     [prod1 release];
     [prod2 release];
-    [prod3 release];
-    prod1 = nil;
-    prod2 = nil;
-    prod3 = nil;
+    [prod3 release];*/
     
-    // Create company objects with the above products
-    Company *apple = [[Company alloc] initWithName:@"Apple"
+        // create hardcoded products and companies
+        // Apple Products
+        Product *prod1 = [[Product alloc] initWithName:@"iPhone X"
+                                               LogoURL:@"https://goo.gl/iYhNTa"
+                                            WebsiteURL:@"https://www.apple.com/iphone-x/"];
+        Product *prod2 = [[Product alloc] initWithName:@"iPad Pro"];
+        prod2.productWebsiteURL = @"https://www.apple.com/ipad-pro/";
+        Product *prod3 = [[Product alloc] initWithName:@"Macbook Pro"];
+        prod3.productWebsiteURL = @"https://www.apple.com/macbook-pro/";
+        NSMutableArray<Product*> *appleProducts = [[NSMutableArray alloc]
+                                                   initWithObjects:prod1, prod2, prod3, nil];
+        [prod1 release];
+        [prod2 release];
+        [prod3 release];
+        prod1 = nil;
+        prod2 = nil;
+        prod3 = nil;
+        
+        // Create the managed object products
+    
+        ProductManagedObject *prod1MO = [NSEntityDescription
+                                         insertNewObjectForEntityForName:@"ProductManagedObject"
+                                         inManagedObjectContext:[self context]];
+        prod1MO.name = prod1.name;
+        prod1MO.productLogoURL = prod1.productLogoURL;
+        prod1MO.productWebsiteURL = prod1.productWebsiteURL;
+        prod1MO.productLogoFilePath = prod1.productLogoFilePath;
+        
+        ProductManagedObject *prod2MO = [NSEntityDescription
+                                         insertNewObjectForEntityForName:@"ProductManagedObject"
+                                         inManagedObjectContext:[self context]];
+        prod2MO.name = prod2.name;
+        prod2MO.productLogoURL = prod2.productLogoURL;
+        prod2MO.productWebsiteURL = prod2.productWebsiteURL;
+        prod2MO.productLogoFilePath = prod2.productLogoFilePath;
+        
+        ProductManagedObject *prod3MO = [NSEntityDescription
+                                         insertNewObjectForEntityForName:@"ProductManagedObject"
+                                         inManagedObjectContext:[self context]];
+        prod3MO.name = prod3.name;
+        prod3MO.productLogoURL = prod3.productLogoURL;
+        prod3MO.productWebsiteURL = prod3.productWebsiteURL;
+        prod3MO.productLogoFilePath = prod3.productLogoFilePath;
+        
+        // Create company objects with the above products
+        Company *apple = [[Company alloc] initWithName:@"Apple"
                                             Ticker:@"AAPL"
                                         AndLogoURL:@"https://goo.gl/1gyEdF"];
-    apple.products = appleProducts;
+        apple.products = appleProducts;
     
-    // try to save into core data here to see how it works
-    CompanyManagedObject *company1 = [NSEntityDescription insertNewObjectForEntityForName:@"CompanyManagedObject" inManagedObjectContext:[self context]];
-    NSError *error = nil;
-    if ([[self context] save:&error] == NO) {
-        NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
-    }
+        // Just created hardcoded apple product, and will save into core data immediately
+        CompanyManagedObject *appleMO = [NSEntityDescription
+                                     insertNewObjectForEntityForName:@"CompanyManagedObject"
+                                     inManagedObjectContext:[self context]];
+        
+        // connecting model object companies with the object companies
+        appleMO.name = apple.name;
+        appleMO.companyLogoURL = apple.companyLogoURL;
+        appleMO.companyLogoFilepath = apple.companyLogoFilepath;
+        appleMO.ticker = apple.ticker;
+        
+        appleMO.products = [[NSSet alloc] initWithObjects:prod1MO, prod2MO, prod3MO, nil];
+        
+        //self.companyList = [NSMutableArray arrayWithObjects: apple, nil];
+        self.managedCompanyList = [NSMutableArray arrayWithObjects: appleMO, nil];
     
+    
+        NSError *error = nil;
+        if ([[self context] save:&error] == NO) {
+            NSAssert(NO, @"Error saving context: %@\n%@",
+                     [error localizedDescription],
+                     [error userInfo]);
+        }
+
+        [apple release];
+        [appleProducts release];
+    /*
     Company *google = [[Company alloc] initWithName:@"Google"
                                              Ticker:@"GOOGL"
                                          AndLogoURL:@"https://goo.gl/irTv1f"];
@@ -136,20 +207,16 @@ static CompanyModelController *sharedInstance = nil;
     Company *amazon = [[Company alloc] initWithName:@"Amazon"
                                              Ticker:@"AMZN"
                                          AndLogoURL:@"https://static1.squarespace.com/static/58eac4d88419c2d993e74f57/58ed681b29687f7f1229cc79/58ed6cf259cc68798571a3e4/1502659740704/e52e202774c81a2da566d4d0a93665cd_amazon-icon-amazon-logo-clipart_512-512.png"];
-    amazon.products = amazonProducts;
-    
+    amazon.products = amazonProducts;*/
+    /*
     self.companyList = [NSMutableArray arrayWithObjects:
-                        apple, google, microsoft, amazon, NULL];
-    
-    [apple release];
-    [google release];
-    [microsoft release];
-    [amazon release];
-    
-    [appleProducts release];
-    [googleProducts release];
-    [amazonProducts release];
-    [microsoftProducts release];
+                        apple, google, microsoft, amazon, NULL]; */
+    //[google release];
+    //[microsoft release];
+    //[amazon release];
+    //[googleProducts release];
+    //[amazonProducts release];
+    //[microsoftProducts release];
 }
 
 - (void)getStockPrices {
@@ -299,20 +366,20 @@ static CompanyModelController *sharedInstance = nil;
     // could start an activity indicator here
 }
 
--(void)stockFetchDidFailWithError:(NSError*)error {
+- (void)stockFetchDidFailWithError:(NSError*)error {
     NSLog(@"Couldn't fetch stock price, this is a description of the error: %@",
           error.localizedDescription);
     // do some sort of error handling here
 }
 
--(void)stockFetchDidStart {
+- (void)stockFetchDidStart {
     NSLog(@"initiating stock fetch...");
     // could start an activity indicator here
 }
 
 #pragma mark Deallocation Methods
 
--(void)dealloc
+- (void)dealloc
 {
     [_networkController release];
     [_companyList release];

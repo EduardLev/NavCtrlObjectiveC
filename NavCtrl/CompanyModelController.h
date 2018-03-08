@@ -19,8 +19,9 @@
 #import "Product.h"
 #import "NetworkController.h"
 #import "CompanyManagedObject+CoreDataClass.h"
+#import "ProductManagedObject+CoreDataClass.h"
 #import "NavControllerAppDelegate.h"
-
+@class NavControllerAppDelegate;
 
 @interface CompanyModelController : NSObject<StockFetcherDelegate>
 
@@ -29,7 +30,7 @@
 @property (nonatomic, strong) NSMutableArray<Company*> *companyList;
 
 // CORE DATA
-@property (nonatomic, strong) NSArray<CompanyManagedObject*> *managedCompanyList;
+@property (nonatomic, strong) NSMutableArray<CompanyManagedObject*> *managedCompanyList;
 @property (nonatomic, strong) NavControllerAppDelegate *appDelegate;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 

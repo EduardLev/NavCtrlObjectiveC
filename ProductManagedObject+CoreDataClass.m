@@ -11,4 +11,5 @@
 
 @implementation ProductManagedObject
 
+
 @end

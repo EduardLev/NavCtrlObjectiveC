@@ -15,7 +15,7 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"ProductManagedObject"];
 }
 
-@dynamic productWebsiteFilePath;
+@dynamic productLogoFilePath;
 @dynamic productLogoURL;
 @dynamic productWebsiteURL;
 @dynamic name;
