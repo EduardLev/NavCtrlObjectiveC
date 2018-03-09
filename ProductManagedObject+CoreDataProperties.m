@@ -12,7 +12,7 @@
 @implementation ProductManagedObject (CoreDataProperties)
 
 + (NSFetchRequest<ProductManagedObject *> *)fetchRequest {
-	return [[NSFetchRequest alloc] initWithEntityName:@"ProductManagedObject"];
+	return [[[NSFetchRequest alloc] initWithEntityName:@"ProductManagedObject"] autorelease];
 }
 
 @dynamic name;

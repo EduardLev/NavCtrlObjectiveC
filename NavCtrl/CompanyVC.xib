@@ -4,7 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
+        <deployment version="2304" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -57,13 +57,47 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="cpd-GD-Tod">
+                    <rect key="frame" x="0.0" y="567" width="375" height="100"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fvS-DG-6wV">
+                            <rect key="frame" x="0.0" y="0.0" width="187.5" height="100"/>
+                            <color key="backgroundColor" red="0.2290514887" green="0.16392487310000001" blue="0.24068052030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                            <state key="normal" title="Undo">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="undoButtonDidTouchUpInside:" destination="-1" eventType="touchUpInside" id="X34-8W-3NZ"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oqy-Zv-r5d">
+                            <rect key="frame" x="187.5" y="0.0" width="187.5" height="100"/>
+                            <color key="backgroundColor" red="0.22905148871800116" green="0.16392487310823869" blue="0.24068052030456855" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                            <state key="normal" title="Redo">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="redoButtonDidTouchUpInside:" destination="-1" eventType="touchUpInside" id="YaL-JU-cvI"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="100" id="9Te-tz-3i2"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="T29-8T-fyx"/>
+                    </constraints>
+                </stackView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="EP0-c1-3Vk" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="2wb-oa-8DZ"/>
                 <constraint firstAttribute="trailing" secondItem="EP0-c1-3Vk" secondAttribute="trailing" id="3sN-kg-Liw"/>
+                <constraint firstItem="cpd-GD-Tod" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="5bI-so-l8d"/>
                 <constraint firstAttribute="bottom" secondItem="EP0-c1-3Vk" secondAttribute="bottom" id="IuW-WV-So4"/>
                 <constraint firstItem="b9s-ce-C0v" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="bEQ-Zw-aaw"/>
+                <constraint firstAttribute="trailing" secondItem="cpd-GD-Tod" secondAttribute="trailing" id="bwt-Jh-meR"/>
+                <constraint firstAttribute="bottom" secondItem="cpd-GD-Tod" secondAttribute="bottom" id="byH-0X-pJS"/>
                 <constraint firstAttribute="trailing" secondItem="b9s-ce-C0v" secondAttribute="trailing" id="ebp-qQ-E2j"/>
                 <constraint firstAttribute="bottom" secondItem="b9s-ce-C0v" secondAttribute="bottom" id="l6Y-x6-gSp"/>
                 <constraint firstItem="b9s-ce-C0v" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="vPr-cD-R1S"/>

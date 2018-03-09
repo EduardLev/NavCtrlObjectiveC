@@ -37,6 +37,9 @@
 // This will return the shared instance of Company Model Controller as per the singleton model
 + (CompanyModelController*)sharedInstance;
 
+- (void)undo;
+- (void)redo;
+
 /**
  * Function that adds a given company to the company list array in the Company Model Controller
  * object. If the company list array does not exist, it is allocated and initialized with

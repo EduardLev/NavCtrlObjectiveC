@@ -11,7 +11,7 @@
 
 @interface Product ()
     
-@property (nonatomic, retain) NetworkController *networkController;
+@property (nonatomic, assign) NetworkController *networkController;
 
 @end
     

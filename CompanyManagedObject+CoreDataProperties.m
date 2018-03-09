@@ -12,7 +12,7 @@
 @implementation CompanyManagedObject (CoreDataProperties)
 
 + (NSFetchRequest<CompanyManagedObject *> *)fetchRequest {
-	return [[NSFetchRequest alloc] initWithEntityName:@"CompanyManagedObject"];
+	return [[[NSFetchRequest alloc] initWithEntityName:@"CompanyManagedObject"] autorelease];
 }
 
 @dynamic companyLogoFilepath;

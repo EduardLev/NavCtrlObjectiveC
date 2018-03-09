@@ -179,7 +179,7 @@
 
 - (void)saveButtonDidTap {
     NSString *name = self.nameTextField.text;
-    NSString *ticker = self.tickerTextField.text; // logoURL for Product!
+    NSString *ticker = [self.tickerTextField.text uppercaseString]; // logoURL for Product!
     NSString *url = self.urlTextField.text;
     
     if ([self.title isEqualToString:@"Add Product"]) {

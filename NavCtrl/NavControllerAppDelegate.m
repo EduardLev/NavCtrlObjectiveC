@@ -109,6 +109,8 @@
 - (void)dealloc {
     [_window release];
     [_navigationController release];
+    [_companyModelController release];
+    [_persistentContainer release];
     [super dealloc];
 }
 

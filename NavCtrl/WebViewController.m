@@ -174,10 +174,10 @@
     if ([keyPath isEqualToString:@"estimatedProgress"]) {
         self.progressView.progress = self.webView.estimatedProgress;
     }
-    
+    /*
     if ([keyPath isEqualToString:@"loading"]) {
         self.progressView.hidden = !self.webView.loading;
-    }
+    }*/
 }
 
 - (void)webView:(WKWebView *)webView

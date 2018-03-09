@@ -35,29 +35,9 @@ static CompanyModelController *sharedInstance = nil;
         // Creates references to the navigation controller app delegate and context
         self.appDelegate = (NavControllerAppDelegate*)[[UIApplication sharedApplication] delegate];
         self.context = self.appDelegate.persistentContainer.viewContext;
+        self.context.undoManager = [[NSUndoManager alloc] init];
         
-        // Creates request which will get the data saved in Core Data and retrieve it
-        NSFetchRequest *request = [NSFetchRequest
-                                   fetchRequestWithEntityName:@"CompanyManagedObject"];
-        
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order"
-                                                                       ascending:YES];
-        request.sortDescriptors = @[sortDescriptor];
-        
-        NSError *error = nil;
-        self.managedCompanyList = [[NSMutableArray alloc]
-                                   initWithArray:[self.context
-                                                  executeFetchRequest:request
-                                                  error:&error]];
-        
-        //bool HasLaunched = [[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"];
-        
-        if (!self.managedCompanyList) {
-            NSLog(@"Error fetching Company objects: %@\n%@",
-                  [error localizedDescription],
-                  [error userInfo]);
-            //abort();
-        }
+        [self fetchCompaniesFromCoreData];
         
         _companyList = [[NSMutableArray<Company*> alloc] init];
         if (self.managedCompanyList.count == 0) {
@@ -80,22 +60,93 @@ static CompanyModelController *sharedInstance = nil;
     return self;
 }
 
+- (void)fetchCompaniesFromCoreData {
+    // Creates request which will get the data saved in Core Data and retrieve it
+    NSFetchRequest *request = [NSFetchRequest
+                               fetchRequestWithEntityName:@"CompanyManagedObject"];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order"
+                                                                   ascending:YES];
+    request.sortDescriptors = @[sortDescriptor];
+    [sortDescriptor release];
+    
+    NSError *error = nil;
+    if (_managedCompanyList == nil) {
+        _managedCompanyList = [[NSMutableArray alloc]
+                               initWithArray:[self.context
+                                              executeFetchRequest:request
+                                              error:&error]];
+    } else {
+        [_managedCompanyList release];
+        _managedCompanyList = [[NSMutableArray alloc] initWithArray:[self.context executeFetchRequest:request error:&error]];
+        //_managedCompanyList = [NSMutableArray arrayWithArray:[self.context executeFetchRequest:request error:&error]];
+    }
+
+    
+    //bool HasLaunched = [[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"];
+    
+    if (!self.managedCompanyList) {
+        NSLog(@"Error fetching Company objects: %@\n%@",
+              [error localizedDescription],
+              [error userInfo]);
+        //abort();
+    }
+}
+
 - (void)populateCompanyListWithFetchedData {
+    if (self.companyList != nil) {
+        [_companyList release];
+    }
+    _companyList = [[NSMutableArray<Company*> alloc] init];
+    
     for (CompanyManagedObject *cMO in self.managedCompanyList) {
         Company *company = [[Company alloc] initWithName:cMO.name
                                                   Ticker:cMO.ticker
                                               AndLogoURL:cMO.companyLogoURL];
-        company.products = [[NSMutableArray<Product*> alloc] init];
         company.order = cMO.order;
+        
+        if (company.products == nil) {
+            company.products = [[NSMutableArray<Product*> alloc] init];
+        }
         for (ProductManagedObject *pMO in cMO.products) {
             Product *product = [[Product alloc] initWithName:pMO.name
                                                      LogoURL:pMO.productLogoURL
                                                   WebsiteURL:pMO.productWebsiteURL];
             [company.products addObject:product];
-            //[product release];
+            [product release];
         }
         [self.companyList addObject:company];
-        //[company release];
+        [company.products release];
+        [company release];
+    }
+}
+
+- (void)undo {
+    if ([self.context.undoManager canUndo]) {
+        [self.context.undoManager undo];
+        [self fetchCompaniesFromCoreData];
+        [self populateCompanyListWithFetchedData];
+        [self getStockPrices];
+        [self save];
+    }
+}
+
+- (void)save {
+    NSError *error = nil;
+    if ([[self context] save:&error] == NO) {
+        NSAssert(NO, @"Error saving context: %@\n%@",
+                 [error localizedDescription],
+                 [error userInfo]);
+    }
+}
+
+- (void)redo {
+    if ([self.context.undoManager canRedo]) {
+        [self.context.undoManager redo];
+        [self fetchCompaniesFromCoreData];
+        [self populateCompanyListWithFetchedData];
+        [self getStockPrices];
+        [self save];
     }
 }
 
@@ -193,7 +244,9 @@ static CompanyModelController *sharedInstance = nil;
         appleMO.products = [[NSSet alloc] initWithObjects:prod1MO, prod2MO, prod3MO, nil];
         
         //self.companyList = [NSMutableArray arrayWithObjects: apple, nil];
-        self.managedCompanyList = [NSMutableArray arrayWithObjects: appleMO, nil];
+        [self.managedCompanyList addObject:appleMO];
+        //self.managedCompanyList = [NSMutableArray arrayWithObjects: appleMO, nil];
+        //[appleMO release]; // POTENTIALLY TROUBLESOME
     
         NSError *error = nil;
         if ([[self context] save:&error] == NO) {
@@ -250,7 +303,6 @@ static CompanyModelController *sharedInstance = nil;
 #pragma mark - Manipulation Data Model Methods
 
 - (void)addCompany:(Company *)company {
-    
     // Add company to the company list array with NSObjects
     if (self.companyList == nil) {
         _companyList = [[NSMutableArray<Company*> alloc] init];
@@ -269,12 +321,7 @@ static CompanyModelController *sharedInstance = nil;
     // when you add a company, you are not yet adding products, so not necessary to add here
     
     [self.managedCompanyList addObject:companyMO];
-    NSError *error = nil;
-    if ([[self context] save:&error] == NO) {
-        NSAssert(NO, @"Error saving context: %@\n%@",
-                 [error localizedDescription],
-                 [error userInfo]);
-    }
+    [self save];
 }
 
 - (void)insertCompany:(Company*)company AtIndex:(int)index {
@@ -294,12 +341,7 @@ static CompanyModelController *sharedInstance = nil;
     companyMO.stockPrice = company.stockPrice;
     
     [self.managedCompanyList insertObject:companyMO atIndex:index];
-    NSError *error = nil;
-    if ([[self context] save:&error] == NO) {
-        NSAssert(NO, @"Error saving context: %@\n%@",
-                 [error localizedDescription],
-                 [error userInfo]);
-    }
+    [self save];
 }
 
 - (int)removeCompany:(Company *)company {
@@ -327,12 +369,7 @@ static CompanyModelController *sharedInstance = nil;
             if ([managedCompanyListUppercase isEqualToString:companyInputUppercase]) {
                 [self.context deleteObject:[self.managedCompanyList objectAtIndex:i]];
                 [self.managedCompanyList removeObjectAtIndex:i];
-                NSError *error = nil;
-                if ([[self context] save:&error] == NO) {
-                    NSAssert(NO, @"Error saving context: %@\n%@",
-                             [error localizedDescription],
-                             [error userInfo]);
-                }
+                [self save];
                 return i;
             }
         }
@@ -380,16 +417,11 @@ static CompanyModelController *sharedInstance = nil;
     
     for (CompanyManagedObject *companyMO in self.managedCompanyList) {
         if ([companyMO.name isEqualToString:company.name]) {
-            if (companyMO.products == nil) {
-                companyMO.products = [[NSSet<ProductManagedObject*> alloc] init];
-            }
+            /*if (companyMO.products == nil) {
+                //companyMO.products = [[NSSet<ProductManagedObject*> alloc] init];
+            }*/
             companyMO.products = [companyMO.products setByAddingObject:productMO];
-            NSError *error = nil;
-            if ([[self context] save:&error] == NO) {
-                NSAssert(NO, @"Error saving context: %@\n%@",
-                         [error localizedDescription],
-                         [error userInfo]);
-            }
+            [self save];
             return true;
         }
     }
@@ -398,6 +430,8 @@ static CompanyModelController *sharedInstance = nil;
 }
 
 - (BOOL)removeProduct:(Product*)product FromCompany:(Company*)company {
+    NSString *productName = product.name;
+    
     for (Company *c in self.companyList) {
         if ([c isEqual:company]) {
             if ([company.products containsObject:product]) {
@@ -410,18 +444,13 @@ static CompanyModelController *sharedInstance = nil;
     for (CompanyManagedObject *cMO in self.managedCompanyList) {
         if ([cMO.name isEqualToString:company.name]) {
             for (ProductManagedObject *pMO in cMO.products) {
-                if ([pMO.name isEqualToString:product.name]) {
+                if ([pMO.name isEqualToString:productName]) {
                     NSMutableSet<ProductManagedObject*> *set = [cMO.products mutableCopy];
                     [set removeObject:pMO];
                     cMO.products = set;
                     [self.context deleteObject:pMO];
                     [set release];
-                    NSError *error = nil;
-                    if ([[self context] save:&error] == NO) {
-                        NSAssert(NO, @"Error saving context: %@\n%@",
-                                 [error localizedDescription],
-                                 [error userInfo]);
-                    }
+                    [self save];
                     return true;
                 }
             }
@@ -455,15 +484,7 @@ static CompanyModelController *sharedInstance = nil;
     }
     // at this point the managedCompanyList matches the companyList
     
-    
-    
-    NSError *error = nil;
-    if ([[self context] save:&error] == NO) {
-        NSAssert(NO, @"Error saving context: %@\n%@",
-                 [error localizedDescription],
-                 [error userInfo]);
-    }
-    
+    [self save];
     [companyMO release];
     
     //[self.companyMC.companyList removeObjectAtIndex:fromIndexPath.row];
@@ -505,16 +526,36 @@ static CompanyModelController *sharedInstance = nil;
 // When the Network Controller finishes, it calls its delegate method, which updates the
 // data model, and then sends a notification that the stock prices were updated. This notification
 // will be recieved by the company view controller.
-- (void)stockFetchSuccessWithPriceArray:(NSArray *)priceArray {
+- (void)stockFetchSuccessWithPriceArray:(NSArray *)priceArray AndCompanies:(NSArray*)companies {
     // Careful here - the user may have added or deleted companies while the stock prices came in.
     // If the user has edited anything during this time, do not put the prices in.
     NSLog(@"Stock price received");
     NSLog(@"%@", priceArray);
+    
+    // The issue here is that some of the ticker symbols may be badly formed.
+    // Therfore, the price array that comes back might have less entries than those that went out
+    // Therefore if the company List looks like GOOGLE, AMAZON, APPLE, we can't assume that the
+    // Price array will hold the prices of GOOGLE, AMAZON and APPLE in that order. If someone
+    // used the ticker symbol GOOG for example for GOOGLE, then the 'priceArray' would only have
+    // two values for AMAZON and APPLE. There we will iterate over each company and string. The
+    // string array is taken from the same dictionary as the price array. Therefore
+    // the strings in the 'companies' array (ticker symbols) will match up 1 to 1 with the prices.
+
+
+    for (Company *c in self.companyList) {
+        if ([companies containsObject:c.ticker]) {
+            c.stockPrice = [priceArray objectAtIndex:[companies indexOfObject:c.ticker]];
+        } else {
+            c.stockPrice = @"No Price";
+        }
+    }
+
+    /*
     if (self.companyList.count == priceArray.count) {
         for (int i = 0; i < priceArray.count; i++) {
             self.companyList[i].stockPrice = priceArray[i];
         }
-    }
+    }*/
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"stockPricesUpdated"
                                                         object:nil];
@@ -554,6 +595,9 @@ static CompanyModelController *sharedInstance = nil;
 {
     [_networkController release];
     [_companyList release];
+    [_context release];
+    [_appDelegate release];
+    [_managedCompanyList release];
     [super dealloc];
 }
 

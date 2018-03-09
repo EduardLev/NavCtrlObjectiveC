@@ -38,24 +38,28 @@
                                                                  options:NSJSONReadingAllowFragments
                                                                    error:nil];
             NSArray *stockQuotes = dict[@"Stock Quotes"];
+            NSLog(@"%@",stockQuotes);
             NSMutableArray *prices = [[NSMutableArray alloc] init];
+            NSMutableArray *strings = [[NSMutableArray alloc] init];
             for (int i = 0; i < stockQuotes.count; i++) {
+                [strings addObject:[stockQuotes[i] objectForKey:@"1. symbol"]];
                 [prices addObject:[stockQuotes[i] objectForKey:@"2. price"]];
             }
             [error release];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.stock_delegate stockFetchSuccessWithPriceArray:prices];
+                [self.stock_delegate stockFetchSuccessWithPriceArray:prices AndCompanies:strings];
             });
             [prices release];
+            [strings release];
         }
     }];
     [task resume];
 }
 
 - (void)fetchImageForUrl:(NSString*)logoURL WithName:(NSString*)name {
-    if ([self.image_delegate
+    if ([_image_delegate
          respondsToSelector:@selector(imageFetchDidStart)]) {
-            [self.image_delegate imageFetchDidStart];
+            [_image_delegate imageFetchDidStart];
     }
     
     NSURL *url = [NSURL URLWithString:logoURL];

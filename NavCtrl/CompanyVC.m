@@ -139,6 +139,19 @@
     [self enterAddMode];
 }
 
+- (IBAction)undoButtonDidTouchUpInside:(UIButton *)sender {
+    [self.companyMC undo];
+    [self toggleCompanyView];
+    [self.tableView reloadData];
+}
+
+
+- (IBAction)redoButtonDidTouchUpInside:(UIButton *)sender {
+    [self.companyMC redo];
+    [self toggleCompanyView];
+    [self.tableView reloadData];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -183,6 +196,9 @@
     cell.detailTextLabel.text = [NSString stringWithFormat:@"$%0.2f", price];
     if (price == 0) {
         cell.detailTextLabel.text = @"Loading...";
+    }
+    if ([comp.stockPrice isEqualToString:@"No Price"]) {
+        cell.detailTextLabel.text = @"No Price";
     }
     cell.detailTextLabel.textColor = UIColor.grayColor;
     
