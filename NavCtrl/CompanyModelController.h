@@ -21,10 +21,14 @@
 #import "CompanyManagedObject+CoreDataClass.h"
 #import "ProductManagedObject+CoreDataClass.h"
 #import "NavControllerAppDelegate.h"
+
+
 @class NavControllerAppDelegate;
 
-@interface CompanyModelController : NSObject<StockFetcherDelegate>
+static NSString *const kStockPricesUpdated = @"StockPricesUpdated";
+static NSString *const kImageFetchSuccess = @"ImageFetchSuccess";
 
+@interface CompanyModelController : NSObject<StockFetcherDelegate>
 
 // This property will hold the list of companies in this application
 @property (nonatomic, strong) NSMutableArray<Company*> *companyList;

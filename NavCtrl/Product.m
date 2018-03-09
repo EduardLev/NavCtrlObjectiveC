@@ -70,7 +70,7 @@
     [_productLogoURL release];
     [_productWebsiteURL release];
     [_productLogoFilePath release];
-    [_networkController release];
+    //[_networkController release];
     [super dealloc];
 }
 

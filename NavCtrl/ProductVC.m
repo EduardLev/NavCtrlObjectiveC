@@ -19,7 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"imageFetchSuccess"
+    [[NSNotificationCenter defaultCenter] addObserverForName:kImageFetchSuccess
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification * _Nonnull note) {
@@ -165,7 +165,7 @@
                  initWithStyle:UITableViewCellStyleDefault
                  reuseIdentifier:CellIdentifier] autorelease];
     }
-    // Configure the cell...
+        // Configure the cell...
     // 1 - Get the product by calling the correct row
     Product *product = [self.company.products objectAtIndex:[indexPath row]];
     cell.textLabel.text = [product name];

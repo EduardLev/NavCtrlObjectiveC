@@ -11,7 +11,10 @@
 
 @interface Company ()
 
+
 @property (nonatomic, assign) NetworkController *networkController;
+
+
 
 @end
 
@@ -31,7 +34,8 @@
   if (self) {
     _name = name;
     _ticker = ticker;
-    
+    _companyLogoURL = logoURL;
+      
     networkController = [[NetworkController alloc] init];
     networkController.image_delegate = self;
     [self.networkController fetchImageForUrl:logoURL WithName:name];
@@ -66,7 +70,7 @@
     [_products release];
     [_name release];
     [_companyLogoURL release];
-    [networkController release];
+    //[networkController release];
     [_companyLogoFilepath release];
     [_ticker release];
     [_stockPrice release];

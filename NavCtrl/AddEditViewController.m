@@ -26,6 +26,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self action:@selector(dismissKeyboard)];
+    [self.view addGestureRecognizer:tap];
+    
     UIImage *backImage = [UIImage imageNamed:@"btn-navBack"];
     // Creates custom back button with arrow image
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
@@ -49,6 +53,13 @@
                        action:@selector(saveButtonDidTap)];
     self.saveButton.enabled = FALSE; // ALWAYS DISABLE THE BUTTON INITIALLY
     self.navigationItem.rightBarButtonItem = self.saveButton;
+}
+
+-(void)dismissKeyboard
+{
+    [self.nameTextField resignFirstResponder];
+    [self.tickerTextField resignFirstResponder];
+    [self.urlTextField resignFirstResponder];
 }
 
 - (void)back {
@@ -179,7 +190,13 @@
 
 - (void)saveButtonDidTap {
     NSString *name = self.nameTextField.text;
-    NSString *ticker = [self.tickerTextField.text uppercaseString]; // logoURL for Product!
+    NSString *ticker;
+    if (self.fromProductController) {
+        ticker = self.tickerTextField.text; // logoURL for product
+    } else {
+        ticker = [self.tickerTextField.text uppercaseString];
+    }
+    
     NSString *url = self.urlTextField.text;
     
     if ([self.title isEqualToString:@"Add Product"]) {
@@ -259,7 +276,6 @@
     }
     return false;
 }
-
 
 - (BOOL)checkIfCompanyExists:(NSString*)name {
     if ([self.companyModelController.companyList count] > 0) {

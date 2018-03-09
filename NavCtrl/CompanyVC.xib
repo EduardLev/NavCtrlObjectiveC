@@ -22,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="b9s-ce-C0v">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="567"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="9E9-mh-79V"/>
@@ -95,11 +95,11 @@
                 <constraint firstAttribute="trailing" secondItem="EP0-c1-3Vk" secondAttribute="trailing" id="3sN-kg-Liw"/>
                 <constraint firstItem="cpd-GD-Tod" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="5bI-so-l8d"/>
                 <constraint firstAttribute="bottom" secondItem="EP0-c1-3Vk" secondAttribute="bottom" id="IuW-WV-So4"/>
+                <constraint firstItem="b9s-ce-C0v" firstAttribute="bottom" secondItem="cpd-GD-Tod" secondAttribute="top" id="XXe-U0-71V"/>
                 <constraint firstItem="b9s-ce-C0v" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="bEQ-Zw-aaw"/>
                 <constraint firstAttribute="trailing" secondItem="cpd-GD-Tod" secondAttribute="trailing" id="bwt-Jh-meR"/>
                 <constraint firstAttribute="bottom" secondItem="cpd-GD-Tod" secondAttribute="bottom" id="byH-0X-pJS"/>
                 <constraint firstAttribute="trailing" secondItem="b9s-ce-C0v" secondAttribute="trailing" id="ebp-qQ-E2j"/>
-                <constraint firstAttribute="bottom" secondItem="b9s-ce-C0v" secondAttribute="bottom" id="l6Y-x6-gSp"/>
                 <constraint firstItem="b9s-ce-C0v" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="vPr-cD-R1S"/>
                 <constraint firstItem="EP0-c1-3Vk" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="vwY-ez-8Yh"/>
             </constraints>

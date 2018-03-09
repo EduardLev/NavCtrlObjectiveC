@@ -8,6 +8,8 @@
 
 #import "CompanyModelController.h"
 
+
+
 @interface CompanyModelController ()
 
 @property (nonatomic, strong) NetworkController *networkController;
@@ -21,10 +23,13 @@ static CompanyModelController *sharedInstance = nil;
 + (CompanyModelController*)sharedInstance {
     // Checks if there is already a shared instance. If not, allocates one.
     if (sharedInstance == nil) {
-        sharedInstance = [[super allocWithZone:NULL] init];
-    }
+      //  sharedInstance = [[CompanyModelController allocWithZone:NULL] init];
+        sharedInstance = [[super allocWithZone:NULL] init] ;
+     }
     return sharedInstance;
 }
+
+
 
 // Called the first time that the singleton is used
 // Should load the data to this data model
@@ -35,7 +40,9 @@ static CompanyModelController *sharedInstance = nil;
         // Creates references to the navigation controller app delegate and context
         self.appDelegate = (NavControllerAppDelegate*)[[UIApplication sharedApplication] delegate];
         self.context = self.appDelegate.persistentContainer.viewContext;
-        self.context.undoManager = [[NSUndoManager alloc] init];
+        NSUndoManager *undoMgr =  [[NSUndoManager alloc] init];
+        self.context.undoManager = undoMgr;
+        [undoMgr release];
         
         [self fetchCompaniesFromCoreData];
         
@@ -45,6 +52,8 @@ static CompanyModelController *sharedInstance = nil;
             [self loadHardcodedData];
         }
         [self populateCompanyListWithFetchedData];
+        
+        
         
         // Counts how many times the user has launched this application
         /*if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"])
@@ -106,7 +115,9 @@ static CompanyModelController *sharedInstance = nil;
         company.order = cMO.order;
         
         if (company.products == nil) {
-            company.products = [[NSMutableArray<Product*> alloc] init];
+            NSMutableArray<Product*> *products_temp = [[NSMutableArray<Product*> alloc] init];
+            company.products = products_temp;
+            [products_temp release];
         }
         for (ProductManagedObject *pMO in cMO.products) {
             Product *product = [[Product alloc] initWithName:pMO.name
@@ -116,7 +127,7 @@ static CompanyModelController *sharedInstance = nil;
             [product release];
         }
         [self.companyList addObject:company];
-        [company.products release];
+     //   [company.products release];
         [company release];
     }
 }
@@ -241,7 +252,9 @@ static CompanyModelController *sharedInstance = nil;
         appleMO.name = @"Apple";
         appleMO.companyLogoURL = @"https://goo.gl/1gyEdF";
         appleMO.ticker = @"AAPL";
-        appleMO.products = [[NSSet alloc] initWithObjects:prod1MO, prod2MO, prod3MO, nil];
+        NSSet *set = [[NSSet alloc] initWithObjects:prod1MO, prod2MO, prod3MO, nil];
+        appleMO.products = set;
+        [set release];
         
         //self.companyList = [NSMutableArray arrayWithObjects: apple, nil];
         [self.managedCompanyList addObject:appleMO];
@@ -308,6 +321,7 @@ static CompanyModelController *sharedInstance = nil;
         _companyList = [[NSMutableArray<Company*> alloc] init];
     }
     [self.companyList addObject:company];
+    [self.companyList lastObject].order = [self.companyList count];
     
     // Add company to the company list array with NSManagedObjects
     CompanyManagedObject *companyMO = [NSEntityDescription
@@ -318,6 +332,7 @@ static CompanyModelController *sharedInstance = nil;
     companyMO.companyLogoFilepath = company.companyLogoFilepath;
     companyMO.companyLogoURL = company.companyLogoURL;
     companyMO.stockPrice = company.stockPrice;
+    companyMO.order = company.order;
     // when you add a company, you are not yet adding products, so not necessary to add here
     
     [self.managedCompanyList addObject:companyMO];
@@ -400,7 +415,9 @@ static CompanyModelController *sharedInstance = nil;
     for (Company *c in self.companyList) {
         if ([c.name isEqualToString:company.name]) {
             if (c.products == nil) {
-                c.products = [[NSMutableArray<Product*> alloc] init];
+                NSMutableArray<Product*> *temp_array = [[NSMutableArray<Product*> alloc] init];
+                c.products = temp_array;
+                [temp_array release];
             }
         [c.products addObject:product];
         //return true;
@@ -557,14 +574,14 @@ static CompanyModelController *sharedInstance = nil;
         }
     }*/
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"stockPricesUpdated"
+    [[NSNotificationCenter defaultCenter] postNotificationName:kStockPricesUpdated
                                                         object:nil];
 }
 
 - (void)imageFetchSuccess {
     NSLog(@"image fetched successfully");
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"imageFetchedSuccessfully"
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"imageFetchSuccess"
                                                         object:nil];
 }
 

@@ -72,13 +72,13 @@
     
     // Create a notificaiton observer that will check when the stock prices have been updated
     // Calls for tableView to reload the data when it recieves the notification
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"stockPricesUpdated"
+    [[NSNotificationCenter defaultCenter] addObserverForName:kStockPricesUpdated
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification * _Nonnull note) {
                                                      [self.tableView reloadData]; }];
     
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"imageFetchSuccess"
+    [[NSNotificationCenter defaultCenter] addObserverForName:kImageFetchSuccess
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification * _Nonnull note) {
@@ -101,7 +101,9 @@
     
     // removes timers and notifications
     [self.stockTimer invalidate];
-    [[NSNotificationCenter defaultCenter] removeObserver:@"stockPricesUpdated"];
+    [[NSNotificationCenter defaultCenter] removeObserver:kStockPricesUpdated];
+    [[NSNotificationCenter defaultCenter] removeObserver:kImageFetchSuccess];
+
 }
 
 - (void)enterAddMode {
